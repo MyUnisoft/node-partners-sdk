@@ -23,7 +23,7 @@ export function getDefaultOptions(options: IDefaultOptions) {
     "X-Third-Party-Secret": secret.get()
   };
   if ("societyId" in options) {
-    headers["society-id"] = options.societyId;
+    headers["society-id"] = String(options.societyId);
   }
 
   return {
