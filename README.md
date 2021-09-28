@@ -30,17 +30,21 @@ $ yarn add @myunisoft/partners-sdk
 
 ```ts
 import dotenv from "dotenv";
-import * as MyUnisoftSDK from "@myunisoft/partners-sdk";
+import * as MyUnisoft from "@myunisoft/partners-sdk";
 
 dotenv.config();
 
-const { api_token: accessToken } = await MyUnisoftSDK.auth.firm.authenticate({
+MyUnisoft.configure({
+  secretKey: process.env.MYUNISOFT_SECRET_KEY,
+  userAgent: "partnerName"
+});
+
+const { api_token: accessToken } = await MyUnisoft.auth.firm.authenticate({
   mail: process.env.MYUNISOFT_MAIL,
   password: process.env.MYUNISOFT_PASSWORD
 });
-sdk.auth.secret.set(process.env.MYUNISOFT_SECRET_KEY);
 
-const diaries = await sdk.compta.diary({
+const diaries = await MyUnisoft.compta.diary({
   accessToken,
   societyId: 1
 });
