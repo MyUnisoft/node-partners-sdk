@@ -33,7 +33,8 @@
   },
   "homepage": "https://github.com/MyUnisoft/node-partners-sdk#readme",
   "dependencies": {
-    "@myunisoft/httpie": "^1.2.0"
+    "@myunisoft/httpie": "^1.2.0",
+    "@myunisoft/tsd": "^1.1.0"
   },
   "devDependencies": {
     "@myunisoft/eslint-config": "^1.4.0",
