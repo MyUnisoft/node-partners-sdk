@@ -49,7 +49,7 @@ export async function getFirms(options: IDefaultHeaderOptions) {
  * Admin EC.
  */
 export async function getDashboardModules(options: IDefaultHeaderOptions) {
-  const endpoint = new URL("/api/v1/member", BASE_API_URL);
+  const endpoint = new URL("/api/v1/dashboard/modules", BASE_API_URL);
 
   const { data } = await httpie.get(endpoint, {
     ...setDefaultHeaderOptions(options)
@@ -75,7 +75,7 @@ export interface ISearchCompanyByRefOptions extends IDefaultOptions {
 }
 
 export async function getCompanyByRef(options: ISearchCompanyByRefOptions) {
-  const endpoint = new URL("/api/v1/society", BASE_API_URL);
+  const endpoint = new URL("/api/v1/society/search", BASE_API_URL);
   setSearchParams(endpoint, options.params);
 
   const { data } = await httpie.get<Windev.Society.CompanyInfo>(endpoint, {
