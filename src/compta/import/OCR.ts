@@ -2,7 +2,7 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { setDefaultHeaderOptions, IDefaultOptions, setSearchParams } from "../../constants";
+import { setDefaultHeaderOptions, IDefaultOptions, setSearchParams, enumInvoiceType } from "../../constants";
 
 export interface ISendImgOrPdfOptions extends IDefaultOptions {
   params: {
@@ -15,12 +15,6 @@ export interface ISendImgOrPdfOptions extends IDefaultOptions {
 }
 
 export async function sendImgOrPdf(options: ISendImgOrPdfOptions) {
-  const enumInvoiceType = {
-    Achat: "1",
-    Frais: "2",
-    Vente: "3",
-    Avoir: "4"
-  };
   const enumOCRType = {
     Manuel: "2",
     OCRMyUnisoft: "3",
@@ -31,7 +25,7 @@ export async function sendImgOrPdf(options: ISendImgOrPdfOptions) {
   const endpoint = new URL("/api/v1/invoice");
   endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.params.invoiceType]);
   endpoint.searchParams.set("ocr_type_id", enumOCRType[options.params.ocrType]);
-  setSearchParams(endpoint, options.params, ["invoiceType"]);
+  setSearchParams(endpoint, options.params, ["invoiceType", "ocrType"]);
 
   options.header.contentType = "application/octect";
 

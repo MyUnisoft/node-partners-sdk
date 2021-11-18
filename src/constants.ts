@@ -4,6 +4,13 @@ import * as secret from "./authenticate/secret";
 export const BASE_AUTH_URL = "https://app.myunisoft.fr/";
 export const BASE_API_URL = "https://app.myunisoft.fr/";
 
+export const enumInvoiceType = Object.freeze({
+  Achat: "1",
+  Frais: "2",
+  Vente: "3",
+  Avoir: "4"
+});
+
 /**
  * @description Default interface for all requests options
  */
