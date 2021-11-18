@@ -21,7 +21,7 @@ export interface IDefaultHeaderOptions {
   /** Company (dossier de production) id */
   societyId?: string | number;
 
-  contentType?: "application/octect" | "application/json"
+  contentType?: "application/octect" | "application/json" | "application/octet-stream";
 }
 
 export interface IDefaultOptions {
@@ -63,13 +63,11 @@ export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
 //   return;
 // }
 
-export function setSearchParams(url: URL, options: any, excludeParams?: string[]) {
+export function setSearchParams(url: URL, options: any, params: string[] = []) {
+  const excludeParams = new Set(params);
   for (const option in options) {
-    if (option in options && !excludeParams?.includes(option)) {
-      if (typeof options[option] === "object") {
-        options[option] = JSON.stringify(options[option]);
-      }
-      url.searchParams.set(option, options[option]);
+    if (!excludeParams.has(option)) {
+      url.searchParams.set(option, typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]);
     }
   }
 
