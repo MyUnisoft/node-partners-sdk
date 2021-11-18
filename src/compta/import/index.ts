@@ -1,6 +1,5 @@
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
-import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
 import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
