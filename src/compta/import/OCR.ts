@@ -37,7 +37,6 @@ export async function sendImgOrPdf(options: ISendImgOrPdfOptions) {
   return data;
 }
 
-// Demander où trouver les routes.
 // REQUEST
 interface IGetOCRFollowUpParams {
   /** Format de date YYYYMMDD. */
