@@ -1,4 +1,5 @@
 // Import Internal Dependencies
+import { isFirmAccess } from "./authenticate/access_type";
 import * as secret from "./authenticate/secret";
 
 export const BASE_AUTH_URL = "https://app.myunisoft.fr/";
@@ -50,21 +51,9 @@ export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
   };
 }
 
-// export function setSearchParams(url: URL, options: any, params: string[]) {
-//   for (const param of params) {
-//     if (param in options) {
-//       if (typeof options[param] === "object") {
-//         options[param] = JSON.stringify(options[param]);
-//       }
-//       url.searchParams.set(param, options[param]);
-//     }
-//   }
-
-//   return;
-// }
-
 export function setSearchParams(url: URL, options: any, params: string[] = []) {
   const excludeParams = new Set(params);
+
   for (const option in options) {
     if (!excludeParams.has(option)) {
       url.searchParams.set(option, typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]);
@@ -72,4 +61,8 @@ export function setSearchParams(url: URL, options: any, params: string[] = []) {
   }
 
   return;
+}
+
+export function firmAccessThrowWithoutSociety(header: IDefaultHeaderOptions) {
+  return isFirmAccess() && !("societyId" in header) ? new Error("SocietyId is missing in the header.") : undefined;
 }
