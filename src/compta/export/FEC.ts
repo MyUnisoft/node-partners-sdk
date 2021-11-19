@@ -24,8 +24,9 @@ export interface IGetFECEntriesOptions extends IDefaultOptions {
 
 export async function getEntries(options: IGetFECEntriesOptions) {
   const endpoint = new URL("/api/v1/export/fec", BASE_API_URL);
-  endpoint.searchParams.set("export_type", String(options.params.exportType));
-  setSearchParams(endpoint, options.params, ["exportType"]);
+  setSearchParams(endpoint, options.params, {
+    exportType: "export_type"
+  });
 
   options.header.contentType = "application/json";
 

@@ -51,7 +51,6 @@ export interface IDefaultGetEntriesOptions extends IDefaultOptions {
   body: any;
 }
 
-
 export async function defaultGetEntries<T>(options: IDefaultGetEntriesOptions) {
   const endpoint = new URL("/api/v1/entries", BASE_API_URL);
   endpoint.searchParams.set("type", options.params.type);

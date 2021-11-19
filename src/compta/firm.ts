@@ -3,7 +3,7 @@ import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultHeaderOptions, IDefaultOptions, setDefaultHeaderOptions, setSearchParams } from "../constants";
+import { BASE_API_URL, IDefaultHeaderOptions, IDefaultOptions, setDefaultHeaderOptions } from "../constants";
 
 export async function getUsersV2(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/users_v2", BASE_API_URL);
@@ -76,7 +76,7 @@ export interface ISearchCompanyByRefOptions extends IDefaultOptions {
 
 export async function getCompanyByRef(options: ISearchCompanyByRefOptions) {
   const endpoint = new URL("/api/v1/society/search", BASE_API_URL);
-  setSearchParams(endpoint, options.params);
+  endpoint.searchParams.set("reference", options.params.reference);
 
   const { data } = await httpie.get<Windev.Society.CompanyInfo>(endpoint, {
     ...setDefaultHeaderOptions(options.header)

@@ -63,11 +63,15 @@ export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
 //   return;
 // }
 
-export function setSearchParams(url: URL, options: any, params: any = {}) {
+export function setSearchParams(url: URL, options: any, customParams: any = {}) {
   // eslint-disable-next-line guard-for-in
   for (const option in options) {
+    if (option in customParams && !customParams[option]) {
+      continue;
+    }
+
     url.searchParams.set(
-      params[option] || option,
+      customParams[option] || option,
       typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]
     );
   }

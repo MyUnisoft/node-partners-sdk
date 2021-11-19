@@ -25,7 +25,10 @@ export async function sendImgOrPdf(options: ISendImgOrPdfOptions) {
   const endpoint = new URL("/api/v1/invoice", BASE_API_URL);
   endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.params.invoiceType]);
   endpoint.searchParams.set("ocr_type_id", enumOCRType[options.params.ocrType]);
-  setSearchParams(endpoint, options.params, ["invoiceType", "ocrType"]);
+  setSearchParams(endpoint, options.params, {
+    invoiceType: undefined,
+    ocrType: undefined
+  });
 
   options.header.contentType = "application/octect";
 

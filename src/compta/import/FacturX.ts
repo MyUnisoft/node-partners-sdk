@@ -3,7 +3,7 @@ import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
-import { setDefaultHeaderOptions, IDefaultOptions, setSearchParams, enumInvoiceType, BASE_API_URL } from "../../constants";
+import { setDefaultHeaderOptions, IDefaultOptions, enumInvoiceType, BASE_API_URL } from "../../constants";
 
 export interface ISendFacturXPdfOptions extends IDefaultOptions {
   params: {
@@ -18,7 +18,7 @@ export async function sendFacturXPdf(options: ISendFacturXPdfOptions) {
   endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.params.invoiceType]);
   endpoint.searchParams.set("ocr_type_id", "6");
   endpoint.searchParams.set("extension", "pdf");
-  setSearchParams(endpoint, options.params, ["invoiceType"]);
+  endpoint.searchParams.set("name", options.params.name);
 
   options.header.contentType = "application/octect";
 
