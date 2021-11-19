@@ -51,13 +51,25 @@ export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
   };
 }
 
-export function setSearchParams(url: URL, options: any, params: string[] = []) {
-  const excludeParams = new Set(params);
+// export function setSearchParams(url: URL, options: any, params: string[] = []) {
+//   const excludeParams = new Set(params);
 
+//   for (const option in options) {
+//     if (!excludeParams.has(option)) {
+//       url.searchParams.set(option, typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]);
+//     }
+//   }
+
+//   return;
+// }
+
+export function setSearchParams(url: URL, options: any, params: any = {}) {
+  // eslint-disable-next-line guard-for-in
   for (const option in options) {
-    if (!excludeParams.has(option)) {
-      url.searchParams.set(option, typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]);
-    }
+    url.searchParams.set(
+      params[option] || option,
+      typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]
+    );
   }
 
   return;
