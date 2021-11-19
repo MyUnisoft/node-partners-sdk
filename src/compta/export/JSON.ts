@@ -2,7 +2,7 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
 
 export interface IGetEntriesOptions extends IDefaultOptions {
   params: {
@@ -26,12 +26,12 @@ export interface IGetEntriesOptions extends IDefaultOptions {
 
 // dans compta/export/index ?
 export async function getEntries(options: IGetEntriesOptions) {
-  const endpoint = new URL("/api/v1/entries");
+  const endpoint = new URL("/api/v1/entries", BASE_API_URL);
   endpoint.searchParams.set("type", options.params.type);
 
   options.header.contentType = "application/json";
 
-  const { data } = await httpie.get<{status: string}>(endpoint, {
+  const { data } = await httpie.post<{status: string}>(endpoint, {
     ...setDefaultHeaderOptions(options.header)
   });
 

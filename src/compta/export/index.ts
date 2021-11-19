@@ -2,7 +2,7 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
 
 export * as JSON from "./JSON";
 export * as FEC from "./FEC";
@@ -20,7 +20,7 @@ export interface IEntryByPartnerResponse {
 }
 
 export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
-  const endpoint = new URL("/api/v1/entries/id");
+  const endpoint = new URL("/api/v1/entries/id", BASE_API_URL);
   endpoint.searchParams.set("id_origin", String(options.params.id));
 
   const { data } = await httpie.get<IEntryByPartnerResponse>(endpoint, {

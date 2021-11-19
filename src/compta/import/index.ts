@@ -29,7 +29,7 @@ export async function addAttachmentToEntry(options: IAddAttachmentToEntryOptions
 
   options.header.contentType = "application/octet-stream";
 
-  const { data } = await httpie.get(endpoint, {
+  const { data } = await httpie.post(endpoint, {
     ...setDefaultHeaderOptions(options.header)
   });
 

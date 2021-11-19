@@ -2,7 +2,7 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { IDefaultOptions, setDefaultHeaderOptions, setSearchParams } from "../../constants";
+import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions, setSearchParams } from "../../constants";
 
 export interface IGetFECEntriesOptions extends IDefaultOptions {
   params: {
@@ -22,13 +22,13 @@ export interface IGetFECEntriesOptions extends IDefaultOptions {
 }
 
 export async function getEntries(options: IGetFECEntriesOptions) {
-  const endpoint = new URL("/api/v1/entries");
+  const endpoint = new URL("/api/v1/entries", BASE_API_URL);
   endpoint.searchParams.set("export_type", String(options.params.exportType));
   setSearchParams(endpoint, options.params);
 
   options.header.contentType = "application/json";
 
-  const { data } = await httpie.get<{status: string}>(endpoint, {
+  const { data } = await httpie.post<{status: string}>(endpoint, {
     ...setDefaultHeaderOptions(options.header)
   });
 
