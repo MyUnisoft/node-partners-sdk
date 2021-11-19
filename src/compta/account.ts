@@ -105,11 +105,29 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
   options.header.contentType = "application/json";
 
   (options.body as any).account_number = options.body.accountNumber;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { accountNumber, ...body } = options.body;
 
   const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
     ...setDefaultHeaderOptions(options.header),
     body
+  });
+
+  return data;
+}
+
+export interface IUpdateAccountOptions extends IDefaultOptions {
+  body: Windev.Account.UpdateAccount;
+}
+
+export async function updateAccount(options: IUpdateAccountOptions) {
+  const endpoint = new URL("/api/v1/account", BASE_API_URL);
+
+  options.header.contentType = "application/json";
+
+  const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
+    ...setDefaultHeaderOptions(options.header),
+    body: options.body
   });
 
   return data;
