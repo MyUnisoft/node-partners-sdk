@@ -1,6 +1,7 @@
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
+import { isFirmAccess } from "../authenticate/access_type";
 
 // Import Internal Dependencies
 import {
@@ -121,11 +122,15 @@ export interface IUpdateAccountOptions extends IDefaultOptions {
 }
 
 export async function updateAccount(options: IUpdateAccountOptions) {
+  if (!isFirmAccess()) {
+    return new Error("This endpoint only work with a cabinet (firm) access.");
+  }
+
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
 
   options.header.contentType = "application/json";
 
-  const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
+  const { data } = await httpie.put<Windev.Account.Account | { status: string; message: string; }>(endpoint, {
     ...setDefaultHeaderOptions(options.header),
     body: options.body
   });
