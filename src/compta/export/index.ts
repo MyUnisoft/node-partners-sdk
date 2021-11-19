@@ -6,6 +6,7 @@ import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../co
 
 export * as JSON from "./JSON";
 export * as FEC from "./FEC";
+export * as OCR from "./OCR";
 
 export interface IEntryByPartnerOptions extends IDefaultOptions {
   params: {

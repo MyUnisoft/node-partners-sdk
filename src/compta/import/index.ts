@@ -4,8 +4,8 @@ import * as httpie from "@myunisoft/httpie";
 // Import Internal Dependencies
 import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
 
-export * as ocr from "./ocr";
-export * as factureX from "./FacturX";
+export * as OCR from "./ocr";
+export * as facturX from "./FacturX";
 export * as JSON from "./JSON";
 export * as TRA from "./TRA";
 export * as FEC from "./FEC";
