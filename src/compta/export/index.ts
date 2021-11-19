@@ -29,3 +29,38 @@ export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
 
   return data;
 }
+
+export interface IDefaultGetEntriesOptions extends IDefaultOptions {
+  params: {
+    /**
+     * E = ECRITURE.
+     *
+     * O = ECRITURE OCR/ECRITURE EN ATTENTE.
+     *
+     * IB = ECRITURE INTEGRATION BANCAIRE.
+     *
+     * M = ECRITURE MANUEL.
+     *
+     * EXT = ECRITURE EXTOURNE.
+     *
+     * L = ECRITURE LETTRAGE.
+     */
+    type: "e" | "o" | "ib" | "m" | "ext" | "l";
+  };
+  body: any;
+}
+
+
+export async function defaultGetEntries<T>(options: IDefaultGetEntriesOptions) {
+  const endpoint = new URL("/api/v1/entries", BASE_API_URL);
+  endpoint.searchParams.set("type", options.params.type);
+
+  options.header.contentType = "application/json";
+
+  const { data } = await httpie.post<T>(endpoint, {
+    ...setDefaultHeaderOptions(options.header)
+  });
+
+  return data;
+}
+
