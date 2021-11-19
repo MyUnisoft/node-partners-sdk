@@ -16,15 +16,16 @@ export interface IGetFECEntriesOptions extends IDefaultOptions {
     /** Format: YYYY-MM-DD */
     from: string;
 
+    /** Format: YYYY-MM-DD */
     to: string;
   };
   body: Buffer | string;
 }
 
 export async function getEntries(options: IGetFECEntriesOptions) {
-  const endpoint = new URL("/api/v1/entries", BASE_API_URL);
+  const endpoint = new URL("/api/v1/export/fec", BASE_API_URL);
   endpoint.searchParams.set("export_type", String(options.params.exportType));
-  setSearchParams(endpoint, options.params);
+  setSearchParams(endpoint, options.params, ["exportType"]);
 
   options.header.contentType = "application/json";
 
