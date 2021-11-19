@@ -90,4 +90,27 @@ export async function findRelatedEntries(options: IFindRelatedEntriesOptions) {
   return data;
 }
 
-// TODO: findOrCreate
+export interface IFindOrCreateOptions extends IDefaultOptions {
+  body: {
+    accountNumber: string;
+    label: string;
+  }
+}
+
+export async function findOrCreate(options: IFindOrCreateOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
+  const endpoint = new URL("/api/v1/account", BASE_API_URL);
+
+  options.header.contentType = "application/json";
+
+  (options.body as any).account_number = options.body.accountNumber;
+  const { accountNumber, ...body } = options.body;
+
+  const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
+    ...setDefaultHeaderOptions(options.header),
+    body
+  });
+
+  return data;
+}
