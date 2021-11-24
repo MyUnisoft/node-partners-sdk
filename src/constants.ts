@@ -63,7 +63,12 @@ export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
 //   return;
 // }
 
+
 export function setSearchParams(url: URL, options: any, customParams: any = {}) {
+  if (typeof customParams !== "object" || Array.isArray(customParams)) {
+    return new Error("customParams must be an object.");
+  }
+
   // eslint-disable-next-line guard-for-in
   for (const option in options) {
     if (option in customParams && !customParams[option]) {
@@ -76,6 +81,7 @@ export function setSearchParams(url: URL, options: any, customParams: any = {}) 
     );
   }
 
+  // eslint-disable-next-line consistent-return
   return;
 }
 
