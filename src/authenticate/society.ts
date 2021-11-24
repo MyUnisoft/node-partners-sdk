@@ -47,3 +47,13 @@ export async function generateKey(options: ISocietyAccessOptions): Promise<any> 
 
   return data;
 }
+
+export async function getEndpoints(options: IDefaultHeaderOptions) {
+  const endpoint = new URL("/api/v1/key/info", BASE_AUTH_URL);
+
+  const { data } = await httpie.get(endpoint, {
+    ...setDefaultHeaderOptions(options)
+  });
+
+  return data;
+}
