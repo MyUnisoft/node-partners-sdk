@@ -60,12 +60,57 @@ export async function paymentType(options: IDefaultHeaderOptions) {
   return data;
 }
 
-export async function society(options: IDefaultHeaderOptions) {
-  firmAccessThrowWithoutSociety(options);
+interface IGetSocietiesParams {
+  /**
+   * Permet de faire une recherche.
+   */
+  q?: string;
+
+  mode?: number;
+  limit?: number;
+  offset?: number;
+  sort?: {
+    direction: "asc" | "desc";
+    /**
+     * Permet de trier sur une colonne.
+     *
+     * Liste des colonnes : "name","city","ape","siret","status","step", "folder_reference".
+     */
+    column: string;
+  },
+  referenceFSront?: any;
+  parentSocietyId?: number;
+}
+
+export interface IGetSocietiesOptions extends IDefaultOptions {
+  params: IGetSocietiesParams
+}
+
+export async function getSocieties(options: IGetSocietiesOptions) {
+  const endpoint = new URL("/api/v1/society", BASE_API_URL);
+  setSearchParams(endpoint, options.params, {
+    parentSocietyId: "parent_society_id",
+    referenceFront: "reference_front"
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { societyId, ...header } = options.header;
+
+  const { data } = await httpie.get<Windev.Society.SocietiesArray>(endpoint, {
+    ...setDefaultHeaderOptions(header)
+  });
+
+  return data;
+}
+
+export async function getOneSociety(options: Required<IDefaultHeaderOptions>) {
+  if (!options.societyId) {
+    return new Error("Missing argment: societyId");
+  }
 
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
 
-  const { data } = await httpie.get<Windev.Society.SocietiesArray>(endpoint, {
+  const { data } = await httpie.get<Windev.Society.Company>(endpoint, {
     ...setDefaultHeaderOptions(options)
   });
 
