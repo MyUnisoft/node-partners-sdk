@@ -105,13 +105,12 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
 
   options.header.contentType = "application/json";
 
-  (options.body as any).account_number = options.body.accountNumber;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { accountNumber, ...body } = options.body;
-
   const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
     ...setDefaultHeaderOptions(options.header),
-    body
+    body: {
+      account_number: options.body.accountNumber,
+      label: options.body.label
+    }
   });
 
   return data;
