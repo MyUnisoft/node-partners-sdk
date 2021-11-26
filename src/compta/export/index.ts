@@ -2,7 +2,7 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
 
 export * as JSON from "./JSON";
 export * as FEC from "./FEC";
@@ -21,6 +21,8 @@ export interface IEntryByPartnerResponse {
 }
 
 export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
   const endpoint = new URL("/api/v1/entries/id", BASE_API_URL);
   endpoint.searchParams.set("id_origin", String(options.params.id));
 
@@ -52,6 +54,8 @@ export interface IDefaultGetEntriesOptions extends IDefaultOptions {
 }
 
 export async function defaultGetEntries<T>(options: IDefaultGetEntriesOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
   const endpoint = new URL("/api/v1/entries", BASE_API_URL);
   endpoint.searchParams.set("type", options.params.type);
 
@@ -63,4 +67,3 @@ export async function defaultGetEntries<T>(options: IDefaultGetEntriesOptions) {
 
   return data;
 }
-

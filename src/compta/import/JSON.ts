@@ -3,7 +3,7 @@ import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
 
 export interface IEntryOptions extends IDefaultOptions {
   body: Windev.Entry.NewEntry;
@@ -21,6 +21,8 @@ export interface IDirectEntryOptions extends IEntryOptions {
 }
 
 export async function sendDirectEntry(options: IDirectEntryOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
   const endpoint = new URL("/api/v1/entry", BASE_API_URL);
   endpoint.searchParams.set("type", options.params.type);
 
@@ -35,6 +37,8 @@ export async function sendDirectEntry(options: IDirectEntryOptions) {
 }
 
 export async function sendEntryPending(options: IEntryOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
   const endpoint = new URL("/api/v1/entry/temp", BASE_API_URL);
 
   options.header.contentType = "application/json";
