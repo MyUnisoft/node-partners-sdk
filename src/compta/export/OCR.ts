@@ -8,7 +8,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultOptions,
   setSearchParams,
-  setDefaultHeaderOptions
+  setDefaultHeaderOptions,
+  BASE_API_URL
 } from "../../constants";
 
 // REQUEST
@@ -96,13 +97,12 @@ export interface IGetOCRFollowUpResponse {
 }
 
 export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
-  const endpoint = new URL("api/v1/ocr_follow_up");
+  const endpoint = new URL("/api/v1/ocr_follow_up", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     startDate: "start_date",
     endDate: "end_date",
     requestMode: "request_mode"
   });
-  // ["start_date", "end_date", "request_mode", "limit", "filter", "sort", "offset"]
 
   const { data } = await httpie.post<IGetOCRFollowUpResponse>(endpoint, {
     body: options.body,
@@ -115,7 +115,7 @@ export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
 export type IOCRFollowUpV2Response = Omit<IOCRFollowUp, "from_source" | "is_parent" | "ocr_parent_doc_id" | "ocr_doc_id">[];
 
 export async function getOCRFollowUpV2(options: Omit<IOCRFollowUpOptions, "body">) {
-  const endpoint = new URL("api/v1/ocr_follow_up_V2");
+  const endpoint = new URL("api/v1/ocr_follow_up_V2", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     startDate: "start_date",
     endDate: "end_date",
