@@ -7,7 +7,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultOptions,
   setSearchParams,
-  setDefaultHeaderOptions
+  setDefaultHeaderOptions,
+  BASE_API_URL
 } from "../../constants";
 
 export interface IPendingDocumentOptions extends IDefaultOptions {
@@ -53,7 +54,7 @@ export interface IPendingDocuments {
 }
 
 export async function getPendingDocument(options: IPendingDocumentOptions) {
-  const endpoint = new URL("/document/pending");
+  const endpoint = new URL("/api/v1/document/pending", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     sortDateDirection: "sort_date_direction",
     societyId: "society_id"
