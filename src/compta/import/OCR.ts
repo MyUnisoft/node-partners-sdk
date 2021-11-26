@@ -2,7 +2,14 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { setDefaultHeaderOptions, IDefaultOptions, setSearchParams, enumInvoiceType, BASE_API_URL } from "../../constants";
+import {
+  setDefaultHeaderOptions,
+  IDefaultOptions,
+  setSearchParams,
+  enumInvoiceType,
+  BASE_API_URL,
+  firmAccessThrowWithoutSociety
+} from "../../constants";
 
 export interface ISendImgOrPdfOptions extends IDefaultOptions {
   params: {
@@ -15,6 +22,8 @@ export interface ISendImgOrPdfOptions extends IDefaultOptions {
 }
 
 export async function sendImgOrPdf(options: ISendImgOrPdfOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
   const enumOCRType = {
     Manuel: "2",
     OCRMyUnisoft: "3",
@@ -30,7 +39,7 @@ export async function sendImgOrPdf(options: ISendImgOrPdfOptions) {
     ocrType: undefined
   });
 
-  options.header.contentType = "application/octect";
+  options.header.contentType = "application/octet-stream";
 
   const { data } = await httpie.post(endpoint, {
     ...setDefaultHeaderOptions(options.header),
