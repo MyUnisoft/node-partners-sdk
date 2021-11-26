@@ -78,7 +78,7 @@ interface IGetSocietiesParams {
      */
     column: string;
   },
-  referenceFSront?: any;
+  referenceFront?: any;
   parentSocietyId?: number;
 }
 
