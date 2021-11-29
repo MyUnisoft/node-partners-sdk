@@ -71,7 +71,7 @@ export interface IUpdateAccountOptions extends IDefaultOptions {
 
 export async function updateAccount(options: IUpdateAccountOptions) {
   if (!isFirmAccess()) {
-    return new Error("This endpoint only work with a cabinet (firm) access.");
+    return new Error("This endpoint only works with a cabinet (firm) access.");
   }
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
