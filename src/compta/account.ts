@@ -40,58 +40,6 @@ export async function getAllDetailed(options: IDefaultHeaderOptions) {
   return data;
 }
 
-export interface IFindRelatedEntriesOptions extends IDefaultOptions {
-  params: {
-    accountNo: number;
-    accountId: number;
-    limit?: number;
-
-    /**
-     * Starting rows (Default 0).
-     */
-    offset?: number;
-
-    /**
-     * Optionnal date ranges but if it's activated start_date and end_date must be filled.
-     */
-    searchDate?: string;
-
-    sort?: {
-      direction: "desc" | "asc";
-      column: "credit" | "debit" | "date" | "label" | "lettrage" | "piece" | "piece2";
-    };
-
-    /**
-     * If lettering param not filled all entries are retrieved.
-     *
-     * True = entries filtered by lettering not empty.
-     * False = entries filtered by lettering empty.
-     */
-    lettering?: boolean;
-
-    // ???
-    prevnext?: "previous" | "next";
-  }
-}
-
-export async function findRelatedEntries(options: IFindRelatedEntriesOptions) {
-  firmAccessThrowWithoutSociety(options.header);
-
-  const endpoint = new URL("/api/v1/account/entries", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    accountNo: "account_no",
-    accountId: "account_id",
-    searchDate: "search_date"
-  });
-
-  // Vérifier le type de retour.
-  const { data } = await httpie.get<Windev.Account.AccountEntries>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
-  });
-
-  return data;
-}
-
 export interface IFindOrCreateOptions extends IDefaultOptions {
   body: {
     accountNumber: string;
@@ -184,7 +132,6 @@ export interface IAccountV2Options extends IDefaultOptions {
      */
     begin_by: string;
   }
-
 }
 
 export async function getAccountV2(options: IAccountV2Options) {
@@ -210,7 +157,7 @@ interface ILineEntriesParams {
    */
   lettering?: "false" | "true" | "date";
 
-  /** 
+  /**
    * Identifiant du compte pour lequel on veut récupérer les écritures.
    * Soit ILineEntriesOptions.account_id, soit ILineEntriesOptions.account_no. */
   accountId?: string;
