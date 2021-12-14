@@ -62,7 +62,8 @@ export async function defaultGetEntries<T>(options: IDefaultGetEntriesOptions) {
   options.header.contentType = "application/json";
 
   const { data } = await httpie.post<T>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    ...setDefaultHeaderOptions(options.header),
+    body: options.body
   });
 
   return data;
