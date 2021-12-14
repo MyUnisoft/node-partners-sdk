@@ -9,6 +9,7 @@ export * as facturX from "./FacturX";
 export * as JSON from "./JSON";
 export * as TRA from "./TRA";
 export * as FEC from "./FEC";
+export * as EBICS from "./EBICS";
 
 export interface IAddAttachmentToEntryOptions extends IDefaultOptions {
   params: {
