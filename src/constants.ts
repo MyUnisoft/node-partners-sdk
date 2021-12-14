@@ -23,6 +23,7 @@ export interface IDefaultHeaderOptions {
   societyId?: string | number;
 
   contentType?:
+  "text/plain" |
   "application/zip" |
   "application/octect" |
   "application/json" |

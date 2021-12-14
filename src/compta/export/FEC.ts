@@ -28,10 +28,11 @@ export async function getEntries(options: IGetFECEntriesOptions) {
     exportType: "export_type"
   });
 
-  options.header.contentType = "application/json";
+  options.header.contentType = "text/plain";
 
   const { data } = await httpie.post<{status: string}>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    ...setDefaultHeaderOptions(options.header),
+    body: options.body
   });
 
   return data;
