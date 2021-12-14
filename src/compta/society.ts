@@ -62,13 +62,10 @@ export async function paymentType(options: IDefaultHeaderOptions) {
 
 interface IGetSocietiesParams {
   /**
-   * Permet de faire une recherche.
+   * Permet de faire une recherche dans les champs : siret, ape, name.
    */
-  q?: string;
+  search?: string;
 
-  mode?: number;
-  limit?: number;
-  offset?: number;
   sort?: {
     direction: "asc" | "desc";
     /**
@@ -86,13 +83,16 @@ export interface IGetSocietiesOptions extends IDefaultOptions {
   params: IGetSocietiesParams
 }
 
+// pour firm uniquement?
 export async function getSocieties(options: IGetSocietiesOptions) {
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     parentSocietyId: "parent_society_id",
-    referenceFront: "reference_front"
+    referenceFront: "reference_front",
+    search: "q"
   });
 
+  // Peut retourner une seule société selon les paramètres dans le cas où le header contient society-id.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { societyId, ...header } = options.header;
 
@@ -105,7 +105,7 @@ export async function getSocieties(options: IGetSocietiesOptions) {
 
 export async function getOneSociety(options: Required<IDefaultHeaderOptions>) {
   if (!options.societyId) {
-    return new Error("Missing argment: societyId");
+    return new Error("Missing argment 'societyId'");
   }
 
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
@@ -117,13 +117,56 @@ export async function getOneSociety(options: Required<IDefaultHeaderOptions>) {
   return data;
 }
 
-export async function balance(options: IDefaultHeaderOptions) {
-  const endpoint = new URL("/api/v1/balance_dynamique", BASE_API_URL);
+interface IBalanceByExerciceParams {
+  /**
+   * ID de l’exercice dont on souhaite la balance.
+   */
+  fiscalYearId: number;
 
-  options.contentType = "application/octet-stream";
+  /**
+   * ID de l’axe dont on souhaite la balance.
+   */
+  axisId: number;
+
+  type?: "compare" | "aged";
+}
+
+interface IBalanceByDateParams {
+  /**
+   * Format: YYYYMMDD
+   */
+  startDate: string;
+
+  /**
+   * Format: YYYYMMDD
+   */
+  endDate: string;
+
+  /**
+   * ID de l’axe dont on souhaite la balance.
+   */
+  axisId: number;
+}
+
+export interface IBalanceOptions extends IDefaultOptions {
+  params: IBalanceByExerciceParams | IBalanceByDateParams;
+}
+
+export async function balance(options: IBalanceOptions) {
+  firmAccessThrowWithoutSociety(options.header);
+
+  const endpoint = new URL("/api/v1/balance_dynamique", BASE_API_URL);
+  setSearchParams(endpoint, options.params, {
+    startDate: "start_date",
+    endDate: "end_date",
+    axisId: "axis_id",
+    fiscalYearId: "fiscal_year_id"
+  });
+
+  options.header.contentType = "application/x-www-form-urlencoded";
 
   const { data } = await httpie.get(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    ...setDefaultHeaderOptions(options.header)
   });
 
   return data;
@@ -150,7 +193,7 @@ export async function getGrandLivre(options: IGetGrandLivreOptions) {
     endDate: "end_date"
   });
 
-  options.header.contentType = "application/octet-stream";
+  options.header.contentType = "application/json";
 
   const { data } = await httpie.get(endpoint, {
     ...setDefaultHeaderOptions(options.header)
