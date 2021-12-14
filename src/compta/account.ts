@@ -8,33 +8,72 @@ import { isFirmAccess } from "../authenticate/access_type";
 import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
-  IDefaultHeaderOptions,
   IDefaultOptions,
   setDefaultHeaderOptions,
   setSearchParams
 } from "../constants";
 
-export async function getAll(options: IDefaultHeaderOptions) {
-  firmAccessThrowWithoutSociety(options);
+export interface IGetAllOptions extends IDefaultOptions {
+  params: {
+    /**
+     * @description
+     * OPTIONAL.
+     *
+     * Retrieves:
+     * - accounts where the account label includes accountNumber.
+     * - accounts where the account number starts with accountNumber.
+     */
+    accountNumber?: string;
+
+    /**
+     * OPTIONAL. Default value: 5.
+     */
+    limit?: number;
+  }
+}
+
+export async function getAll(options: IGetAllOptions) {
+  firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
   endpoint.searchParams.set("mode", "1");
+  setSearchParams(endpoint, options.params, {
+    accountNumber: "q"
+  });
 
   const { data } = await httpie.get<Windev.Account.SimplifiedAccount[]>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    ...setDefaultHeaderOptions(options.header)
   });
 
   return data;
 }
 
-export async function getAllDetailed(options: IDefaultHeaderOptions) {
-  firmAccessThrowWithoutSociety(options);
+export interface IGetAllDetailedOptions extends IDefaultOptions {
+  params: {
+    /**
+     * @description OPTIONAL. Retrieves accounts where the account number starts with begin_by.
+     */
+    accountNumber?: string;
+
+    /**
+     * OPTIONAL.
+     */
+    sort?: number;
+  }
+}
+
+export async function getAllDetailed(options: IGetAllDetailedOptions) {
+  firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
   endpoint.searchParams.set("mode", "2");
+  setSearchParams(endpoint, options.params, {
+    accountNumber: "begin_by",
+    sort: "sort_"
+  });
 
   const { data } = await httpie.get<Windev.Account.DetailedAccounts>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    ...setDefaultHeaderOptions(options.header)
   });
 
   return data;
@@ -81,71 +120,6 @@ export async function updateAccount(options: IUpdateAccountOptions) {
   const { data } = await httpie.put<Windev.Account.Account | { status: string; message: string; }>(endpoint, {
     ...setDefaultHeaderOptions(options.header),
     body: options.body
-  });
-
-  return data;
-}
-
-export interface IAccountV2Options extends IDefaultOptions {
-  params: {
-    account_id?: string;
-
-    /**
-     * Permet d'obtenir les infos complémentaires.
-     * Valeur par défaut: false.
-     */
-    details?: boolean;
-
-    /**
-     * Permet d’obtenir les infos sens, solde et blocked pour le plan comptable.
-     * Valeur par défaut: false.
-     */
-    compta?: boolean;
-
-    /**
-     * Permet d'obtenir les infos TVA.
-     * Valeur par défaut: false.
-     */
-    vat?: boolean;
-
-    /**
-     * Permet d'obtenir les infos de contrepartie.
-     * Valeur par défaut: false.
-     */
-    counterpart?: boolean;
-
-    /**
-     * Permet de faire un contrôle de validation du compte à la date donnée (aucun contrôle si pas de date).
-     * Format: YYYYMMDD
-     */
-    entry_date?: string;
-
-    /**
-     * Permet d’obtenir les infos des quantités.
-     * Valeur par défaut: false.
-     */
-    quantity: boolean;
-
-    /**
-     * Permet de filtrer sur des comptes commançant par...
-     * Valeur par défaut: "".
-     */
-    begin_by: string;
-  }
-}
-
-export async function getAccountV2(options: IAccountV2Options) {
-  firmAccessThrowWithoutSociety(options.header);
-
-  const endpoint = new URL("/api/v1/account/v2", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    accountantId: "accountant_id",
-    entryDate: "entry_date",
-    beginBy: "begin_by"
-  });
-
-  const { data } = httpie.get<Windev.Account.DetailedAccountV2>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
   });
 
   return data;
@@ -205,80 +179,145 @@ export async function getlineEntries(options: ILineEntriesOptions) {
   return data;
 }
 
-export interface IBalanceOptions extends IDefaultOptions {
-  params: {
-    /**
-     * Date pour identifier l’exercice associé.
-     * Format: YYYY_MM
-     */
-    date: string;
+// export interface IAccountV2Options extends IDefaultOptions {
+//   params: {
+//     account_id?: string;
 
-    accountId: string;
-  }
-}
+//     /**
+//      * Permet d'obtenir les infos complémentaires.
+//      * Valeur par défaut: false.
+//      */
+//     details?: boolean;
 
-export async function getBalance(options: IBalanceOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+//     /**
+//      * Permet d’obtenir les infos sens, solde et blocked pour le plan comptable.
+//      * Valeur par défaut: false.
+//      */
+//     compta?: boolean;
 
-  // à vérifier
-  const endpoint = new URL(`/api/v1/account/${options.params.accountId}/balance`, BASE_API_URL);
-  endpoint.searchParams.set("YYYY_MM", options.params.date);
+//     /**
+//      * Permet d'obtenir les infos TVA.
+//      * Valeur par défaut: false.
+//      */
+//     vat?: boolean;
 
-  options.header.contentType = "application/json";
+//     /**
+//      * Permet d'obtenir les infos de contrepartie.
+//      * Valeur par défaut: false.
+//      */
+//     counterpart?: boolean;
 
-  const { data } = await httpie.get<Windev.Account.AccountBalance>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
-  });
+//     /**
+//      * Permet de faire un contrôle de validation du compte à la date donnée (aucun contrôle si pas de date).
+//      * Format: YYYYMMDD
+//      */
+//     entry_date?: string;
 
-  return data;
-}
+//     /**
+//      * Permet d’obtenir les infos des quantités.
+//      * Valeur par défaut: false.
+//      */
+//     quantity: boolean;
 
-export interface INextLetteringOptions extends IDefaultOptions {
-  params: {
-    accountId: string;
-  }
-}
+//     /**
+//      * Permet de filtrer sur des comptes commançant par...
+//      * Valeur par défaut: "".
+//      */
+//     begin_by: string;
+//   }
+// }
 
-export async function getNextLettering(options: INextLetteringOptions) {
-  const endpoint = new URL(`/api/v1/account/${options.params.accountId}/next_lettering`, BASE_API_URL);
+// export async function getAccountV2(options: IAccountV2Options) {
+//   firmAccessThrowWithoutSociety(options.header);
 
-  const { data } = httpie.get<Windev.Account.NextLettering>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
-  });
+//   const endpoint = new URL("/api/v1/account/v2", BASE_API_URL);
+//   setSearchParams(endpoint, options.params, {
+//     accountantId: "accountant_id",
+//     entryDate: "entry_date",
+//     beginBy: "begin_by"
+//   });
 
-  return data;
-}
+//   const { data } = httpie.get<Windev.Account.DetailedAccountV2>(endpoint, {
+//     ...setDefaultHeaderOptions(options.header)
+//   });
 
-export async function getUnbalancedLettering(options: IDefaultHeaderOptions) {
-  firmAccessThrowWithoutSociety(options);
+//   return data;
+// }
 
-  const endpoint = new URL("/api/v1/account/unbalanced_lettering", BASE_API_URL);
+// export interface IBalanceOptions extends IDefaultOptions {
+//   params: {
+//     /**
+//      * Date pour identifier l’exercice associé.
+//      * Format: YYYY_MM
+//      */
+//     date: string;
 
-  const { data } = httpie.get<Windev.Account.UnbalancedLettering[]>(endpoint, {
-    ...setDefaultHeaderOptions(options)
-  });
+//     accountId: string;
+//   }
+// }
 
-  return data;
-}
+// export async function getBalance(options: IBalanceOptions) {
+//   firmAccessThrowWithoutSociety(options.header);
 
-export interface IAccountRevisionOptions extends IDefaultOptions {
-  params: {
-    accountId: string;
-    dossierRevisionId: string;
-  }
-}
+//   // à vérifier
+//   const endpoint = new URL(`/api/v1/account/${options.params.accountId}/balance`, BASE_API_URL);
+//   endpoint.searchParams.set("YYYY_MM", options.params.date);
 
-export async function getAccountRevision(options: IAccountRevisionOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+//   options.header.contentType = "application/json";
 
-  const endpoint = new URL(
-    `/api/v1/accounts/${options.params.accountId}/revisions/${options.params.dossierRevisionId}/infos`,
-    BASE_API_URL
-  );
+//   const { data } = await httpie.get<Windev.Account.AccountBalance>(endpoint, {
+//     ...setDefaultHeaderOptions(options.header)
+//   });
 
-  const { data } = httpie.get<Windev.Account.AccountRevision>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
-  });
+//   return data;
+// }
 
-  return data;
-}
+// export interface INextLetteringOptions extends IDefaultOptions {
+//   params: {
+//     accountId: string;
+//   }
+// }
+
+// export async function getNextLettering(options: INextLetteringOptions) {
+//   const endpoint = new URL(`/api/v1/account/${options.params.accountId}/next_lettering`, BASE_API_URL);
+
+//   const { data } = httpie.get<Windev.Account.NextLettering>(endpoint, {
+//     ...setDefaultHeaderOptions(options.header)
+//   });
+
+//   return data;
+// }
+
+// export async function getUnbalancedLettering(options: IDefaultHeaderOptions) {
+//   firmAccessThrowWithoutSociety(options);
+
+//   const endpoint = new URL("/api/v1/account/unbalanced_lettering", BASE_API_URL);
+
+//   const { data } = httpie.get<Windev.Account.UnbalancedLettering[]>(endpoint, {
+//     ...setDefaultHeaderOptions(options)
+//   });
+
+//   return data;
+// }
+
+// export interface IAccountRevisionOptions extends IDefaultOptions {
+//   params: {
+//     accountId: string;
+//     dossierRevisionId: string;
+//   }
+// }
+
+// export async function getAccountRevision(options: IAccountRevisionOptions) {
+//   firmAccessThrowWithoutSociety(options.header);
+
+//   const endpoint = new URL(
+//     `/api/v1/accounts/${options.params.accountId}/revisions/${options.params.dossierRevisionId}/infos`,
+//     BASE_API_URL
+//   );
+
+//   const { data } = httpie.get<Windev.Account.AccountRevision>(endpoint, {
+//     ...setDefaultHeaderOptions(options.header)
+//   });
+
+//   return data;
+// }
