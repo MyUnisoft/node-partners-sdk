@@ -11,7 +11,7 @@ export interface ISendTRAOptions extends IDefaultOptions {
 export async function sendTRA(options: ISendTRAOptions) {
   const endpoint = new URL("/api/v1/TRA/partial", BASE_API_URL);
 
-  options.header.contentType = "application/octet-stream";
+  options.header.contentType = "application/zip";
 
   const { data } = await httpie.post<{status: string}>(endpoint, {
     ...setDefaultHeaderOptions(options.header)
