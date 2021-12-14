@@ -51,19 +51,6 @@ export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
   };
 }
 
-// export function setSearchParams(url: URL, options: any, params: string[] = []) {
-//   const excludeParams = new Set(params);
-
-//   for (const option in options) {
-//     if (!excludeParams.has(option)) {
-//       url.searchParams.set(option, typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]);
-//     }
-//   }
-
-//   return;
-// }
-
-
 export function setSearchParams(url: URL, options: any, customParams: any = {}) {
   if (typeof customParams !== "object" || Array.isArray(customParams)) {
     return new Error("customParams must be an object.");
