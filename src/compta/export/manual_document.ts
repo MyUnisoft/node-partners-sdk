@@ -4,11 +4,11 @@ import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
 import {
-  firmAccessThrowWithoutSociety,
   IDefaultOptions,
   setSearchParams,
   setDefaultHeaderOptions,
-  BASE_API_URL
+  BASE_API_URL,
+  throwIfIsNotFirm
 } from "../../constants";
 
 export interface IPendingDocumentOptions extends IDefaultOptions {
@@ -54,6 +54,8 @@ export interface IPendingDocuments {
 }
 
 export async function getPendingDocument(options: IPendingDocumentOptions) {
+  throwIfIsNotFirm();
+
   const endpoint = new URL("/api/v1/document/pending", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     sortDateDirection: "sort_date_direction",
