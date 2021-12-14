@@ -8,13 +8,15 @@ import {
   IDefaultOptions,
   enumInvoiceType,
   BASE_API_URL,
-  firmAccessThrowWithoutSociety
+  firmAccessThrowWithoutSociety,
+  setSearchParams
 } from "../../constants";
 
 export interface ISendFacturXPdfOptions extends IDefaultOptions {
   params: {
     name: string;
-    invoiceType: "Achat" | "Frais" | "Vente" | "Avoir";
+    invoiceType: "Achat" | "Note de frais" | "Vente" | "Avoir";
+    extension: "pdf"
   };
   body: Buffer | string;
 }
@@ -25,8 +27,9 @@ export async function sendFacturXPdf(options: ISendFacturXPdfOptions) {
   const endpoint = new URL("/api/v1/invoice", BASE_API_URL);
   endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.params.invoiceType]);
   endpoint.searchParams.set("ocr_type_id", "6");
-  endpoint.searchParams.set("extension", "pdf");
-  endpoint.searchParams.set("name", options.params.name);
+  setSearchParams(endpoint, options.params, {
+    invoiceType: undefined
+  });
 
   options.header.contentType = "application/octect";
 
