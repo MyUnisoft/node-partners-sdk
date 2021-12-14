@@ -1,6 +1,5 @@
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
-import { isFirmAccess } from "../../authenticate/access_type";
 
 // Import Internal Dependencies
 import {
@@ -8,7 +7,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultOptions,
   setDefaultHeaderOptions,
-  setSearchParams
+  setSearchParams,
+  throwIfIsNotFirm
 } from "../../constants";
 
 export interface ISendEBICS extends IDefaultOptions {
@@ -19,9 +19,7 @@ export interface ISendEBICS extends IDefaultOptions {
 }
 
 export async function sendEBICS(options: ISendEBICS) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/releve_bancaire", BASE_API_URL);

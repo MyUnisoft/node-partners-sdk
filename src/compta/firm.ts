@@ -1,7 +1,6 @@
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
-import { isFirmAccess } from "../authenticate/access_type";
 
 // Import Internal Dependencies
 import {
@@ -10,13 +9,12 @@ import {
   IDefaultHeaderOptions,
   IDefaultOptions,
   setDefaultHeaderOptions,
-  setSearchParams
+  setSearchParams,
+  throwIfIsNotFirm
 } from "../constants";
 
 export async function getUsersV2(options: IDefaultHeaderOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/users_v2", BASE_API_URL);
 
@@ -28,9 +26,7 @@ export async function getUsersV2(options: IDefaultHeaderOptions) {
 }
 
 export async function getPhysicalPersons(options: IDefaultHeaderOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/pers_physique", BASE_API_URL);
 
@@ -42,9 +38,7 @@ export async function getPhysicalPersons(options: IDefaultHeaderOptions) {
 }
 
 export async function getWallets(options: IDefaultHeaderOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/wallet", BASE_API_URL);
 
@@ -56,9 +50,7 @@ export async function getWallets(options: IDefaultHeaderOptions) {
 }
 
 export async function getFirms(options: IDefaultHeaderOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/member", BASE_API_URL);
 
@@ -73,9 +65,7 @@ export async function getFirms(options: IDefaultHeaderOptions) {
  * Admin EC.
  */
 export async function getDashboardModules(options: IDefaultHeaderOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/dashboard/modules", BASE_API_URL);
 
@@ -87,9 +77,7 @@ export async function getDashboardModules(options: IDefaultHeaderOptions) {
 }
 
 export async function getCompanies(options: IDefaultHeaderOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
 
@@ -107,9 +95,7 @@ export interface ISearchCompanyByRefOptions extends IDefaultOptions {
 }
 
 export async function getCompanyByRef(options: ISearchCompanyByRefOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/society/search", BASE_API_URL);
   endpoint.searchParams.set("reference", options.params.reference);
@@ -131,9 +117,7 @@ export interface IGetReviewOptions extends IDefaultOptions {
 }
 
 export async function getReview(options: IGetReviewOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/dadp/dossier_revision_list", BASE_API_URL);
@@ -171,9 +155,7 @@ export interface IGetCycleOfReviewOptions extends IDefaultOptions {
 }
 
 export async function getCycleOfReview(options: IGetCycleOfReviewOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/dadp/cycle", BASE_API_URL);
@@ -203,9 +185,7 @@ export interface IWorkProgramOfReview extends IGetCycleOfReviewOptions {
 }
 
 export async function getWorkProgramOfReview(options: IWorkProgramOfReview) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/dadp/cycle", BASE_API_URL);

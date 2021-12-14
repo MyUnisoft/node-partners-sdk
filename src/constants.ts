@@ -80,3 +80,7 @@ export function setSearchParams(url: URL, options: any, customParams: any = {}) 
 export function firmAccessThrowWithoutSociety(header: IDefaultHeaderOptions) {
   return isFirmAccess() && !("societyId" in header) ? new Error("SocietyId is missing in the header.") : undefined;
 }
+
+export function throwIfIsNotFirm() {
+  return isFirmAccess() ? undefined : new Error("This endpoint only works with a cabinet (firm) access.");
+}

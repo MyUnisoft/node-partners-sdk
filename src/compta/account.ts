@@ -2,7 +2,6 @@
 import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
 import { RequireExactlyOne } from "type-fest";
-import { isFirmAccess } from "../authenticate/access_type";
 
 // Import Internal Dependencies
 import {
@@ -10,7 +9,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultOptions,
   setDefaultHeaderOptions,
-  setSearchParams
+  setSearchParams,
+  throwIfIsNotFirm
 } from "../constants";
 
 export interface IGetAllOptions extends IDefaultOptions {
@@ -109,9 +109,7 @@ export interface IUpdateAccountOptions extends IDefaultOptions {
 }
 
 export async function updateAccount(options: IUpdateAccountOptions) {
-  if (!isFirmAccess()) {
-    return new Error("This endpoint only works with a cabinet (firm) access.");
-  }
+  throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
 
