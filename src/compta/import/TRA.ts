@@ -14,9 +14,9 @@ export async function sendTRA(options: ISendTRAOptions) {
   options.header.contentType = "application/zip";
 
   const { data } = await httpie.post<{status: string}>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    ...setDefaultHeaderOptions(options.header),
+    body: options.body
   });
 
   return data;
 }
-
