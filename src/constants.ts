@@ -22,7 +22,7 @@ export interface IDefaultHeaderOptions {
   /** Company (dossier de production) id */
   societyId?: string | number;
 
-  contentType?: "application/octect" | "application/json" | "application/octet-stream";
+  contentType?: "application/octect" | "application/json" | "application/octet-stream" | "application/x-www-form-urlencoded";
 }
 
 export interface IDefaultOptions {
