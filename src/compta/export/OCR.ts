@@ -5,11 +5,11 @@ import * as httpie from "@myunisoft/httpie";
 // Import Internal Dependencies
 // import { defaultGetEntries, IDefaultGetEntriesOptions } from "./index";
 import {
-  firmAccessThrowWithoutSociety,
   IDefaultOptions,
   setSearchParams,
   setDefaultHeaderOptions,
-  BASE_API_URL
+  BASE_API_URL,
+  throwIfIsNotFirm
 } from "../../constants";
 
 // REQUEST
@@ -29,7 +29,7 @@ interface IGetOCRFollowUpParams {
    *
    * 3 (OCR only)
    */
-  requestMode: number;
+  mode: 1 | 2 | 3;
 
   /** Valeur par défaut: 1000000 */
   limit?: number;
@@ -40,7 +40,7 @@ interface IGetOCRFollowUpParams {
   /** Column and direction of sorting results by columns (society, fileName, type, sendBy, status). */
   sort?: {
     direction: "asc" | "desc";
-    column: string;
+    column: "society" | "fileName" | "type" | "sendBy" | "status";
   }
 
   /** List of society_id in an array. */
@@ -97,6 +97,8 @@ export interface IGetOCRFollowUpResponse {
 }
 
 export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
+  throwIfIsNotFirm();
+
   const endpoint = new URL("/api/v1/ocr_follow_up", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     startDate: "start_date",
@@ -112,75 +114,18 @@ export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
   return data;
 }
 
-export type IOCRFollowUpV2Response = Omit<IOCRFollowUp, "from_source" | "is_parent" | "ocr_parent_doc_id" | "ocr_doc_id">[];
+// export type IOCRFollowUpV2Response = Omit<IOCRFollowUp, "from_source" | "is_parent" | "ocr_parent_doc_id" | "ocr_doc_id">[];
 
-export async function getOCRFollowUpV2(options: Omit<IOCRFollowUpOptions, "body">) {
-  const endpoint = new URL("api/v1/ocr_follow_up_V2", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    startDate: "start_date",
-    endDate: "end_date",
-    requestMode: "request_mode",
-    arraySocietyId: "array_society_id"
-  });
+// export async function getOCRFollowUpV2(options: Omit<IOCRFollowUpOptions, "body">) {
+//   const endpoint = new URL("api/v1/ocr_follow_up_V2", BASE_API_URL);
+//   setSearchParams(endpoint, options.params, {
+//     startDate: "start_date",
+//     endDate: "end_date",
+//     requestMode: "request_mode",
+//     arraySocietyId: "array_society_id"
+//   });
 
-  const { data } = await httpie.get<IOCRFollowUpV2Response>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
-  });
-
-  return data;
-}
-
-
-// export interface IOCRFollowUpOptions extends IDefaultOptions {
-//   body: {
-//     sort?: {
-//       ecr: "desc" | "asc";
-//     };
-//     filters?: {
-//       // type: "e" ???
-
-//       diary?: number;
-//       /** Format: YYYY-MM-DD. */
-//       start_date?: string;
-
-//       /** Format: YYYY-MM-DD. */
-//       end_date?: string;
-//     };
-//   }
-// }
-
-// /**
-//  * Suivi OCR.
-//  */
-// export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
-//   firmAccessThrowWithoutSociety(options.header);
-
-//   (options as IDefaultGetEntriesOptions).params = { type: "o" };
-
-//   return await defaultGetEntries<Windev.Entry.Entries>(options as IDefaultGetEntriesOptions);
-// }
-
-// /**
-//  * Récupérer Flux Manuel.
-//  */
-// export async function getFluxManuel(options: IOCRFollowUpOptions) {
-//   firmAccessThrowWithoutSociety(options.header);
-
-//   (options as IDefaultGetEntriesOptions).params = { type: "m" };
-
-//   return await defaultGetEntries<Windev.Entry.Entries>(options as IDefaultGetEntriesOptions);
-// }
-
-// export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
-//   const endpoint = new URL("/api/v1/entries", BASE_API_URL);
-//   endpoint.searchParams.set("type", "o");
-
-//   if (isFirmAccess() && !("societyId" in options.header)) {
-//     return new Error("Need societyId in the header.");
-//   }
-
-//   const { data } = await httpie.post<Windev.Entry.Entries>(endpoint, {
-//     body: options.body,
+//   const { data } = await httpie.get<IOCRFollowUpV2Response>(endpoint, {
 //     ...setDefaultHeaderOptions(options.header)
 //   });
 
