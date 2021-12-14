@@ -14,7 +14,7 @@ export interface IAddAttachmentToEntryOptions extends IDefaultOptions {
   params: {
     location: "ENTRIES" | "ENTRIES_TEMP";
     objectId: number;
-    filenameExtension: string;
+    filename: string;
   };
 }
 
@@ -22,7 +22,7 @@ export async function addAttachmentToEntry(options: IAddAttachmentToEntryOptions
   const endpoint = new URL("/api/v1/document/add_all_types", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     objectId: "object_id",
-    filenameExtension: "filename_extension"
+    filename: "filename_extension"
   });
 
   // ???
