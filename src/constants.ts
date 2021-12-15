@@ -78,6 +78,8 @@ export function setSearchParams(url: URL, options: any, customParams: any = {}) 
   return;
 }
 
+
+// CHECK ACCES TYPE
 export function firmAccessThrowWithoutSociety(header: IDefaultHeaderOptions) {
   return isFirmAccess() && !("societyId" in header) ? new Error("SocietyId is missing in the header.") : undefined;
 }
