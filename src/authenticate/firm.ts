@@ -3,6 +3,7 @@ import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
 import * as constants from "../constants";
+import * as accessType from "./access_type";
 
 export interface IFirmAuthenticateOptions {
   mail: string;
@@ -27,6 +28,8 @@ export async function authenticate(options: IFirmAuthenticateOptions): Promise<I
   const response = await httpie.post<IFirmAuthenticateResponse>(endpoint, {
     body: options
   });
+
+  accessType.set("firm");
 
   return response.data;
 }
