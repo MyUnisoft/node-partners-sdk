@@ -4,7 +4,6 @@ import * as httpie from "@myunisoft/httpie";
 // Import Internal Dependencies
 import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
 
-export * as JSON from "./JSON";
 export * as FEC from "./FEC";
 export * as OCR from "./OCR";
 
@@ -53,7 +52,7 @@ export interface IDefaultGetEntriesOptions extends IDefaultOptions {
   body: any;
 }
 
-export async function defaultGetEntries<T>(options: IDefaultGetEntriesOptions) {
+export async function getEntries<T>(options: IDefaultGetEntriesOptions) {
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/entries", BASE_API_URL);
