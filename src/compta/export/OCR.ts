@@ -3,7 +3,6 @@ import * as httpie from "@myunisoft/httpie";
 // import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
-// import { defaultGetEntries, IDefaultGetEntriesOptions } from "./index";
 import {
   IDefaultOptions,
   setSearchParams,
