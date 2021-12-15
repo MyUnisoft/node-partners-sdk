@@ -1,6 +1,6 @@
 let accessType: AccessLabel;
 
-type AccessLabel = "firm" | "society";
+type AccessLabel = "firm";
 
 export function set(access: AccessLabel) {
   accessType = access;
