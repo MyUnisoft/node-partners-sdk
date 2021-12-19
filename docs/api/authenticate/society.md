@@ -1,22 +1,29 @@
 # Society access
-Once your API token is generated, it is no longer necessary to use this function (unless the token has been revoked).
+>Once your API token is generated, it is no longer necessary to use this function (unless the token has been revoked).
 
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";
-import { ApiToken } from "@myunisoft/tsd";
 
-const options: MyUnisfot.auth.society.ISocietyAccessOptions = {
+const payload: MyUnisfot.auth.society.ISocietyAccessOptions = {
   mail: "Your@mail",
   password: "Your password",
   companyId: 1234 
 };
 
-const data: ApiToken = await generateKey(options);
+const { value: accessToken } = await Myunisoft.auth.society.generateKey(payload);
+```
+
+If everything worked fine, you can use the function **getEndpoints** to get the list of authorized endpoints:
+```ts
+const options: IDefaultHeaderOptions = { accessToken };
+const endpoints: Endpoint[] = await Myunisoft.auth.society.getEndpoints(options);
 ```
 
 ## Interfaces
+- [IDefaultHeaderOptions](../../../interfaces/common.md).
+
 ```ts
-type generateKey = (options: ISocietyAccessOptions) => Promise<ApiToken>;
+type generateKey = (payload: ISocietyAccessOptions) => Promise<any>;
 
 interface ISocietyAccessOptions {
   mail: string;
@@ -28,10 +35,11 @@ interface ISocietyAccessOptions {
   companyId: number;
 }
 
-interface ApiToken {
-  type: "api";
-  member_group_id: number;
-  third_party_id: number;
-  society_id: number;
+interface Endpoint {
+  path: string;
+  method: "get" | "post" | "put" | "delete";
 }
+
+type getEndpoints = (options: IDefaultHeaderOptions) => Promise<Endpoint[]>;
+
 ```
