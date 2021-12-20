@@ -19,6 +19,8 @@ const data: Windev.Society.Exercice[] = await MyUnisfot.compta.society.exercices
 - [IDefaultHeaderOptions](../../../interfaces/common.md).
 
 ```ts
+type exercices = (options: IDefaultHeaderOptions) => Promise<Exercice[]>;
+
 interface Exercice {
   exercice_id: number;
   start_date: string;
