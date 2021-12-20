@@ -62,16 +62,16 @@ export async function paymentType(options: IDefaultHeaderOptions) {
 
 interface IGetSocietiesParams {
   /**
-   * Permet de faire une recherche dans les champs : siret, ape, name.
+   * Allows you to search in fields: siret, ape, name.
    */
   search?: string;
 
   sort?: {
     direction: "asc" | "desc";
     /**
-     * Permet de trier sur une colonne.
+     * Allows you to sort on a column.
      *
-     * Liste des colonnes : "name","city","ape","siret","status","step", "folder_reference".
+     * Columns name: "name","city","ape","siret","status","step", "folder_reference".
      */
     column: string;
   },
@@ -80,17 +80,20 @@ interface IGetSocietiesParams {
 }
 
 export interface IGetSocietiesOptions extends IDefaultOptions {
-  params: IGetSocietiesParams
+  params?: IGetSocietiesParams
 }
 
 // pour firm uniquement?
 export async function getSocieties(options: IGetSocietiesOptions) {
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    parentSocietyId: "parent_society_id",
-    referenceFront: "reference_front",
-    search: "q"
-  });
+
+  if (options.params) {
+    setSearchParams(endpoint, options.params, {
+      parentSocietyId: "parent_society_id",
+      referenceFront: "reference_front",
+      search: "q"
+    });
+  }
 
   // Peut retourner une seule société selon les paramètres dans le cas où le header contient society-id.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -103,7 +106,7 @@ export async function getSocieties(options: IGetSocietiesOptions) {
   return data;
 }
 
-export async function getOneSociety(options: Required<IDefaultHeaderOptions>) {
+export async function getOneSociety(options: Required<Omit<IDefaultHeaderOptions, "contentType">>) {
   if (!options.societyId) {
     return new Error("Missing argment 'societyId'");
   }
