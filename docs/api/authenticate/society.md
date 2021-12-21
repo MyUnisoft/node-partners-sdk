@@ -20,7 +20,7 @@ const endpoints: Endpoint[] = await Myunisoft.auth.society.getEndpoints(options)
 ```
 
 ## Interfaces
-- [IDefaultHeaderOptions](../../../interfaces/common.md).
+- [IDefaultHeaderOptions](../../interfaces/common.md).
 
 ```ts
 type generateKey = (payload: ISocietyAccessOptions) => Promise<any>;
