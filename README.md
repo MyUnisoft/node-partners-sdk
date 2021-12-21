@@ -55,9 +55,9 @@ console.log(diaries);
 
 > WORK IN PROGRESS
 
-### [Configure](.docs/api/configure.md)
+### [Configure](./docs/api/configure.md)
 
-### [Authenticate](.docs/api/authenticate)
+### [Authenticate](./docs/api/authenticate)
 - [Firm access](./docs/api/authenticate/firm.md)
 - [Society access](./docs/api/authenticate/society.md)
 
