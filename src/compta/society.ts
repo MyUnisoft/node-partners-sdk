@@ -60,53 +60,53 @@ export async function paymentType(options: IDefaultHeaderOptions) {
   return data;
 }
 
-interface IGetSocietiesParams {
-  /**
-   * Allows you to search in fields: siret, ape, name.
-   */
-  search?: string;
+// interface IGetSocietiesParams {
+//   /**
+//    * Allows you to search in fields: siret, ape, name.
+//    */
+//   search?: string;
 
-  sort?: {
-    direction: "asc" | "desc";
-    /**
-     * Allows you to sort on a column.
-     *
-     * Columns name: "name","city","ape","siret","status","step", "folder_reference".
-     */
-    column: string;
-  },
-  referenceFront?: any;
-  parentSocietyId?: number;
-}
+//   sort?: {
+//     direction: "asc" | "desc";
+//     /**
+//      * Allows you to sort on a column.
+//      *
+//      * Columns name: "name","city","ape","siret","status","step", "folder_reference".
+//      */
+//     column: string;
+//   },
+//   referenceFront?: any;
+//   parentSocietyId?: number;
+// }
 
-export interface IGetSocietiesOptions extends IDefaultOptions {
-  params?: IGetSocietiesParams
-}
+// export interface IGetSocietiesOptions extends IDefaultOptions {
+//   params?: IGetSocietiesParams
+// }
 
-// pour firm uniquement?
-export async function getSocieties(options: IGetSocietiesOptions) {
-  const endpoint = new URL("/api/v1/society", BASE_API_URL);
+// // pour firm uniquement?
+// export async function getSocieties(options: IGetSocietiesOptions) {
+//   const endpoint = new URL("/api/v1/society", BASE_API_URL);
 
-  if (options.params) {
-    setSearchParams(endpoint, options.params, {
-      parentSocietyId: "parent_society_id",
-      referenceFront: "reference_front",
-      search: "q"
-    });
-  }
+//   if (options.params) {
+//     setSearchParams(endpoint, options.params, {
+//       parentSocietyId: "parent_society_id",
+//       referenceFront: "reference_front",
+//       search: "q"
+//     });
+//   }
 
-  // Peut retourner une seule société selon les paramètres dans le cas où le header contient society-id.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { societyId, ...header } = options.header;
+//   // Peut retourner une seule société selon les paramètres dans le cas où le header contient society-id.
+//   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//   const { societyId, ...header } = options.header;
 
-  const { data } = await httpie.get<Windev.Society.SocietiesArray>(endpoint, {
-    ...setDefaultHeaderOptions(header)
-  });
+//   const { data } = await httpie.get<Windev.Society.SocietiesArray>(endpoint, {
+//     ...setDefaultHeaderOptions(header)
+//   });
 
-  return data;
-}
+//   return data;
+// }
 
-export async function getOneSociety(options: Required<Omit<IDefaultHeaderOptions, "contentType">>) {
+export async function getInfo(options: Required<Omit<IDefaultHeaderOptions, "contentType">>) {
   if (!options.societyId) {
     return new Error("Missing argment 'societyId'");
   }
