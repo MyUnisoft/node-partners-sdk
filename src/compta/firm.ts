@@ -30,7 +30,7 @@ export async function getPhysicalPersons(options: IDefaultHeaderOptions) {
 
   const endpoint = new URL("/api/v1/pers_physique", BASE_API_URL);
 
-  const { data } = await httpie.get(endpoint, {
+  const { data } = await httpie.get<Windev.User.PhysicalPerson>(endpoint, {
     ...setDefaultHeaderOptions(options)
   });
 
