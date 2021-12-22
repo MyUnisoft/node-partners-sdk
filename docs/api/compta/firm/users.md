@@ -1,7 +1,7 @@
 # Users
 📢 Get/fetch the list of users.
 
-Physical persons should not be confused with users. A user can be a physical person but the reverse is not necessarily true.
+Users should not be confused with physical persons. A user can be a physical person but the reverse is not necessarily true.
 
 From a technical point of view, a user is first and foremost someone who has access to the MyUnisoft solution (and more specifically to the firm).
 
