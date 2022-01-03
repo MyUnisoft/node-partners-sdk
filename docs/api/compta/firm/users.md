@@ -1,13 +1,15 @@
 # Users
-📢 Get/fetch the list of users.
+> **Firm access is required.**
 
-Users should not be confused with physical persons. A user can be a physical person but the reverse is not necessarily true.
+📢 Users should not be confused with physical persons. A user can be a physical person but the reverse is not necessarily true.
 
 From a technical point of view, a user is first and foremost someone who has access to the MyUnisoft solution (and more specifically to the firm).
 
-> 📌 **Firm access is required.**
 
 ## Get all
+
+Get/fetch the list of users.
+
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";
 import { Windev } from "@myunisoft/tsd";
