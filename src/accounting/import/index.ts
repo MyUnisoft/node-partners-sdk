@@ -4,12 +4,12 @@ import * as httpie from "@myunisoft/httpie";
 // Import Internal Dependencies
 import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions, setSearchParams } from "../../constants";
 
-export * as OCR from "./ocr";
-export * as facturX from "./FacturX";
-export * as JSON from "./JSON";
-export * as TRA from "./TRA";
-export * as FEC from "./FEC";
-export * as EBICS from "./EBICS";
+export * from "./ocr";
+export * from "./FacturX";
+export * from "./JSON";
+export * from "./TRA";
+export * from "./FEC";
+export * from "./EBICS";
 
 export interface IAddAttachmentToEntryOptions extends IDefaultOptions {
   params: {

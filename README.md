@@ -61,15 +61,15 @@ console.log(diaries);
 - [Firm access](./docs/api/authenticate/firm.md)
 - [Society access](./docs/api/authenticate/society.md)
 
-### [Compta](./docs/api/compta)
-- [Society](./docs/api/compta/society)
-  - [Informations of the society](./docs/api/compta/society/society-info.md)
-  - [Diaries](./docs/api/compta/society/diary.md)
-  - [Exercices](./docs/api/compta/society/exercices.md)
-  - [Balance](./docs/api/compta/society/balance.md)
-  - [Grand Livre](./docs/api/compta/society/grandèlivre.md)
-  - [Payment type](./docs/api/compta/society/payment-type.md)
-  - [VAT](./docs/api/compta/society/vat.md)
+### [Accounting](./docs/api/compta)
+- [Folder](./docs/api/accounting/folder)
+  - [Informations of the accounting folder](./docs/api/accounting/folder/society-info.md)
+  - [Diaries](./docs/api/accounting/folder/diary.md)
+  - [Exercices](./docs/api/accounting/folder/exercices.md)
+  - [Balance](./docs/api/accounting/folder/balance.md)
+  - [Grand Livre](./docs/api/accounting/folder/grandèlivre.md)
+  - [Payment type](./docs/api/accounting/folder/payment-type.md)
+  - [VAT](./docs/api/accounting/folder/vat.md)
 
 ## License
 MIT

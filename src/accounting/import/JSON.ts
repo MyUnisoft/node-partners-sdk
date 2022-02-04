@@ -20,7 +20,7 @@ export interface IDirectEntryOptions extends IEntryOptions {
   };
 }
 
-export async function sendDirectEntry(options: IDirectEntryOptions) {
+export async function jsonEntry(options: IDirectEntryOptions) {
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/entry", BASE_API_URL);
@@ -36,7 +36,7 @@ export async function sendDirectEntry(options: IDirectEntryOptions) {
   return data;
 }
 
-export async function sendEntryPending(options: IEntryOptions) {
+export async function jsonPendingEntry(options: IEntryOptions) {
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/entry/temp", BASE_API_URL);

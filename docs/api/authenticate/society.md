@@ -7,7 +7,7 @@ import * as MyUnisoft from "@myunisoft/partners-sdk";
 const payload: MyUnisfot.auth.society.ISocietyAccessOptions = {
   mail: "Your@mail",
   password: "Your password",
-  companyId: 1234 
+  accountingFolderId: 1234 
 };
 
 const { value: accessToken } = await Myunisoft.auth.society.generateKey(payload);
@@ -32,7 +32,7 @@ interface ISocietyAccessOptions {
   /**
    * ID of the company that will be linked to the APItoken.
    */
-  companyId: number;
+  accountingFolderId: number;
 }
 
 interface Endpoint {

@@ -21,7 +21,7 @@ export interface ISendFacturXPdfOptions extends IDefaultOptions {
   body: Buffer | string;
 }
 
-export async function sendFacturXPdf(options: ISendFacturXPdfOptions) {
+export async function FacturX(options: ISendFacturXPdfOptions) {
   firmAccessThrowWithoutSociety(options.header);
 
   const endpoint = new URL("/api/v1/invoice", BASE_API_URL);

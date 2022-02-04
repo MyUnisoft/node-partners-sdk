@@ -1,9 +1,13 @@
-// Import Internal Dependencies
-import { isFirmAccess } from "./authenticate/access_type";
-import * as secret from "./authenticate/secret";
+// Import Node.js Dependencies
+import { IncomingHttpHeaders } from "http";
 
-export const BASE_AUTH_URL = "https://app.myunisoft.fr/";
-export const BASE_API_URL = "https://app.myunisoft.fr/";
+// Import Internal Dependencies
+import { getters } from "./index";
+
+// export const BASE_AUTH_URL = "https://app.myunisoft.fr/";
+// export const BASE_API_URL = "https://app.myunisoft.fr/";
+export const BASE_AUTH_URL = "https://yoda.myunisoft.fr:1337/";
+export const BASE_API_URL = "https://yoda.myunisoft.fr:1367/";
 
 export const enumInvoiceType = Object.freeze({
   Achat: "1",
@@ -19,7 +23,7 @@ export interface IDefaultHeaderOptions {
   /** API Bearer Token */
   accessToken: string;
 
-  /** Company (dossier de production) id */
+  /** Accounting folder (dossier de production) id */
   societyId?: string | number;
 
   contentType?:
@@ -39,17 +43,11 @@ export interface IDefaultOptions {
  * @description Default httpie options with all required headers
  */
 export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
-  const headers = {
-    "X-Third-Party-Secret": secret.get()
+  const headers: IncomingHttpHeaders = {
+    "X-Third-Party-Secret": getters.secret.get(),
+    ...("societyId" in options ? { "society-id": String(options.societyId) } : {}),
+    ...("contentType" in options ? { "content-type": options.contentType as string } : {})
   };
-
-  if ("societyId" in options) {
-    headers["society-id"] = options.societyId;
-  }
-
-  if ("contentType" in options) {
-    headers["Content-Type"] = options.contentType;
-  }
 
   return {
     authorization: options.accessToken,
@@ -62,7 +60,6 @@ export function setSearchParams(url: URL, options: any, customParams: any = {}) 
     return new Error("customParams must be an object.");
   }
 
-  // eslint-disable-next-line guard-for-in
   for (const option in options) {
     if (option in customParams && !customParams[option]) {
       continue;
@@ -74,16 +71,15 @@ export function setSearchParams(url: URL, options: any, customParams: any = {}) 
     );
   }
 
-  // eslint-disable-next-line consistent-return
-  return;
+  return void 0;
 }
 
 
 // CHECK ACCES TYPE
 export function firmAccessThrowWithoutSociety(header: IDefaultHeaderOptions) {
-  return isFirmAccess() && !("societyId" in header) ? new Error("SocietyId is missing in the header.") : undefined;
+  return getters.accessType.is("firm") && !("societyId" in header) ? new Error("SocietyId is missing in the header.") : undefined;
 }
 
 export function throwIfIsNotFirm() {
-  return isFirmAccess() ? undefined : new Error("This endpoint only works with a cabinet (firm) access.");
+  return getters.accessType.is("firm") ? undefined : new Error("This endpoint only works with a cabinet (firm) access.");
 }

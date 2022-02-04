@@ -4,7 +4,7 @@ import { BearerToken } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
 import { BASE_AUTH_URL } from "../constants";
-import * as secret from "./secret";
+import { getters } from "../index";
 
 export interface IUserAuthenticateOptions {
   mail: string;
@@ -27,7 +27,7 @@ export async function authenticate(options: IUserAuthenticateOptions): Promise<I
 
   const { data } = await httpie.post<IUserAuthenticateResponse>(endpoint, {
     headers: {
-      "X-Third-Party-Secret": secret.get(),
+      "X-Third-Party-Secret": getters.secret.get(),
       "Content-Type": "application/json"
     },
     body: options

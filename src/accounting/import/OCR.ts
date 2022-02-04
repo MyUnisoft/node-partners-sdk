@@ -21,7 +21,7 @@ export interface ISendImgOrPdfOptions extends IDefaultOptions {
   body: Buffer;
 }
 
-export async function send(options: ISendImgOrPdfOptions) {
+export async function ocr(options: ISendImgOrPdfOptions) {
   firmAccessThrowWithoutSociety(options.header);
 
   const enumOCRType = {

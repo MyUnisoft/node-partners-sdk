@@ -3,7 +3,7 @@ import * as httpie from "@myunisoft/httpie";
 // Import Internal Dependencies
 import { BASE_AUTH_URL, IDefaultHeaderOptions, setDefaultHeaderOptions } from "../constants";
 import * as User from "./user";
-import * as secret from "./secret";
+import { getters } from "../index";
 
 export interface ISocietyAccessOptions {
   mail: string;
@@ -12,7 +12,7 @@ export interface ISocietyAccessOptions {
   /**
    * ID of the company that will be linked to the APItoken.
    */
-  companyId: number;
+  accountingFolderId: number;
 }
 
 /**
@@ -26,7 +26,7 @@ export async function generateKey(options: ISocietyAccessOptions): Promise<any> 
   })).details;
 
   if (!access_token) {
-    return new Error("Invalid user.");
+    return new Error("Unable to authenticate user.");
   }
 
   const headers: IDefaultHeaderOptions = {
@@ -35,17 +35,19 @@ export async function generateKey(options: ISocietyAccessOptions): Promise<any> 
   };
 
   const endpointGrantedFor = new URL("/api/v1/key/granted-for", BASE_AUTH_URL);
-  const { grantedFor } = (await httpie.post<any>(endpointGrantedFor, {
+  const { data: grantedFor } = await httpie.post<any>(endpointGrantedFor, {
     ...setDefaultHeaderOptions(headers),
-    body: { secret: secret.get() }
-  })).data;
+    body: {
+      secret: getters.secret.get()
+    }
+  });
 
   const endpoint = new URL("/api/v1/key/create", BASE_AUTH_URL);
   const { data } = await httpie.post(endpoint, {
     ...setDefaultHeaderOptions(headers),
     body: {
       grantedFor,
-      target: options.companyId
+      target: options.accountingFolderId
     }
   });
 

@@ -8,7 +8,7 @@ export interface ISendTRAOptions extends IDefaultOptions {
   body: Buffer | string;
 }
 
-export async function sendTRA(options: ISendTRAOptions) {
+export async function TRA(options: ISendTRAOptions) {
   const endpoint = new URL("/api/v1/TRA/partial", BASE_API_URL);
 
   options.header.contentType = "application/zip";

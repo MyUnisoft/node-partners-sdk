@@ -2,23 +2,17 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import * as secret from "./authenticate/secret";
+import LocalVariable from "./utils/localVariable";
 
-// const myun: httpie.CustomHttpAgent = {
-//   customPath: "myun",
-//   domains: new Set([
-//     "yoda.myunisoft.fr",
-//     "app.myunisoft.fr"
-//   ]),
-//   agent: new httpie.Agent({
-//     connections: 100
-//   }),
-//   prod: "https://app.myunisoft.fr",
-//   preprod: "https://yoda.myunisoft.fr",
-//   dev: "https://yoda.myunisoft.fr"
-// };
+/**
+ * @see https://github.com/MyUnisoft/api-partenaires#type-dacc%C3%A8s-
+ */
+export type AccessType = "firm" | "society";
 
-// httpie.agents.add(myun);
+export const getters = Object.freeze({
+  secret: new LocalVariable<string>(),
+  accessType: new LocalVariable<AccessType>()
+});
 
 export interface IConfigureOptions {
   /** Name to use for the http 'user-agent' header */
@@ -29,10 +23,10 @@ export interface IConfigureOptions {
 }
 
 export function configure(options: IConfigureOptions) {
-  secret.set(options.secretKey);
+  getters.secret.set(options.secretKey);
 
   httpie.DEFAULT_HEADER["user-agent"] = options.userAgent;
 }
 
-export * as auth from "./authenticate/index";
-export * as compta from "./compta/index";
+export * as authentication from "./authenticate/index";
+export * as accounting from "./accounting/index";
