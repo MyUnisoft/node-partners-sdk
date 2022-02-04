@@ -25,11 +25,14 @@ export interface IFirmAuthenticateResponse {
 export async function authenticate(options: IFirmAuthenticateOptions): Promise<IFirmAuthenticateResponse> {
   const endpoint = new URL("/api/authenticate/firm", constants.BASE_AUTH_URL);
 
-  const response = await httpie.post<IFirmAuthenticateResponse>(endpoint, {
+  const { data } = await httpie.post<any>(endpoint, {
     body: options
   });
+  if (data.status === "firm-selection") {
+    throw new Error("You must select a firm to authenticate");
+  }
 
   getters.accessType.set("firm");
 
-  return response.data;
+  return data as IFirmAuthenticateResponse;
 }

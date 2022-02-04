@@ -5,12 +5,12 @@ import * as httpie from "@myunisoft/httpie";
 import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
-  IDefaultOptions,
-  setDefaultHeaderOptions,
+  IDefaultHeaderOptions,
+  getDefaultHeaders,
   setSearchParams
 } from "../../constants";
 
-export interface ISendFECOptions extends IDefaultOptions {
+export interface ISendFECOptions extends IDefaultHeaderOptions {
   params: {
     exerciceId: number;
     filename: string;
@@ -28,17 +28,18 @@ export interface ISendFECOptions extends IDefaultOptions {
 }
 
 export async function FEC(options: ISendFECOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/fec", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
     exerciceId: "exercice_id"
   });
 
-  options.header.contentType = "application/octet-stream";
-
   const { data } = await httpie.post<{status: string}>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/octet-stream"
+    },
     body: options.body
   });
 

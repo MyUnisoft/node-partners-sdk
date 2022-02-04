@@ -2,9 +2,9 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions, setSearchParams } from "../../constants";
+import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders, setSearchParams } from "../../constants";
 
-export interface IGetFECEntriesOptions extends IDefaultOptions {
+export interface IGetFECEntriesOptions extends IDefaultHeaderOptions {
   params: {
     /**
      * 0 = export à base de ID_EXERCICE.
@@ -28,10 +28,11 @@ export async function getEntries(options: IGetFECEntriesOptions) {
     exportType: "export_type"
   });
 
-  options.header.contentType = "text/plain";
-
   const { data } = await httpie.post<{status: string}>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "text/plain"
+    },
     body: options.body
   });
 

@@ -7,120 +7,66 @@ import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
-  IDefaultOptions,
-  setDefaultHeaderOptions,
+  getDefaultHeaders,
   setSearchParams
 } from "../constants";
 
-export async function exercices(options: IDefaultHeaderOptions) {
+export async function getExercices(options: IDefaultHeaderOptions) {
   firmAccessThrowWithoutSociety(options);
-
   const endpoint = new URL("/api/v1/society/exercice", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.Exercice[]>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-export async function diary(options: IDefaultHeaderOptions) {
+export async function getDiaries(options: IDefaultHeaderOptions) {
   firmAccessThrowWithoutSociety(options);
-
   const endpoint = new URL("/api/v1/diary", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.Diary[]>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-export async function vat(options: IDefaultHeaderOptions) {
+export async function getVatParameters(options: IDefaultHeaderOptions) {
   firmAccessThrowWithoutSociety(options);
-
   const endpoint = new URL("/api/v1/vat_param", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Vat.VatParam[]>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-export async function paymentType(options: IDefaultHeaderOptions) {
+export async function getPaymentType(options: IDefaultHeaderOptions) {
   firmAccessThrowWithoutSociety(options);
-
   const endpoint = new URL("/api/v1/payment_type", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.PaymentType[]>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-// interface IGetSocietiesParams {
-//   /**
-//    * Allows you to search in fields: siret, ape, name.
-//    */
-//   search?: string;
-
-//   sort?: {
-//     direction: "asc" | "desc";
-//     /**
-//      * Allows you to sort on a column.
-//      *
-//      * Columns name: "name","city","ape","siret","status","step", "folder_reference".
-//      */
-//     column: string;
-//   },
-//   referenceFront?: any;
-//   parentSocietyId?: number;
-// }
-
-// export interface IGetSocietiesOptions extends IDefaultOptions {
-//   params?: IGetSocietiesParams
-// }
-
-// // pour firm uniquement?
-// export async function getSocieties(options: IGetSocietiesOptions) {
-//   const endpoint = new URL("/api/v1/society", BASE_API_URL);
-
-//   if (options.params) {
-//     setSearchParams(endpoint, options.params, {
-//       parentSocietyId: "parent_society_id",
-//       referenceFront: "reference_front",
-//       search: "q"
-//     });
-//   }
-
-//   // Peut retourner une seule société selon les paramètres dans le cas où le header contient society-id.
-//   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//   const { societyId, ...header } = options.header;
-
-//   const { data } = await httpie.get<Windev.Society.SocietiesArray>(endpoint, {
-//     ...setDefaultHeaderOptions(header)
-//   });
-
-//   return data;
-// }
-
-export async function getInfo(options: Required<Omit<IDefaultHeaderOptions, "contentType">>) {
-  if (!options.accountingFolderId) {
-    return new Error("Missing argment 'accountingFolderId'");
-  }
-
+export async function getInformation(options: IDefaultHeaderOptions) {
+  firmAccessThrowWithoutSociety(options);
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.Company>(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-interface IBalanceByExerciceParams {
+export interface IBalanceByExerciceParams {
   /**
    * ID de l’exercice dont on souhaite la balance.
    */
@@ -134,7 +80,7 @@ interface IBalanceByExerciceParams {
   type?: "compare" | "aged";
 }
 
-interface IBalanceByDateParams {
+export interface IBalanceByDateParams {
   /**
    * Format: YYYYMMDD
    */
@@ -151,12 +97,12 @@ interface IBalanceByDateParams {
   axisId: number;
 }
 
-export interface IBalanceOptions extends IDefaultOptions {
+export interface IBalanceOptions extends IDefaultHeaderOptions {
   params: IBalanceByExerciceParams | IBalanceByDateParams;
 }
 
-export async function balance(options: IBalanceOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+export async function getDynamicBalance(options: IBalanceOptions) {
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/balance_dynamique", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
@@ -166,16 +112,17 @@ export async function balance(options: IBalanceOptions) {
     fiscalYearId: "fiscal_year_id"
   });
 
-  options.header.contentType = "application/x-www-form-urlencoded";
-
   const { data } = await httpie.get(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/x-www-form-urlencoded"
+    }
   });
 
   return data;
 }
 
-export interface IGetGrandLivreOptions extends IDefaultOptions {
+export interface IGetGrandLivreOptions extends IDefaultHeaderOptions {
   params: {
     /**
      * Format: YYYY-MM-DD
@@ -196,10 +143,8 @@ export async function getGrandLivre(options: IGetGrandLivreOptions) {
     endDate: "end_date"
   });
 
-  options.header.contentType = "application/json";
-
   const { data } = await httpie.get(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;

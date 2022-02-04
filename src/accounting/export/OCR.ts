@@ -4,9 +4,9 @@ import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
 import {
-  IDefaultOptions,
+  IDefaultHeaderOptions,
   setSearchParams,
-  setDefaultHeaderOptions,
+  getDefaultHeaders,
   BASE_API_URL,
   throwIfIsNotFirm
 } from "../../constants";
@@ -51,7 +51,7 @@ interface IGetOCRFollowUpParams {
   offset?: number;
 }
 
-export interface IOCRFollowUpOptions extends IDefaultOptions {
+export interface IOCRFollowUpOptions extends IDefaultHeaderOptions {
   params: Omit<IGetOCRFollowUpParams, "array_society_id">;
   body: {
     societies_array: number[];
@@ -107,7 +107,7 @@ export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
 
   const { data } = await httpie.post<IGetOCRFollowUpResponse>(endpoint, {
     body: options.body,
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;

@@ -3,9 +3,9 @@ import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
-import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
 
-export interface IEntryOptions extends IDefaultOptions {
+export interface IEntryOptions extends IDefaultHeaderOptions {
   body: Windev.Entry.NewEntry;
 }
 
@@ -21,15 +21,13 @@ export interface IDirectEntryOptions extends IEntryOptions {
 }
 
 export async function jsonEntry(options: IDirectEntryOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/entry", BASE_API_URL);
   endpoint.searchParams.set("type", options.params.type);
 
-  options.header.contentType = "application/json";
-
   const { data } = await httpie.post(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: getDefaultHeaders(options),
     body: options.body
   });
 
@@ -37,14 +35,11 @@ export async function jsonEntry(options: IDirectEntryOptions) {
 }
 
 export async function jsonPendingEntry(options: IEntryOptions) {
-  firmAccessThrowWithoutSociety(options.header);
-
+  firmAccessThrowWithoutSociety(options);
   const endpoint = new URL("/api/v1/entry/temp", BASE_API_URL);
 
-  options.header.contentType = "application/json";
-
   const { data } = await httpie.post(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: getDefaultHeaders(options),
     body: options.body
   });
 

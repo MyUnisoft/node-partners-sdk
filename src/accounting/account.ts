@@ -7,13 +7,13 @@ import { RequireExactlyOne } from "type-fest";
 import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
-  IDefaultOptions,
-  setDefaultHeaderOptions,
+  IDefaultHeaderOptions,
+  getDefaultHeaders,
   setSearchParams,
   throwIfIsNotFirm
 } from "../constants";
 
-export interface IGetAllOptions extends IDefaultOptions {
+export interface IGetAllOptions extends IDefaultHeaderOptions {
   params: {
     /**
      * @description
@@ -33,7 +33,7 @@ export interface IGetAllOptions extends IDefaultOptions {
 }
 
 export async function getAll(options: IGetAllOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
   endpoint.searchParams.set("mode", "1");
@@ -42,13 +42,13 @@ export async function getAll(options: IGetAllOptions) {
   });
 
   const { data } = await httpie.get<Windev.Account.SimplifiedAccount[]>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-export interface IGetAllDetailedOptions extends IDefaultOptions {
+export interface IGetAllDetailedOptions extends IDefaultHeaderOptions {
   params: {
     /**
      * @description OPTIONAL. Retrieves accounts where the account number starts with begin_by.
@@ -63,7 +63,7 @@ export interface IGetAllDetailedOptions extends IDefaultOptions {
 }
 
 export async function getAllDetailed(options: IGetAllDetailedOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
   endpoint.searchParams.set("mode", "2");
@@ -73,13 +73,13 @@ export async function getAllDetailed(options: IGetAllDetailedOptions) {
   });
 
   const { data } = await httpie.get<Windev.Account.DetailedAccounts>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-export interface IFindOrCreateOptions extends IDefaultOptions {
+export interface IFindOrCreateOptions extends IDefaultHeaderOptions {
   body: {
     accountNumber: string;
     label: string;
@@ -87,14 +87,11 @@ export interface IFindOrCreateOptions extends IDefaultOptions {
 }
 
 export async function findOrCreate(options: IFindOrCreateOptions) {
-  firmAccessThrowWithoutSociety(options.header);
-
+  firmAccessThrowWithoutSociety(options);
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
 
-  options.header.contentType = "application/json";
-
   const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: getDefaultHeaders(options),
     body: {
       account_number: options.body.accountNumber,
       label: options.body.label
@@ -104,19 +101,16 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
   return data;
 }
 
-export interface IUpdateAccountOptions extends IDefaultOptions {
+export interface IUpdateAccountOptions extends IDefaultHeaderOptions {
   body: Windev.Account.UpdateAccount;
 }
 
 export async function updateAccount(options: IUpdateAccountOptions) {
   throwIfIsNotFirm();
-
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
 
-  options.header.contentType = "application/json";
-
   const { data } = await httpie.put<Windev.Account.Account | { status: string; message: string; }>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: getDefaultHeaders(options),
     body: options.body
   });
 
@@ -155,12 +149,12 @@ interface ILineEntriesParams {
   entryTypes?: "SITU" | "NORM";
 }
 
-export interface ILineEntriesOptions extends IDefaultOptions {
+export interface ILineEntriesOptions extends IDefaultHeaderOptions {
   params: RequireExactlyOne<ILineEntriesParams, "accountId" | "accountNo">;
 }
 
 export async function getlineEntries(options: ILineEntriesOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/account/entries", BASE_API_URL);
   setSearchParams(endpoint, options.params, {
@@ -171,7 +165,7 @@ export async function getlineEntries(options: ILineEntriesOptions) {
   });
 
   const { data } = await httpie.get<Windev.Account.AccountEntries>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
@@ -226,7 +220,7 @@ export async function getlineEntries(options: ILineEntriesOptions) {
 // }
 
 // export async function getAccountV2(options: IAccountV2Options) {
-//   firmAccessThrowWithoutSociety(options.header);
+//   firmAccessThrowWithoutSociety(options);
 
 //   const endpoint = new URL("/api/v1/account/v2", BASE_API_URL);
 //   setSearchParams(endpoint, options.params, {
@@ -236,7 +230,7 @@ export async function getlineEntries(options: ILineEntriesOptions) {
 //   });
 
 //   const { data } = httpie.get<Windev.Account.DetailedAccountV2>(endpoint, {
-//     ...setDefaultHeaderOptions(options.header)
+//     ...setDefaultHeaderOptions(options)
 //   });
 
 //   return data;
@@ -255,16 +249,16 @@ export async function getlineEntries(options: ILineEntriesOptions) {
 // }
 
 // export async function getBalance(options: IBalanceOptions) {
-//   firmAccessThrowWithoutSociety(options.header);
+//   firmAccessThrowWithoutSociety(options);
 
 //   // à vérifier
 //   const endpoint = new URL(`/api/v1/account/${options.params.accountId}/balance`, BASE_API_URL);
 //   endpoint.searchParams.set("YYYY_MM", options.params.date);
 
-//   options.header.contentType = "application/json";
+//   options.contentType = "application/json";
 
 //   const { data } = await httpie.get<Windev.Account.AccountBalance>(endpoint, {
-//     ...setDefaultHeaderOptions(options.header)
+//     ...setDefaultHeaderOptions(options)
 //   });
 
 //   return data;
@@ -280,7 +274,7 @@ export async function getlineEntries(options: ILineEntriesOptions) {
 //   const endpoint = new URL(`/api/v1/account/${options.params.accountId}/next_lettering`, BASE_API_URL);
 
 //   const { data } = httpie.get<Windev.Account.NextLettering>(endpoint, {
-//     ...setDefaultHeaderOptions(options.header)
+//     ...setDefaultHeaderOptions(options)
 //   });
 
 //   return data;
@@ -306,7 +300,7 @@ export async function getlineEntries(options: ILineEntriesOptions) {
 // }
 
 // export async function getAccountRevision(options: IAccountRevisionOptions) {
-//   firmAccessThrowWithoutSociety(options.header);
+//   firmAccessThrowWithoutSociety(options);
 
 //   const endpoint = new URL(
 //     `/api/v1/accounts/${options.params.accountId}/revisions/${options.params.dossierRevisionId}/infos`,
@@ -314,7 +308,7 @@ export async function getlineEntries(options: ILineEntriesOptions) {
 //   );
 
 //   const { data } = httpie.get<Windev.Account.AccountRevision>(endpoint, {
-//     ...setDefaultHeaderOptions(options.header)
+//     ...setDefaultHeaderOptions(options)
 //   });
 
 //   return data;

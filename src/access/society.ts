@@ -1,16 +1,24 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_AUTH_URL, IDefaultHeaderOptions, setDefaultHeaderOptions } from "../constants";
+import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../constants";
 import { getters } from "../index";
 
-export interface ISocietyAccessOptions {
-  userAccessToken: string;
+export interface IGrantedFor {
+  grantedFor: number;
+}
 
-  /**
-   * ID of the company that will be linked to the APItoken.
-   */
-  accountingFolderId: number;
+export async function getThirdPartyId(options: IDefaultHeaderOptions): Promise<IGrantedFor> {
+  const endpoint = new URL("/api/v1/key/granted-for", BASE_API_URL);
+
+  const { data } = await httpie.post<IGrantedFor>(endpoint, {
+    authorization: options.accessToken,
+    body: {
+      secret: getters.secret.get()
+    }
+  });
+
+  return data;
 }
 
 export interface SocietyApiToken {
@@ -25,28 +33,15 @@ export interface SocietyApiToken {
  * Once your API token is generated,
  * it is no longer necessary to use this function (unless the token has been revoked).
  */
-export async function generateKey(options: ISocietyAccessOptions): Promise<SocietyApiToken> {
-  const headers: IDefaultHeaderOptions = {
-    contentType: "application/json",
-    accessToken: options.userAccessToken
-  };
+export async function generateKey(options: Required<IDefaultHeaderOptions>): Promise<SocietyApiToken> {
+  const { grantedFor } = await getThirdPartyId(options);
 
-  const endpointGrantedFor = new URL("/api/v1/key/granted-for", BASE_AUTH_URL);
-  console.log(endpointGrantedFor);
-
-  const { data: grantedFor } = await httpie.post<any>(endpointGrantedFor, {
-    ...setDefaultHeaderOptions(headers),
-    body: {
-      secret: getters.secret.get()
-    }
-  });
-
-  const endpoint = new URL("/api/v1/key/create", BASE_AUTH_URL);
+  const endpoint = new URL("/api/v1/key/create", BASE_API_URL);
   const { data } = await httpie.post<SocietyApiToken>(endpoint, {
-    ...setDefaultHeaderOptions(headers),
+    authorization: options.accessToken,
     body: {
-      grantedFor,
-      target: options.accountingFolderId
+      grantedFor: String(grantedFor),
+      target: String(options.accountingFolderId)
     }
   });
 
@@ -54,10 +49,10 @@ export async function generateKey(options: ISocietyAccessOptions): Promise<Socie
 }
 
 export async function getEndpoints(options: IDefaultHeaderOptions) {
-  const endpoint = new URL("/api/v1/key/info", BASE_AUTH_URL);
+  const endpoint = new URL("/api/v1/key/info", BASE_API_URL);
 
   const { data } = await httpie.get(endpoint, {
-    ...setDefaultHeaderOptions(options)
+    headers: getDefaultHeaders(options)
   });
 
   return data;

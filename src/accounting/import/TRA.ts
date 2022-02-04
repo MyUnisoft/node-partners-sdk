@@ -2,19 +2,20 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
 
-export interface ISendTRAOptions extends IDefaultOptions {
+export interface ISendTRAOptions extends IDefaultHeaderOptions {
   body: Buffer | string;
 }
 
 export async function TRA(options: ISendTRAOptions) {
   const endpoint = new URL("/api/v1/TRA/partial", BASE_API_URL);
 
-  options.header.contentType = "application/zip";
-
   const { data } = await httpie.post<{status: string}>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/octet-stream"
+    },
     body: options.body
   });
 

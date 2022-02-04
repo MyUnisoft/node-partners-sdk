@@ -25,33 +25,16 @@ export interface IDefaultHeaderOptions {
 
   /** Accounting folder (dossier de production) id */
   accountingFolderId?: string | number;
-
-  contentType?:
-  "text/plain" |
-  "application/zip" |
-  "application/octect" |
-  "application/json" |
-  "application/octet-stream" |
-  "application/x-www-form-urlencoded";
-}
-
-export interface IDefaultOptions {
-  header: IDefaultHeaderOptions
 }
 
 /**
  * @description Default httpie options with all required headers
  */
-export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
-  const headers: IncomingHttpHeaders = {
-    "X-Third-Party-Secret": getters.secret.get(),
-    ...("societyId" in options ? { "society-id": String(options.accountingFolderId) } : {}),
-    ...("contentType" in options ? { "content-type": options.contentType as string } : {})
-  };
-
+export function getDefaultHeaders(options: IDefaultHeaderOptions): IncomingHttpHeaders {
   return {
-    authorization: options.accessToken,
-    headers
+    authorization: `Bearer ${options.accessToken}`,
+    "X-Third-Party-Secret": getters.secret.get(),
+    ...("accountingFolderId" in options ? { "society-id": String(options.accountingFolderId) } : {})
   };
 }
 
@@ -74,12 +57,15 @@ export function setSearchParams(url: URL, options: any, customParams: any = {}) 
   return void 0;
 }
 
-
 // CHECK ACCES TYPE
-export function firmAccessThrowWithoutSociety(header: IDefaultHeaderOptions) {
-  return getters.accessType.is("firm") && !("societyId" in header) ? new Error("SocietyId is missing in the header.") : undefined;
+export function firmAccessThrowWithoutSociety(options: IDefaultHeaderOptions) {
+  if (getters.accessType.is("firm") && !("accountingFolderId" in options)) {
+    throw new Error("accountingFolderId is missing (mandatory for a firm access).");
+  }
 }
 
 export function throwIfIsNotFirm() {
-  return getters.accessType.is("firm") ? undefined : new Error("This endpoint only works with a cabinet (firm) access.");
+  if (!getters.accessType.is("firm")) {
+    throw new Error("This endpoint only works with a cabinet (firm) access.");
+  }
 }

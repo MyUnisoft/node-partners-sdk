@@ -2,7 +2,7 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultOptions, setDefaultHeaderOptions, setSearchParams } from "../../constants";
+import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders, setSearchParams } from "../../constants";
 
 export * from "./ocr";
 export * from "./FacturX";
@@ -11,7 +11,7 @@ export * from "./TRA";
 export * from "./FEC";
 export * from "./EBICS";
 
-export interface IAddAttachmentToEntryOptions extends IDefaultOptions {
+export interface IAddAttachmentToEntryOptions extends IDefaultHeaderOptions {
   params: {
     location: "ENTRIES" | "ENTRIES_TEMP";
     objectId: number;
@@ -29,10 +29,11 @@ export async function addAttachmentToEntry(options: IAddAttachmentToEntryOptions
   // ???
   endpoint.searchParams.set("type_result", "1");
 
-  options.header.contentType = "application/octet-stream";
-
   const { data } = await httpie.post(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/octet-stream"
+    }
   });
 
   return data;

@@ -2,12 +2,12 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultOptions, setDefaultHeaderOptions } from "../../constants";
+import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
 
 export * as FEC from "./FEC";
 export * as OCR from "./OCR";
 
-export interface IEntryByPartnerOptions extends IDefaultOptions {
+export interface IEntryByPartnerOptions extends IDefaultHeaderOptions {
   params: {
     id: number;
   }
@@ -20,19 +20,19 @@ export interface IEntryByPartnerResponse {
 }
 
 export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/entries/id", BASE_API_URL);
   endpoint.searchParams.set("id_origin", String(options.params.id));
 
   const { data } = await httpie.get<IEntryByPartnerResponse>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;
 }
 
-export interface IDefaultGetEntriesOptions extends IDefaultOptions {
+export interface IDefaultGetEntriesOptions extends IDefaultHeaderOptions {
   params: {
     /**
      * E = ECRITURE.
@@ -53,15 +53,13 @@ export interface IDefaultGetEntriesOptions extends IDefaultOptions {
 }
 
 export async function getEntries<T>(options: IDefaultGetEntriesOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/entries", BASE_API_URL);
   endpoint.searchParams.set("type", options.params.type);
 
-  options.header.contentType = "application/json";
-
   const { data } = await httpie.post<T>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: getDefaultHeaders(options),
     body: options.body
   });
 

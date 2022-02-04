@@ -4,7 +4,6 @@ import { BearerToken } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
 import { BASE_AUTH_URL } from "../constants";
-import { getters } from "../index";
 
 export interface IUserAuthenticateOptions {
   mail: string;
@@ -19,19 +18,18 @@ export interface IUserAuthenticateResponse {
     id: number;
     label: string;
   }
-  details: BearerToken
+  details: BearerToken;
 }
 
-export async function authenticate(options: IUserAuthenticateOptions): Promise<IUserAuthenticateResponse> {
+export async function authenticate(options: IUserAuthenticateOptions): Promise<string> {
   const endpoint = new URL("/api/authenticate", BASE_AUTH_URL);
 
   const { data } = await httpie.post<IUserAuthenticateResponse>(endpoint, {
-    headers: {
-      "X-Third-Party-Secret": getters.secret.get(),
-      "Content-Type": "application/json"
-    },
     body: options
   });
+  if (data.status !== "authenticated") {
+    throw new Error("Unable to authenticate user");
+  }
 
-  return data;
+  return data.details.access_token;
 }

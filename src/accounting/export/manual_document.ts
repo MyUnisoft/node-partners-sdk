@@ -4,14 +4,14 @@ import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
 import {
-  IDefaultOptions,
+  IDefaultHeaderOptions,
   setSearchParams,
-  setDefaultHeaderOptions,
+  getDefaultHeaders,
   BASE_API_URL,
   throwIfIsNotFirm
 } from "../../constants";
 
-export interface IPendingDocumentOptions extends IDefaultOptions {
+export interface IPendingDocumentOptions extends IDefaultHeaderOptions {
   params: {
     limit: number;
     societyId: number;
@@ -63,7 +63,7 @@ export async function getPendingDocument(options: IPendingDocumentOptions) {
   });
 
   const { data } = await httpie.get<IPendingDocuments>(endpoint, {
-    ...setDefaultHeaderOptions(options.header)
+    headers: getDefaultHeaders(options)
   });
 
   return data;

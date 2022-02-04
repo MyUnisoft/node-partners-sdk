@@ -4,15 +4,15 @@ import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
 import {
-  setDefaultHeaderOptions,
-  IDefaultOptions,
+  getDefaultHeaders,
+  IDefaultHeaderOptions,
   enumInvoiceType,
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
   setSearchParams
 } from "../../constants";
 
-export interface ISendFacturXPdfOptions extends IDefaultOptions {
+export interface ISendFacturXPdfOptions extends IDefaultHeaderOptions {
   params: {
     name: string;
     invoiceType: "Achat" | "Note de frais" | "Vente" | "Avoir";
@@ -22,7 +22,7 @@ export interface ISendFacturXPdfOptions extends IDefaultOptions {
 }
 
 export async function FacturX(options: ISendFacturXPdfOptions) {
-  firmAccessThrowWithoutSociety(options.header);
+  firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/invoice", BASE_API_URL);
   endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.params.invoiceType]);
@@ -31,10 +31,11 @@ export async function FacturX(options: ISendFacturXPdfOptions) {
     invoiceType: undefined
   });
 
-  options.header.contentType = "application/octect";
-
   const { data } = await httpie.post<Windev.Entry.Entries>(endpoint, {
-    ...setDefaultHeaderOptions(options.header),
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/octect"
+    },
     body: options.body
   });
 
