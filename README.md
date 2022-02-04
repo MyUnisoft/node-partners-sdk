@@ -51,9 +51,25 @@ const diaries = await MyUnisoft.compta.diary({
 console.log(diaries);
 ```
 
-## 📜 API
+## 📜 [API](./docs/api)
 
 > WORK IN PROGRESS
+
+### [Configure](./docs/api/configure.md)
+
+### [Authenticate](./docs/api/authenticate)
+- [Firm access](./docs/api/authenticate/firm.md)
+- [Society access](./docs/api/authenticate/society.md)
+
+### [Compta](./docs/api/compta)
+- [Society](./docs/api/compta/society)
+  - [Informations of the society](./docs/api/compta/society/society-info.md)
+  - [Diaries](./docs/api/compta/society/diary.md)
+  - [Exercices](./docs/api/compta/society/exercices.md)
+  - [Balance](./docs/api/compta/society/balance.md)
+  - [Grand Livre](./docs/api/compta/society/grandèlivre.md)
+  - [Payment type](./docs/api/compta/society/payment-type.md)
+  - [VAT](./docs/api/compta/society/vat.md)
 
 ## License
 MIT

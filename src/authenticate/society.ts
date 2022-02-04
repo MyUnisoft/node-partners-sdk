@@ -8,12 +8,16 @@ import * as secret from "./secret";
 export interface ISocietyAccessOptions {
   mail: string;
   password: string;
-  target: string;
+
+  /**
+   * ID of the company that will be linked to the APItoken.
+   */
+  companyId: number;
 }
 
 /**
- * À noter qu’une fois votre API token généré il n’est plus nécessaire d'utiliser cette fonction
- * (sauf si le token a entre-temps été revoqué).
+ * Once your API token is generated,
+ * it is no longer necessary to use this function (unless the token has been revoked).
  */
 export async function generateKey(options: ISocietyAccessOptions): Promise<any> {
   const { access_token } = (await User.authenticate({
@@ -41,7 +45,7 @@ export async function generateKey(options: ISocietyAccessOptions): Promise<any> 
     ...setDefaultHeaderOptions(headers),
     body: {
       grantedFor,
-      target: options.target
+      target: options.companyId
     }
   });
 

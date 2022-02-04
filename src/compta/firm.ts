@@ -13,12 +13,12 @@ import {
   throwIfIsNotFirm
 } from "../constants";
 
-export async function getUsersV2(options: IDefaultHeaderOptions) {
+export async function getUsers(options: IDefaultHeaderOptions) {
   throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/users_v2", BASE_API_URL);
 
-  const { data } = await httpie.get(endpoint, {
+  const { data } = await httpie.get<Windev.User.UsersResponse>(endpoint, {
     ...setDefaultHeaderOptions(options)
   });
 
@@ -30,7 +30,7 @@ export async function getPhysicalPersons(options: IDefaultHeaderOptions) {
 
   const endpoint = new URL("/api/v1/pers_physique", BASE_API_URL);
 
-  const { data } = await httpie.get(endpoint, {
+  const { data } = await httpie.get<Windev.User.PhysicalPerson>(endpoint, {
     ...setDefaultHeaderOptions(options)
   });
 
