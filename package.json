@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/MyUnisoft/node-partners-sdk#readme",
   "dependencies": {
-    "@myunisoft/httpie": "^1.2.0",
+    "@myunisoft/httpie": "^1.4.1",
     "@myunisoft/tsd": "^2.0.0",
     "type-fest": "^2.11.1"
   },
