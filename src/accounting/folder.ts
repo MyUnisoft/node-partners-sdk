@@ -107,8 +107,8 @@ export async function paymentType(options: IDefaultHeaderOptions) {
 // }
 
 export async function getInfo(options: Required<Omit<IDefaultHeaderOptions, "contentType">>) {
-  if (!options.societyId) {
-    return new Error("Missing argment 'societyId'");
+  if (!options.accountingFolderId) {
+    return new Error("Missing argment 'accountingFolderId'");
   }
 
   const endpoint = new URL("/api/v1/society", BASE_API_URL);

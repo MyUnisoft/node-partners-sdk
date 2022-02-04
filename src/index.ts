@@ -28,5 +28,5 @@ export function configure(options: IConfigureOptions) {
   httpie.DEFAULT_HEADER["user-agent"] = options.userAgent;
 }
 
-export * as authentication from "./authenticate/index";
+export * as access from "./access/index";
 export * as accounting from "./accounting/index";

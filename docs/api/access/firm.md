@@ -3,12 +3,12 @@
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";
 
-const options: MyUnisoft.auth.firm.IFirmAuthenticateOptions = {
+const options: MyUnisoft.access.firm.IFirmAuthenticateOptions = {
   mail: process.env.MYUNISOFT_MAIL,
   password: process.env.MYUNISOFT_PASSWORD
 };
 
-const data: MyUnisoft.auth.firm.IFirmAuthenticateResponse = await MyUnisoft.auth.firm.authenticate(options);
+const data: MyUnisoft.access.firm.IFirmAuthenticateResponse = await MyUnisoft.access.firm.authenticate(options);
 ```
 
 ## Interfaces

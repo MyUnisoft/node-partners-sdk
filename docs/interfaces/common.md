@@ -7,7 +7,7 @@ interface IDefaultHeaderOptions {
   accessToken: string;
 
   /** Company (dossier de production) id */
-  societyId?: string | number;
+  accountingFolderId?: string | number;
 
   contentType?:
   "text/plain" |

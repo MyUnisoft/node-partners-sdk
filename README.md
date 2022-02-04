@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  Simplify your life with the official Node.js SDK.
+  Simplify your life with the official Node.js SDK created and maintained by MyUnisoft.
 </p>
 
 <p align="center">
@@ -39,14 +39,15 @@ MyUnisoft.configure({
   userAgent: "partnerName"
 });
 
-const { api_token: accessToken } = await MyUnisoft.auth.firm.authenticate({
+const { api_token: accessToken } = await MyUnisoft.access.firm.authenticate({
   mail: process.env.MYUNISOFT_MAIL,
   password: process.env.MYUNISOFT_PASSWORD
 });
 
-const diaries = await MyUnisoft.compta.diary({
+const diaries = await MyUnisoft.accounting.folder.diary({
   accessToken,
-  societyId: 1
+  /** Mandatory for 'firm' access **/
+  accountingFolderId: 1
 });
 console.log(diaries);
 ```
@@ -57,9 +58,9 @@ console.log(diaries);
 
 ### [Configure](./docs/api/configure.md)
 
-### [Authenticate](./docs/api/authenticate)
-- [Firm access](./docs/api/authenticate/firm.md)
-- [Society access](./docs/api/authenticate/society.md)
+### [Access](./docs/api/access)
+- [Firm](./docs/api/access/firm.md)
+- [Society](./docs/api/access/society.md)
 
 ### [Accounting](./docs/api/compta)
 - [Folder](./docs/api/accounting/folder)

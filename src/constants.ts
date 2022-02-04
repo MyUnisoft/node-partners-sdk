@@ -24,7 +24,7 @@ export interface IDefaultHeaderOptions {
   accessToken: string;
 
   /** Accounting folder (dossier de production) id */
-  societyId?: string | number;
+  accountingFolderId?: string | number;
 
   contentType?:
   "text/plain" |
@@ -45,7 +45,7 @@ export interface IDefaultOptions {
 export function setDefaultHeaderOptions(options: IDefaultHeaderOptions) {
   const headers: IncomingHttpHeaders = {
     "X-Third-Party-Secret": getters.secret.get(),
-    ...("societyId" in options ? { "society-id": String(options.societyId) } : {}),
+    ...("societyId" in options ? { "society-id": String(options.accountingFolderId) } : {}),
     ...("contentType" in options ? { "content-type": options.contentType as string } : {})
   };
 

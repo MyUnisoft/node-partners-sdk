@@ -4,19 +4,19 @@
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";
 
-const payload: MyUnisfot.auth.society.ISocietyAccessOptions = {
+const payload: MyUnisfot.access.society.ISocietyAccessOptions = {
   mail: "Your@mail",
   password: "Your password",
   accountingFolderId: 1234 
 };
 
-const { value: accessToken } = await Myunisoft.auth.society.generateKey(payload);
+const { value: accessToken } = await Myunisoft.access.society.generateKey(payload);
 ```
 
 If everything worked fine, you can use the function **getEndpoints** to get the list of authorized endpoints:
 ```ts
 const options: IDefaultHeaderOptions = { accessToken };
-const endpoints: Endpoint[] = await Myunisoft.auth.society.getEndpoints(options);
+const endpoints: Endpoint[] = await Myunisoft.access.society.getEndpoints(options);
 ```
 
 ## Interfaces
