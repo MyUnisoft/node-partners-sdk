@@ -10,21 +10,19 @@ export interface IEntryOptions extends IDefaultHeaderOptions {
 }
 
 export interface IDirectEntryOptions extends IEntryOptions {
-  params: {
-    /**
-     * E = ecriture
-     *
-     * O = ocr
-     */
-    type: "e" | "o"
-  };
+  /**
+   * E = ecriture
+   *
+   * O = ocr
+   */
+  type: "e" | "o";
 }
 
 export async function jsonEntry(options: IDirectEntryOptions) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/entry", BASE_API_URL);
-  endpoint.searchParams.set("type", options.params.type);
+  endpoint.searchParams.set("type", options.type);
 
   const { data } = await httpie.post(endpoint, {
     headers: getDefaultHeaders(options),

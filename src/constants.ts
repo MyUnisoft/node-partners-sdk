@@ -38,25 +38,6 @@ export function getDefaultHeaders(options: IDefaultHeaderOptions): IncomingHttpH
   };
 }
 
-export function setSearchParams(url: URL, options: any, customParams: any = {}) {
-  if (typeof customParams !== "object" || Array.isArray(customParams)) {
-    return new Error("customParams must be an object.");
-  }
-
-  for (const option in options) {
-    if (option in customParams && !customParams[option]) {
-      continue;
-    }
-
-    url.searchParams.set(
-      customParams[option] || option,
-      typeof options[option] === "object" ? JSON.stringify(options[option]) : options[option]
-    );
-  }
-
-  return void 0;
-}
-
 // CHECK ACCES TYPE
 export function firmAccessThrowWithoutSociety(options: IDefaultHeaderOptions) {
   if (getters.accessType.is("firm") && !("accountingFolderId" in options)) {

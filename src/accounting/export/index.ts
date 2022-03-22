@@ -8,9 +8,7 @@ export * as FEC from "./FEC";
 export * as OCR from "./OCR";
 
 export interface IEntryByPartnerOptions extends IDefaultHeaderOptions {
-  params: {
-    id: number;
-  }
+  id: number;
 }
 
 export interface IEntryByPartnerResponse {
@@ -23,7 +21,7 @@ export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/entries/id", BASE_API_URL);
-  endpoint.searchParams.set("id_origin", String(options.params.id));
+  endpoint.searchParams.set("id_origin", String(options.id));
 
   const { data } = await httpie.get<IEntryByPartnerResponse>(endpoint, {
     headers: getDefaultHeaders(options)
@@ -33,30 +31,38 @@ export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
 }
 
 export interface IDefaultGetEntriesOptions extends IDefaultHeaderOptions {
-  params: {
-    /**
-     * E = ECRITURE.
-     *
-     * O = ECRITURE OCR/ECRITURE EN ATTENTE.
-     *
-     * IB = ECRITURE INTEGRATION BANCAIRE.
-     *
-     * M = ECRITURE MANUEL.
-     *
-     * EXT = ECRITURE EXTOURNE.
-     *
-     * L = ECRITURE LETTRAGE.
-     */
-    type: "e" | "o" | "ib" | "m" | "ext" | "l";
-  };
+  /**
+   * E = ECRITURE.
+   *
+   * O = ECRITURE OCR/ECRITURE EN ATTENTE.
+   *
+   * IB = ECRITURE INTEGRATION BANCAIRE.
+   *
+   * M = ECRITURE MANUEL.
+   *
+   * EXT = ECRITURE EXTOURNE.
+   *
+   * L = ECRITURE LETTRAGE.
+   */
+  type: "entry" | "ocrFollowUp" | "bankStatement" | "manual" | "reversed" | "lettering";
+
   body: any;
 }
 
 export async function getEntries<T>(options: IDefaultGetEntriesOptions) {
+  const enumEntryTypes = {
+    entry: "e",
+    ocrFollowUp: "o",
+    bankStatement: "ib",
+    manual: "m",
+    reversed: "ext",
+    lettering: "l"
+  };
+
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/entries", BASE_API_URL);
-  endpoint.searchParams.set("type", options.params.type);
+  endpoint.searchParams.set("type", enumEntryTypes[options.type]);
 
   const { data } = await httpie.post<T>(endpoint, {
     headers: getDefaultHeaders(options),
