@@ -5,19 +5,16 @@ import * as httpie from "@myunisoft/httpie";
 import {
   getDefaultHeaders,
   IDefaultHeaderOptions,
-  setSearchParams,
   enumInvoiceType,
   BASE_API_URL,
   firmAccessThrowWithoutSociety
 } from "../../constants";
 
 export interface ISendImgOrPdfOptions extends IDefaultHeaderOptions {
-  params: {
-    extension: "pdf" | "jpg";
-    name: string;
-    invoiceType: "Achat" | "Frais" | "Vente" | "Avoir";
-    ocrType: "Manuel" | "OCRMyUnisoft" | "OCRPremium" | "Factur-X";
-  };
+  extension: "pdf" | "jpg";
+  name: string;
+  invoiceType: "Achat" | "Frais" | "Vente" | "Avoir";
+  ocrType: "Manuel" | "OCRMyUnisoft" | "OCRPremium" | "Factur-X";
   body: Buffer;
 }
 
@@ -32,12 +29,10 @@ export async function ocr(options: ISendImgOrPdfOptions) {
   };
 
   const endpoint = new URL("/api/v1/invoice", BASE_API_URL);
-  endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.params.invoiceType]);
-  endpoint.searchParams.set("ocr_type_id", enumOCRType[options.params.ocrType]);
-  setSearchParams(endpoint, options.params, {
-    invoiceType: undefined,
-    ocrType: undefined
-  });
+  endpoint.searchParams.set("extension", options.extension);
+  endpoint.searchParams.set("name", options.name);
+  endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.invoiceType]);
+  endpoint.searchParams.set("ocr_type_id", enumOCRType[options.ocrType]);
 
   const { data } = await httpie.post(endpoint, {
     headers: {

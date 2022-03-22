@@ -5,14 +5,12 @@ import * as httpie from "@myunisoft/httpie";
 // Import Internal Dependencies
 import {
   IDefaultHeaderOptions,
-  setSearchParams,
   getDefaultHeaders,
   BASE_API_URL,
   throwIfIsNotFirm
 } from "../../constants";
 
-// REQUEST
-interface IGetOCRFollowUpParams {
+export interface IOCRFollowUpOptions extends IDefaultHeaderOptions {
   /** Format de date YYYYMMDD. */
   startDate: string;
 
@@ -42,17 +40,13 @@ interface IGetOCRFollowUpParams {
     column: "society" | "fileName" | "type" | "sendBy" | "status";
   }
 
-  /** List of society_id in an array. */
-  arraySocietyId?: {
-    id: number;
-    pwd?: string;
-  }
+  // /** List of society_id in an array. */
+  // arraySocietyId?: {
+  //   id: number;
+  //   pwd?: string;
+  // }
 
   offset?: number;
-}
-
-export interface IOCRFollowUpOptions extends IDefaultHeaderOptions {
-  params: Omit<IGetOCRFollowUpParams, "array_society_id">;
   body: {
     societies_array: number[];
   }
@@ -99,15 +93,17 @@ export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
   throwIfIsNotFirm();
 
   const endpoint = new URL("/api/v1/ocr_follow_up", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    startDate: "start_date",
-    endDate: "end_date",
-    requestMode: "request_mode"
-  });
+  endpoint.searchParams.set("start_date", options.startDate);
+  endpoint.searchParams.set("end_date", options.endDate);
+  endpoint.searchParams.set("request_mode", String(options.mode));
+  endpoint.searchParams.set("limit", String(options.limit || ""));
+  endpoint.searchParams.set("filter", options.filter || "");
+  endpoint.searchParams.set("sort", JSON.stringify(options.sort) || "");
+  endpoint.searchParams.set("offset", String(options.offset || ""));
 
   const { data } = await httpie.post<IGetOCRFollowUpResponse>(endpoint, {
-    body: options.body,
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    body: options.body
   });
 
   return data;

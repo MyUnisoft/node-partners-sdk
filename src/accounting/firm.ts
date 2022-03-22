@@ -8,7 +8,6 @@ import {
   firmAccessThrowWithoutSociety,
   getDefaultHeaders,
   IDefaultHeaderOptions,
-  setSearchParams,
   throwIfIsNotFirm
 } from "../constants";
 
@@ -99,12 +98,10 @@ export async function getCompanyByRef(options: ISearchCompanyByRefOptions) {
 }
 
 export interface IGetReviewOptions extends IDefaultHeaderOptions {
-  params?: {
-    /**
-     * OPTIONAL. For a specific review.
-     */
-    reviewId: number;
-  };
+  /**
+   * OPTIONAL. For a specific review.
+   */
+  reviewId?: number;
 }
 
 export async function getReview(options: IGetReviewOptions) {
@@ -112,7 +109,7 @@ export async function getReview(options: IGetReviewOptions) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/dadp/dossier_revision_list", BASE_API_URL);
-  setSearchParams(endpoint, options.params, { reviewId: "review_id" });
+  endpoint.searchParams.set("review_id", String(options.reviewId || ""));
 
   const { data } = await httpie.get(endpoint, {
     headers: getDefaultHeaders(options)
@@ -121,7 +118,7 @@ export async function getReview(options: IGetReviewOptions) {
   return data;
 }
 
-interface CommonReviewParams {
+export interface IGetCycleOfReviewOptions extends IDefaultHeaderOptions {
   reviewId: number;
   sectionId: number;
 
@@ -138,11 +135,7 @@ interface CommonReviewParams {
   /**
    * Code ou Label du cycle.
    */
-  cycleRef?: string;
-}
-
-export interface IGetCycleOfReviewOptions extends IDefaultHeaderOptions {
-  params: CommonReviewParams;
+  cycleId?: string;
 }
 
 export async function getCycleOfReview(options: IGetCycleOfReviewOptions) {
@@ -151,13 +144,11 @@ export async function getCycleOfReview(options: IGetCycleOfReviewOptions) {
 
   const endpoint = new URL("/api/v1/dadp/cycle", BASE_API_URL);
   endpoint.searchParams.set("category", "DA");
-  setSearchParams(endpoint, options.params, {
-    reviewId: "dossier_revision_id",
-    startDate: "start_date",
-    endDate: "end_date",
-    cycleRef: "cycle_da_dp_id",
-    sectionId: "section_id"
-  });
+  endpoint.searchParams.set("dossier_revision_id", String(options.reviewId));
+  endpoint.searchParams.set("start_date", options.startDate);
+  endpoint.searchParams.set("end_date", options.endDate);
+  endpoint.searchParams.set("cycle_da_dp_id", options.cycleId || "");
+  endpoint.searchParams.set("section_id", String(options.sectionId));
 
   const { data } = await httpie.get(endpoint, {
     headers: getDefaultHeaders(options)
@@ -167,27 +158,41 @@ export async function getCycleOfReview(options: IGetCycleOfReviewOptions) {
 }
 
 export interface IWorkProgramOfReview extends IGetCycleOfReviewOptions {
-  params: CommonReviewParams & {
-    /**
-     * 0 pour toutes les diligences. 1 WorkSheets seulement.
-     */
-    workSheetOnly: 0 | 1;
-  };
+  reviewId: number;
+  sectionId: number;
+
+  /**
+   * Format: YYYY-MM-DD
+   */
+  startDate: string;
+
+  /**
+   * Format: YYYY-MM-DD
+   */
+  endDate: string;
+
+  /**
+   * Code ou Label du cycle.
+   */
+  cycleId?: string;
+
+  /**
+   * 0 pour toutes les diligences. 1 WorkSheets seulement.
+   */
+  workSheetOnly: 0 | 1;
 }
 
 export async function getWorkProgramOfReview(options: IWorkProgramOfReview) {
   throwIfIsNotFirm();
   firmAccessThrowWithoutSociety(options);
 
-  const endpoint = new URL("/api/v1/dadp/cycle", BASE_API_URL);
+  const endpoint = new URL("/api/v1/dadp/work_program", BASE_API_URL);
   endpoint.searchParams.set("category", "DA");
-  setSearchParams(endpoint, options.params, {
-    reviewId: "review_id",
-    startDate: "start_date",
-    endDate: "end_date",
-    cycleRef: "cycle_id",
-    sectionId: "section_id"
-  });
+  endpoint.searchParams.set("review_id", String(options.reviewId));
+  endpoint.searchParams.set("start_date", options.startDate);
+  endpoint.searchParams.set("end_date", options.endDate);
+  endpoint.searchParams.set("cycle_id", options.cycleId || "");
+  endpoint.searchParams.set("section_id", String(options.sectionId));
 
   const { data } = await httpie.get(endpoint, {
     headers: getDefaultHeaders(options)

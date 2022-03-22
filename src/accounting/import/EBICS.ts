@@ -7,14 +7,11 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
   getDefaultHeaders,
-  setSearchParams,
   throwIfIsNotFirm
 } from "../../constants";
 
 export interface ISendEBICS extends IDefaultHeaderOptions {
-  params: {
-    filename: string;
-  };
+  filename: string;
   body: Buffer | string;
 }
 
@@ -23,7 +20,7 @@ export async function EBICS(options: ISendEBICS) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/releve_bancaire", BASE_API_URL);
-  setSearchParams(endpoint, options.params);
+  endpoint.searchParams.set("filename", options.filename);
 
   const { data } = await httpie.post<{status: string}>(endpoint, {
     headers: {

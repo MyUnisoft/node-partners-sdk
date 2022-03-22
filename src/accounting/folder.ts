@@ -7,8 +7,7 @@ import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
-  getDefaultHeaders,
-  setSearchParams
+  getDefaultHeaders
 } from "../constants";
 
 export async function getExercices(options: IDefaultHeaderOptions) {
@@ -66,11 +65,11 @@ export async function getInformation(options: IDefaultHeaderOptions) {
   return data;
 }
 
-export interface IBalanceByExerciceParams {
+export interface IBalanceByExercice extends IDefaultHeaderOptions {
   /**
    * ID de l’exercice dont on souhaite la balance.
    */
-  fiscalYearId: number;
+  exerciceId: number;
 
   /**
    * ID de l’axe dont on souhaite la balance.
@@ -80,7 +79,26 @@ export interface IBalanceByExerciceParams {
   type?: "compare" | "aged";
 }
 
-export interface IBalanceByDateParams {
+export async function getDynamicBalanceFromExercice(options: IBalanceByExercice) {
+  firmAccessThrowWithoutSociety(options);
+
+  const endpoint = new URL("/api/v1/balance_dynamique", BASE_API_URL);
+
+  endpoint.searchParams.set("fiscal_year_id", String(options.exerciceId));
+  endpoint.searchParams.set("axis_id", String(options.axisId));
+  endpoint.searchParams.set("type", options.type || "");
+
+  const { data } = await httpie.get(endpoint, {
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/x-www-form-urlencoded"
+    }
+  });
+
+  return data;
+}
+
+export interface IBalanceByDate extends IDefaultHeaderOptions {
   /**
    * Format: YYYYMMDD
    */
@@ -97,20 +115,13 @@ export interface IBalanceByDateParams {
   axisId: number;
 }
 
-export interface IBalanceOptions extends IDefaultHeaderOptions {
-  params: IBalanceByExerciceParams | IBalanceByDateParams;
-}
-
-export async function getDynamicBalance(options: IBalanceOptions) {
+export async function getDynamicBalanceFromDate(options: IBalanceByDate) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/balance_dynamique", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    startDate: "start_date",
-    endDate: "end_date",
-    axisId: "axis_id",
-    fiscalYearId: "fiscal_year_id"
-  });
+  endpoint.searchParams.set("axis_id", String(options.axisId));
+  endpoint.searchParams.set("start_date", options.startDate);
+  endpoint.searchParams.set("end_date", options.endDate);
 
   const { data } = await httpie.get(endpoint, {
     headers: {
@@ -123,25 +134,21 @@ export async function getDynamicBalance(options: IBalanceOptions) {
 }
 
 export interface IGetGrandLivreOptions extends IDefaultHeaderOptions {
-  params: {
-    /**
-     * Format: YYYY-MM-DD
-     */
-    startDate: string;
+  /**
+   * Format: YYYY-MM-DD
+   */
+  startDate: string;
 
-    /**
-     * Format: YYYY-MM-DD
-     */
-    endDate: string;
-  }
+  /**
+   * Format: YYYY-MM-DD
+   */
+  endDate: string;
 }
 
 export async function getGrandLivre(options: IGetGrandLivreOptions) {
   const endpoint = new URL("/api/v1/grand_livre", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    startDate: "start_date",
-    endDate: "end_date"
-  });
+  endpoint.searchParams.set("start_date", options.startDate);
+  endpoint.searchParams.set("end_date", options.endDate);
 
   const { data } = await httpie.get(endpoint, {
     headers: getDefaultHeaders(options)

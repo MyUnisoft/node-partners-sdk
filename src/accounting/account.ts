@@ -9,27 +9,24 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
   getDefaultHeaders,
-  setSearchParams,
   throwIfIsNotFirm
 } from "../constants";
 
 export interface IGetAllOptions extends IDefaultHeaderOptions {
-  params: {
-    /**
-     * @description
-     * OPTIONAL.
-     *
-     * Retrieves:
-     * - accounts where the account label includes accountNumber.
-     * - accounts where the account number starts with accountNumber.
-     */
-    accountNumber?: string;
+  /**
+   * @description
+   * OPTIONAL.
+   *
+   * Retrieves:
+   * - accounts where the account label includes accountNumber.
+   * - accounts where the account number starts with accountNumber.
+   */
+  accountNumber?: string;
 
-    /**
-     * OPTIONAL. Default value: 5.
-     */
-    limit?: number;
-  }
+  /**
+  * OPTIONAL. Default value: 5.
+  */
+  limit?: number;
 }
 
 export async function getAll(options: IGetAllOptions) {
@@ -37,9 +34,7 @@ export async function getAll(options: IGetAllOptions) {
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
   endpoint.searchParams.set("mode", "1");
-  setSearchParams(endpoint, options.params, {
-    accountNumber: "q"
-  });
+  endpoint.searchParams.set("q", String(options.accountNumber || ""));
 
   const { data } = await httpie.get<Windev.Account.SimplifiedAccount[]>(endpoint, {
     headers: getDefaultHeaders(options)
@@ -49,17 +44,15 @@ export async function getAll(options: IGetAllOptions) {
 }
 
 export interface IGetAllDetailedOptions extends IDefaultHeaderOptions {
-  params: {
-    /**
-     * @description OPTIONAL. Retrieves accounts where the account number starts with begin_by.
-     */
-    accountNumber?: string;
+  /**
+   * @description OPTIONAL. Retrieves accounts where the account number starts with begin_by.
+   */
+  accountNumber?: string;
 
-    /**
-     * OPTIONAL.
-     */
-    sort?: number;
-  }
+  sort?: {
+    column: "";
+    direction: "asc" | "desc";
+  };
 }
 
 export async function getAllDetailed(options: IGetAllDetailedOptions) {
@@ -67,10 +60,8 @@ export async function getAllDetailed(options: IGetAllDetailedOptions) {
 
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
   endpoint.searchParams.set("mode", "2");
-  setSearchParams(endpoint, options.params, {
-    accountNumber: "begin_by",
-    sort: "sort_"
-  });
+  endpoint.searchParams.set("begin_by", String(options.accountNumber || ""));
+  endpoint.searchParams.set("sort_", JSON.stringify(options.sort) || "");
 
   const { data } = await httpie.get<Windev.Account.DetailedAccounts>(endpoint, {
     headers: getDefaultHeaders(options)
@@ -80,10 +71,8 @@ export async function getAllDetailed(options: IGetAllDetailedOptions) {
 }
 
 export interface IFindOrCreateOptions extends IDefaultHeaderOptions {
-  body: {
-    accountNumber: string;
-    label: string;
-  }
+  accountNumber: string;
+  label: string;
 }
 
 export async function findOrCreate(options: IFindOrCreateOptions) {
@@ -93,8 +82,8 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
   const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
     headers: getDefaultHeaders(options),
     body: {
-      account_number: options.body.accountNumber,
-      label: options.body.label
+      account_number: options.accountNumber,
+      label: options.label
     }
   });
 
@@ -117,52 +106,54 @@ export async function updateAccount(options: IUpdateAccountOptions) {
   return data;
 }
 
-interface ILineEntriesParams {
+export interface ILineEntriesOptions extends IDefaultHeaderOptions {
   /**
-   * Type de filtrage sur le lettrage.
-   */
+ * Type de filtrage sur le lettrage.
+ */
   lettering?: "false" | "true" | "date";
 
   /**
-   * Identifiant du compte pour lequel on veut récupérer les écritures.
-   * Soit ILineEntriesOptions.account_id, soit ILineEntriesOptions.account_no. */
-  accountId?: string;
+  * Identifiant du compte pour lequel on veut récupérer les écritures.
+  * Soit ILineEntriesOptions.account_id, soit ILineEntriesOptions.account_no. */
+  accountId?: number;
 
   /**
-   * Permet de filtrer sur les comptes qui commencent par XXX.
-   * Soit ILineEntriesOptions.account_id, soit ILineEntriesOptions.account_no.
-   */
-  accountNo?: string;
+  * Permet de filtrer sur les comptes qui commencent par XXX.
+  * Soit ILineEntriesOptions.account_id, soit ILineEntriesOptions.account_no.
+  */
+  accountNumber?: string;
 
   /**
-   * Période pour laquel on va retourner les lignes d'écritures.
-   * Format des dates: YYYYMMDD
-   */
+  * Période pour laquel on va retourner les lignes d'écritures.
+  * Format des dates: YYYYMMDD
+  */
   searchDate?: {
     start_date: string;
     end_date: string;
   }
 
   /**
-   * Permet de selectionner le type d'écriture à remonter.
-   */
+  * Permet de selectionner le type d'écriture à remonter.
+  */
   entryTypes?: "SITU" | "NORM";
 }
 
-export interface ILineEntriesOptions extends IDefaultHeaderOptions {
-  params: RequireExactlyOne<ILineEntriesParams, "accountId" | "accountNo">;
-}
-
-export async function getlineEntries(options: ILineEntriesOptions) {
+export async function getlineEntries(options: RequireExactlyOne<ILineEntriesOptions, "accountId" | "accountNumber">) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/account/entries", BASE_API_URL);
-  setSearchParams(endpoint, options.params, {
-    entryTypes: "entry_types",
-    searchDate: "search_date",
-    accountNo: "account_no",
-    accountId: "account_id"
-  });
+  endpoint.searchParams.set("entry_types", options.entryTypes || "");
+  endpoint.searchParams.set("search_date", JSON.stringify(options.searchDate) || "");
+
+  if (options.accountId) {
+    endpoint.searchParams.set("account_id", String(options.accountId));
+  }
+  else if (options.accountNumber) {
+    endpoint.searchParams.set("account_no", options.accountNumber);
+  }
+  else {
+    throw new Error("Missing account ID/number");
+  }
 
   const { data } = await httpie.get<Windev.Account.AccountEntries>(endpoint, {
     headers: getDefaultHeaders(options)
