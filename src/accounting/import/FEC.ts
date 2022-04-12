@@ -1,3 +1,6 @@
+// Import Node.js Dependencies
+import { ReadStream } from "fs";
+
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 
@@ -21,7 +24,7 @@ export interface ISendFECOptions extends IDefaultHeaderOptions {
    * 2 = Delete and import.
    */
   type: 0 | 1 | 2;
-  body: Buffer | string;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function FEC(options: ISendFECOptions) {
@@ -42,4 +45,3 @@ export async function FEC(options: ISendFECOptions) {
 
   return data;
 }
-

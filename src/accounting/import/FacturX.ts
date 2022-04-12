@@ -1,3 +1,6 @@
+// Import Node.js Dependencies
+import { ReadStream } from "fs";
+
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
@@ -15,7 +18,7 @@ export interface ISendFacturXPdfOptions extends IDefaultHeaderOptions {
   name: string;
   invoiceType: "Achat" | "Note de frais" | "Vente" | "Avoir";
   extension: string;
-  body: Buffer | string;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function FacturX(options: ISendFacturXPdfOptions) {

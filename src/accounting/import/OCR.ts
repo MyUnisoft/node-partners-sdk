@@ -1,3 +1,6 @@
+// Import Node.js Dependencies
+import { ReadStream } from "fs";
+
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 
@@ -15,7 +18,7 @@ export interface ISendImgOrPdfOptions extends IDefaultHeaderOptions {
   name: string;
   invoiceType: "Achat" | "Frais" | "Vente" | "Avoir";
   ocrType: "Manuel" | "OCRMyUnisoft" | "OCRPremium" | "Factur-X";
-  body: Buffer;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function ocr(options: ISendImgOrPdfOptions) {
@@ -34,7 +37,7 @@ export async function ocr(options: ISendImgOrPdfOptions) {
   endpoint.searchParams.set("invoice_type_id", enumInvoiceType[options.invoiceType]);
   endpoint.searchParams.set("ocr_type_id", enumOCRType[options.ocrType]);
 
-  const { data } = await httpie.post(endpoint, {
+  const { data } = await httpie.post<{status: string}>(endpoint, {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"

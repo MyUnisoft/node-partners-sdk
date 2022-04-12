@@ -1,3 +1,6 @@
+// Import Node.js Dependencies
+import { ReadStream } from "fs";
+
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 
@@ -5,7 +8,7 @@ import * as httpie from "@myunisoft/httpie";
 import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
 
 export interface ISendTRAOptions extends IDefaultHeaderOptions {
-  body: Buffer | string;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function TRA(options: ISendTRAOptions) {

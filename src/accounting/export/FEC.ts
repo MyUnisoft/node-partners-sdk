@@ -1,5 +1,6 @@
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
+import { ReadStream } from "fs";
 
 // Import Internal Dependencies
 import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
@@ -33,7 +34,7 @@ export async function getPartialFEC(options: IGetFECEntriesOptions) {
 
 export interface IGetFEC extends IDefaultHeaderOptions {
   exerciceId: number;
-  body: Buffer | string;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function getFEC(options: IGetFEC) {
@@ -41,13 +42,23 @@ export async function getFEC(options: IGetFEC) {
   endpoint.searchParams.set("export_type", "0");
   endpoint.searchParams.set("exercice_id", String(options.exerciceId));
 
-  const { data } = await httpie.post<{status: string}>(endpoint, {
+  if (Buffer.isBuffer(options.body)) {
+    const { data } = await httpie.post<{status: string}>(endpoint, {
+      headers: {
+        ...getDefaultHeaders(options),
+        "content-type": "text/plain"
+      },
+      body: options.body
+    });
+
+    return data;
+  }
+
+  return await httpie.stream("POST", endpoint, {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "text/plain"
     },
     body: options.body
   });
-
-  return data;
 }

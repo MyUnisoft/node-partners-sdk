@@ -4,10 +4,10 @@ import { IncomingHttpHeaders } from "http";
 // Import Internal Dependencies
 import { getters } from "./index";
 
-// export const BASE_AUTH_URL = "https://app.myunisoft.fr/";
-// export const BASE_API_URL = "https://app.myunisoft.fr/";
-export const BASE_AUTH_URL = "https://yoda.myunisoft.fr:1337/";
-export const BASE_API_URL = "https://yoda.myunisoft.fr:1367/";
+// export const BASE_AUTH_URL = "https://app.myunisoft.fr";
+// export const BASE_API_URL = "https://app.myunisoft.fr";
+export const BASE_AUTH_URL = "https://yoda.myunisoft.fr:1337";
+export const BASE_API_URL = "https://yoda.myunisoft.fr:1367";
 
 export const enumInvoiceType = Object.freeze({
   Achat: "1",
