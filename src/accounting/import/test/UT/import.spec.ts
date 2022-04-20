@@ -7,7 +7,7 @@ import path from "path";
 import * as httpie from "@myunisoft/httpie";
 
 // Require Internal Dependencies
-import * as myun from "../../../../../dist/index";
+import * as myun from "../../../../index";
 import { BASE_API_URL } from "../../../../constants";
 import { Windev } from "@myunisoft/tsd";
 

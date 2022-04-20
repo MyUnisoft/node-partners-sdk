@@ -88,18 +88,32 @@ export interface IGetOCRFollowUpResponse {
   nb_ocr: number;
   ocr_follow_up_array: IOCRFollowUp[];
 }
+function setPendingDocumentParams(options: IOCRFollowUpOptions) {
+  const endpoint = new URL("/api/v1/document_follow_up", BASE_API_URL);
+
+  endpoint.searchParams.set("start_date", options.startDate);
+  endpoint.searchParams.set("end_date", options.endDate);
+  endpoint.searchParams.set("request_mode", String(options.mode));
+  if (typeof options.limit !== "undefined") {
+    endpoint.searchParams.set("limit", String(options.limit));
+  }
+  if (typeof options.filter !== "undefined") {
+    endpoint.searchParams.set("filter", options.filter);
+  }
+  if (typeof options.sort !== "undefined") {
+    endpoint.searchParams.set("sort", JSON.stringify(options.sort));
+  }
+  if (typeof options.offset !== "undefined") {
+    endpoint.searchParams.set("offset", String(options.offset));
+  }
+
+  return endpoint;
+}
 
 export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
   throwIfIsNotFirm();
 
-  const endpoint = new URL("/api/v1/ocr_follow_up", BASE_API_URL);
-  endpoint.searchParams.set("start_date", options.startDate);
-  endpoint.searchParams.set("end_date", options.endDate);
-  endpoint.searchParams.set("request_mode", String(options.mode));
-  endpoint.searchParams.set("limit", String(options.limit || ""));
-  endpoint.searchParams.set("filter", options.filter || "");
-  endpoint.searchParams.set("sort", JSON.stringify(options.sort) || "");
-  endpoint.searchParams.set("offset", String(options.offset || ""));
+  const endpoint = setPendingDocumentParams(options);
 
   const { data } = await httpie.post<IGetOCRFollowUpResponse>(endpoint, {
     headers: getDefaultHeaders(options),
@@ -107,6 +121,17 @@ export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
   });
 
   return data;
+}
+
+export async function getOCRFollowUpStream(options: IOCRFollowUpOptions) {
+  throwIfIsNotFirm();
+
+  const endpoint = setPendingDocumentParams(options);
+
+  return await httpie.stream("POST", endpoint, {
+    headers: getDefaultHeaders(options),
+    body: options.body
+  });
 }
 
 // export type IOCRFollowUpV2Response = Omit<IOCRFollowUp, "from_source" | "is_parent" | "ocr_parent_doc_id" | "ocr_doc_id">[];

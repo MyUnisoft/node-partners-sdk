@@ -5,7 +5,7 @@ import { Writable } from "stream";
 import * as httpie from "@myunisoft/httpie";
 
 // Require Internal Dependencies
-import * as myun from "../../../../../dist/index";
+import * as myun from "../../../../index";
 import { BASE_API_URL } from "../../../../constants";
 import { Windev } from "@myunisoft/tsd";
 
@@ -51,6 +51,16 @@ function initiateHttpieMock(options: OptionHttpieMock = Object.create(null)) {
       list_manual_document: []
     }, kHttpReplyHeaders);
 
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/document_follow_up`),
+      method: "POST"
+    })
+    .reply(200, {
+      nb_ocr: 0,
+      ocr_follow_up_array: []
+    }, kHttpReplyHeaders);
+
   return mockClient;
 }
 
@@ -80,7 +90,6 @@ describe("export", () => {
       exerciceId: 1
     });
 
-    // console.log(data);
     expect(data.status).toBe("ok");
   });
 
@@ -106,7 +115,6 @@ describe("export", () => {
 
   test("getPendingDocument", async() => {
     mockClient = initiateHttpieMock();
-    // myun.getters.accessType.set("firm");
 
     const data = await myun.accounting.export.getPendingDocument({
       accessToken: "test",
@@ -114,7 +122,6 @@ describe("export", () => {
       societyId: 1
     });
 
-    // console.log(data);
     expect(data.ocrStatus).toBe(false);
   });
 
@@ -137,5 +144,42 @@ describe("export", () => {
 
     const data = JSON.parse(Buffer.concat(buffs).toString("utf-8"));
     expect(data.ocrStatus).toBe(false);
+  });
+
+  test("getOCRFollowUp", async() => {
+    mockClient = initiateHttpieMock();
+
+    const data = await myun.accounting.export.OCR.getOCRFollowUp({
+      accessToken: "test",
+      startDate: "20210101",
+      endDate: "20221231",
+      mode: 1,
+      body: { societies_array: [1] }
+    });
+
+    expect(data.nb_ocr).toBe(0);
+  });
+
+  test("getOCRFollowUpStream", async() => {
+    mockClient = initiateHttpieMock();
+
+    const cursor = await myun.accounting.export.OCR.getOCRFollowUpStream({
+      accessToken: "test",
+      startDate: "20210101",
+      endDate: "20221231",
+      mode: 1,
+      body: { societies_array: [1] }
+    });
+
+    const buffs: Buffer[] = [];
+
+    cursor(new Writable({
+      write(chunk) {
+        buffs.push(chunk);
+      }
+    }));
+
+    const data = JSON.parse(Buffer.concat(buffs).toString("utf-8"));
+    expect(data.nb_ocr).toBe(0);
   });
 });
