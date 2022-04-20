@@ -18,52 +18,86 @@ export interface IPendingDocumentOptions extends IDefaultHeaderOptions {
   /**
    * Retrieves all by default.
    */
-  filter: "grouped" | "ungrouped";
+  filter?: "grouped" | "ungrouped";
 
   /**
    * Thumbnail width.
    */
-  width: number;
+  width?: number;
 
   /**
    * Thumbnail heigth.
    */
-  height: number;
+  height?: number;
+}
+
+interface IListManualDocuments {
+  rows_number: number;
+  created_date: string;
+  document_attached_id: number;
+  documents: IDocument[];
+}
+
+interface IDocument {
+  document_id: number;
+  name: string;
+  thumbnail: string;
+  date: string;
+  token: string;
+  link: string;
+  invoice_type_id: number;
 }
 
 export interface IPendingDocuments {
-  agent_name: string;
-  baseURL: string;
-  created_date_time: string;
-  docuemnt_id: number;
-  document_label: string;
-  download: string;
-  from_source: string;
-  invoice_label_id: string;
-  invoice_type_id: number;
-  is_parent: string;
-  last_status_date_time: string;
-  link: string;
-  ocr_doc_id: number;
-  ocr_follow_up_id: number;
-  ocr_parent_doc_id: number;
+  rows_number: number;
+  pages_number: number;
+  ocrStatus: boolean;
+  list_manual_document: IListManualDocuments[];
+
+}
+
+function setPendingDocumentParams(options: IPendingDocumentOptions) {
+  const endpoint = new URL("/api/v1/document/pending", BASE_API_URL);
+
+  endpoint.searchParams.set("limit", String(options.limit));
+  endpoint.searchParams.set("society_id", String(options.societyId));
+  if (typeof options.offset !== "undefined") {
+    endpoint.searchParams.set("offset", String(options.offset));
+  }
+  if (typeof options.filter !== "undefined") {
+    endpoint.searchParams.set("filter", options.filter);
+  }
+  if (typeof options.width !== "undefined") {
+    endpoint.searchParams.set("width", String(options.width));
+  }
+  if (typeof options.height !== "undefined") {
+    endpoint.searchParams.set("height", String(options.height));
+  }
+  if (typeof options.sortDateDirection !== "undefined") {
+    endpoint.searchParams.set("sort_date_direction", options.sortDateDirection);
+  }
+
+  return endpoint;
 }
 
 export async function getPendingDocument(options: IPendingDocumentOptions) {
   throwIfIsNotFirm();
 
-  const endpoint = new URL("/api/v1/document/pending", BASE_API_URL);
-  endpoint.searchParams.set("limit", String(options.limit));
-  endpoint.searchParams.set("offset", String(options.offset || ""));
-  endpoint.searchParams.set("filter", options.filter);
-  endpoint.searchParams.set("width", String(options.width));
-  endpoint.searchParams.set("height", String(options.height));
-  endpoint.searchParams.set("sort_date_direction", options.sortDateDirection || "");
-  endpoint.searchParams.set("society_id", String(options.societyId));
+  const endpoint = setPendingDocumentParams(options);
 
   const { data } = await httpie.get<IPendingDocuments>(endpoint, {
     headers: getDefaultHeaders(options)
   });
 
   return data;
+}
+
+export async function getPendingDocumentStream(options: IPendingDocumentOptions) {
+  throwIfIsNotFirm();
+
+  const endpoint = setPendingDocumentParams(options);
+
+  return await httpie.stream("GET", endpoint, {
+    headers: getDefaultHeaders(options)
+  });
 }

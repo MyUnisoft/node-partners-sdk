@@ -6,6 +6,7 @@ import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultHeaderOptions, get
 
 export * as FEC from "./FEC";
 export * as OCR from "./OCR";
+export * from "./manual_document";
 
 export interface IEntryByPartnerOptions extends IDefaultHeaderOptions {
   id: number;
