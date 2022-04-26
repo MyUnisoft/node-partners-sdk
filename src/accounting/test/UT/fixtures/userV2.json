@@ -1,0 +1,103 @@
+{
+  "bdelete": 1,
+  "user_array": [
+    {
+      "tel": null,
+      "mail": {
+        "id": 0,
+        "coordonnee": "s.doual@myunisoft.fr"
+      },
+      "name": "Doual",
+      "badmin": true,
+      "tel_fix": null,
+      "user_id": 20,
+      "civility": "Monsieur",
+      "firstname": "Sofian",
+      "groupslst": [],
+      "id_profil": 1,
+      "access_list": [
+        {
+          "label": null,
+          "siret": null,
+          "acces_id": 22,
+          "profil_id": 1,
+          "wallet_id": 1,
+          "society_id": null,
+          "profil_name": "Administrateur",
+          "wallet_label": "TOUTES",
+          "id_type_profil": 2,
+          "libelle_type_profil": "Cabinet"
+        }
+      ],
+      "civility_id": 1,
+      "maiden_name": null,
+      "safe_status": false,
+      "tel_portable": null,
+      "id_type_profil": 2,
+      "libelle_profil": "Administrateur",
+      "display_safe_choice": false,
+      "libelle_type_profil": "Cabinet"
+    },
+    {
+      "tel": null,
+      "mail": {
+        "id": 0,
+        "coordonnee": "n.hallaert@myunisoft.fr"
+      },
+      "name": "Hallaert",
+      "badmin": true,
+      "tel_fix": null,
+      "user_id": 19,
+      "civility": "Monsieur",
+      "firstname": "Nicolas",
+      "groupslst": [],
+      "id_profil": 1,
+      "access_list": [
+        {
+          "label": "Vuiton - MyUni",
+          "siret": null,
+          "acces_id": 21,
+          "profil_id": 1,
+          "wallet_id": null,
+          "society_id": 5,
+          "profil_name": "Administrateur",
+          "wallet_label": null,
+          "id_type_profil": 2,
+          "libelle_type_profil": "Cabinet"
+        },
+        {
+          "label": "Vuiton - MyUni2",
+          "siret": null,
+          "acces_id": 20,
+          "profil_id": 1,
+          "wallet_id": null,
+          "society_id": 6,
+          "profil_name": "Administrateur",
+          "wallet_label": null,
+          "id_type_profil": 2,
+          "libelle_type_profil": "Cabinet"
+        },
+        {
+          "label": "Vuiton - MyUni3",
+          "siret": null,
+          "acces_id": 19,
+          "profil_id": 1,
+          "wallet_id": null,
+          "society_id": 7,
+          "profil_name": "Administrateur",
+          "wallet_label": null,
+          "id_type_profil": 2,
+          "libelle_type_profil": "Cabinet"
+        }
+      ],
+      "civility_id": 1,
+      "maiden_name": null,
+      "safe_status": false,
+      "tel_portable": null,
+      "id_type_profil": 2,
+      "libelle_profil": "Administrateur",
+      "display_safe_choice": false,
+      "libelle_type_profil": "Cabinet"
+    }
+  ]
+}

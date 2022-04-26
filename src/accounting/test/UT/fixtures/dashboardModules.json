@@ -1,0 +1,189 @@
+[
+  {
+      "EC": null,
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 1,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "Aadprox",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": null,
+      "preaccounting_id": null,
+      "accounting_process": false
+  },
+  {
+      "EC": null,
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 4,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "Dext",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": null,
+      "preaccounting_id": null,
+      "accounting_process": false
+  },
+  {
+      "EC": {
+          "id": 1,
+          "name": "Gentilhomme",
+          "initial": "TG",
+          "firstname": "THOMAS"
+      },
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 3,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "MY UNISOFT",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": null,
+      "preaccounting_id": null,
+      "accounting_process": false
+  },
+  {
+      "EC": null,
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 2,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "Triiptic Evoliz",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": null,
+      "preaccounting_id": null,
+      "accounting_process": false
+  },
+  {
+      "EC": null,
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 5,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "Vuiton - MyUni",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": null,
+      "preaccounting_id": null,
+      "accounting_process": false
+  },
+  {
+      "EC": null,
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 6,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "Vuiton - MyUni2",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": null,
+      "preaccounting_id": null,
+      "accounting_process": false
+  },
+  {
+      "EC": null,
+      "MG": null,
+      "RD": null,
+      "secured": false,
+      "company_id": 7,
+      "my_data_rh": false,
+      "silae_code": null,
+      "wallet_list": [
+          {
+              "label": "TOUTES",
+              "wallet_id": 1
+          }
+      ],
+      "company_name": "Vuiton - MyUni3",
+      "type_company": {
+          "label": "Client",
+          "id_type_company": 1
+      },
+      "retrieving_day": 5,
+      "employee_app_id": null,
+      "formula_myun_id": 2,
+      "folder_reference": "MyUni3",
+      "preaccounting_id": null,
+      "accounting_process": false
+  }
+]

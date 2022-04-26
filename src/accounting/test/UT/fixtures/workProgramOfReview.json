@@ -1,0 +1,71 @@
+[
+  {
+      "na": null,
+      "ref": "AC-A-00-A1",
+      "help": "",
+      "name": "Entreprise",
+      "ref_id": 140,
+      "children": null,
+      "periodicity": "PERM"
+  },
+  {
+      "na": null,
+      "ref": "AC-A-00-A2",
+      "help": "",
+      "name": "Fiscal",
+      "ref_id": 141,
+      "children": null,
+      "periodicity": "PERM"
+  },
+  {
+      "na": {
+          "id": 3,
+          "value": false
+      },
+      "ref": "AC-A-03",
+      "help": "Vérifier que rien ne s'oppose à la poursuite de la mission",
+      "name": "Poursuite mission",
+      "ref_id": 3,
+      "children": {
+          "id_ref_da_dp": 3,
+          "diligence_list": [
+              {
+                  "to": "2021-12-31",
+                  "from": "2021-01-01",
+                  "name": "Du 01/01/2021 Au 31/12/2021",
+                  "pj_list": [],
+                  "comments": 0,
+                  "valid_rm": "to_validate",
+                  "diligence_id": 3,
+                  "valid_collab": "to_do",
+                  "link_work_sheet": "",
+                  "custom_worksheet": {
+                      "original_custom_worksheet": {
+                          "link": "https://preprod-mycloud.myunisoft.fr/index.php",
+                          "name": "FT Maintien de Mission.v1.3",
+                          "token": "pBiDRErMsicwTLt",
+                          "baseUrl": "https://preprod-mycloud.myunisoft.fr/",
+                          "download": "",
+                          "thumbnail": "",
+                          "document_id": 266,
+                          "original_name": "FT Maintien de Mission.v1.3"
+                      },
+                      "diligence_custom_worksheet": {}
+                  },
+                  "hasJustification": false,
+                  "label_work_sheet": ""
+              }
+          ]
+      },
+      "periodicity": "E"
+  },
+  {
+      "na": null,
+      "ref": "AC-A-03-A1",
+      "help": "Classer les documents relatifs à la mission",
+      "name": "Mission",
+      "ref_id": 139,
+      "children": null,
+      "periodicity": "PERM"
+  }
+]

@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "resolveJsonModule": true,
       "declaration": true,
       "strictNullChecks": true,
       "target": "ES2019",
