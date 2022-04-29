@@ -1,5 +1,7 @@
 // Import Node.js Dependencies
 import { Writable } from "stream";
+import { join } from "path";
+import { readFileSync } from "fs";
 
 // Require Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
@@ -12,8 +14,11 @@ import { BASE_API_URL } from "../../../../constants";
 const kMockHttpAgent = new httpie.MockAgent();
 const kOriginalHttpDispatcher = httpie.getGlobalDispatcher();
 const kHttpReplyHeaders = { headers: { "content-type": "application/json" } };
-const kHttpReply = { status: "ok" };
+const kPlainTextReplyHeaders = { headers: { "content-type": "plain/text" } };
+// const kHttpReply = { status: "ok" };
 const kUrlPathname = "/api/v1";
+const kFixturePath = join(__dirname, "fixtures");
+const kExportFEC = readFileSync(join(kFixturePath, "exportFEC.txt"), { encoding: "utf-8" });
 
 
 function initiateHttpieMock() {
@@ -24,7 +29,7 @@ function initiateHttpieMock() {
       path: (url) => url.startsWith(`${kUrlPathname}/export/fec`),
       method: "POST"
     })
-    .reply(200, kHttpReply, kHttpReplyHeaders);
+    .reply(200, kExportFEC, kPlainTextReplyHeaders);
 
   mockClient
     .intercept({
@@ -72,13 +77,42 @@ describe("export", () => {
     await mockClient.close();
   });
 
+  test("getPartialFEC", async() => {
+    const data = await myun.accounting.export.FEC.getPartialFEC({
+      accessToken: "test",
+      from: "2021-01-01",
+      to: "2021-12-31"
+    });
+
+    expect(typeof data).toBe("string");
+  });
+
+  test("getPartialFECStream", async() => {
+    const cursor = await myun.accounting.export.FEC.getPartialFECStream({
+      accessToken: "test",
+      from: "2021-01-01",
+      to: "2021-12-31"
+    });
+
+    const buffs: Buffer[] = [];
+    cursor(new Writable({
+      write(chunk) {
+        buffs.push(chunk);
+      }
+    }));
+
+    const data = Buffer.concat(buffs).toString("utf-8");
+
+    expect(typeof data).toBe("string");
+  });
+
   test("getFEC", async() => {
     const data = await myun.accounting.export.FEC.getFEC({
       accessToken: "test",
       exerciceId: 1
     });
 
-    expect(data.status).toBe("ok");
+    expect(typeof data).toBe("string");
   });
 
   test("getFECStream", async() => {
@@ -88,15 +122,14 @@ describe("export", () => {
     });
 
     const buffs: Buffer[] = [];
-
     cursor(new Writable({
       write(chunk) {
         buffs.push(chunk);
       }
     }));
 
-    const data = JSON.parse(Buffer.concat(buffs).toString("utf-8"));
-    expect(data.status).toBe("ok");
+    const data = Buffer.concat(buffs).toString("utf-8");
+    expect(typeof data).toBe("string");
   });
 
   test("getPendingDocument", async() => {

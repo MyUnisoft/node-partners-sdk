@@ -1,0 +1,370 @@
+{
+  "fiscal_year_list": [
+    "01/01/2021 au 31/12/2021",
+    "01/01/2020 au 31/12/2020"
+  ],
+  "month_list": [
+    "2021/01",
+    "2021/02",
+    "2021/03",
+    "2021/04",
+    "2021/05",
+    "2021/06",
+    "2021/07",
+    "2021/08",
+    "2021/09",
+    "2021/10",
+    "2021/11",
+    "2021/12"
+  ],
+  "data": [
+    {
+      "id_account": 0,
+      "account_number": "4",
+      "label": "TIERS",
+      "exercice_values": [
+        -12.11,
+        null
+      ],
+      "exercice_mvt": [
+        {
+          "credit": 29.4,
+          "debit": 17.29
+        }
+      ],
+      "percentage_values": [],
+      "month_values": [
+        null,
+        null,
+        -12.11,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "account_List": [
+        {
+          "id_account": 0,
+          "account_number": "41",
+          "label": "Clients et comptes rattachés",
+          "exercice_values": [
+            -12.11,
+            null
+          ],
+          "exercice_mvt": [
+            {
+              "credit": 29.4,
+              "debit": 17.29
+            }
+          ],
+          "percentage_values": [],
+          "month_values": [
+            null,
+            null,
+            -12.11,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "account_List": [
+            {
+              "id_account": 126,
+              "account_number": "4110000000",
+              "label": "CLIENTS",
+              "exercice_values": [
+                0,
+                null
+              ],
+              "exercice_mvt": [
+                {
+                  "credit": 1.11,
+                  "debit": 1.11
+                },
+                null
+              ],
+              "percentage_values": [],
+              "month_values": [
+                null,
+                null,
+                0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "account_List": [],
+              "validation": {
+                "VRM": "AV",
+                "VCOL": "AF",
+                "VSUP": "AV"
+              },
+              "hasComment": false,
+              "hasJustification": false,
+              "id_account_revision": 0,
+              "id_fiscal_year": 0,
+              "varPercent": null,
+              "varValue": 0
+            },
+            {
+              "id_account": 423,
+              "account_number": "41101DextM",
+              "label": "01.Dext_MyUnisoft_Customer",
+              "exercice_values": [
+                -12.11,
+                null
+              ],
+              "exercice_mvt": [
+                {
+                  "credit": 21.11,
+                  "debit": 9
+                },
+                null
+              ],
+              "percentage_values": [],
+              "month_values": [
+                null,
+                null,
+                -12.11,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "account_List": [],
+              "validation": {
+                "VRM": "AV",
+                "VCOL": "AF",
+                "VSUP": "AV"
+              },
+              "hasComment": false,
+              "hasJustification": false,
+              "id_account_revision": 0,
+              "id_fiscal_year": 0,
+              "varPercent": null,
+              "varValue": -12.11
+            },
+            {
+              "id_account": 421,
+              "account_number": "419999",
+              "label": "01.MyUni_Dext_Customer",
+              "exercice_values": [
+                0,
+                null
+              ],
+              "exercice_mvt": [
+                {
+                  "credit": 7.18,
+                  "debit": 7.18
+                },
+                null
+              ],
+              "percentage_values": [],
+              "month_values": [
+                null,
+                null,
+                0,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "account_List": [],
+              "validation": {
+                "VRM": "AV",
+                "VCOL": "AF",
+                "VSUP": "AV"
+              },
+              "hasComment": false,
+              "hasJustification": false,
+              "id_account_revision": 0,
+              "id_fiscal_year": 0,
+              "varPercent": null,
+              "varValue": 0
+            }
+          ],
+          "validation": null,
+          "hasComment": false,
+          "hasJustification": false,
+          "id_account_revision": 0,
+          "id_fiscal_year": 0,
+          "varPercent": null,
+          "varValue": -12
+        }
+      ],
+      "validation": null,
+      "hasComment": false,
+      "hasJustification": false,
+      "id_account_revision": 0,
+      "id_fiscal_year": 0,
+      "varPercent": null,
+      "varValue": -12.11
+    },
+    {
+      "id_account": 0,
+      "account_number": "7",
+      "label": "PRODUITS",
+      "exercice_values": [
+        12.11,
+        null
+      ],
+      "exercice_mvt": [
+        {
+          "credit": 0,
+          "debit": 12.11
+        }
+      ],
+      "percentage_values": [],
+      "month_values": [
+        null,
+        null,
+        12.11,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "account_List": [
+        {
+          "id_account": 0,
+          "account_number": "78",
+          "label": "Reprises sur amortissements et provisions",
+          "exercice_values": [
+            12.11,
+            null
+          ],
+          "exercice_mvt": [
+            {
+              "credit": 0,
+              "debit": 12.11
+            }
+          ],
+          "percentage_values": [],
+          "month_values": [
+            null,
+            null,
+            12.11,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "account_List": [
+            {
+              "id_account": 386,
+              "account_number": "787400",
+              "label": "REP/AUTRES PROV.REGL",
+              "exercice_values": [
+                12.11,
+                null
+              ],
+              "exercice_mvt": [
+                {
+                  "credit": 0,
+                  "debit": 12.11
+                },
+                null
+              ],
+              "percentage_values": [],
+              "month_values": [
+                null,
+                null,
+                12.11,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "account_List": [],
+              "validation": {
+                "VRM": "AV",
+                "VCOL": "AF",
+                "VSUP": "AV"
+              },
+              "hasComment": false,
+              "hasJustification": false,
+              "id_account_revision": 0,
+              "id_fiscal_year": 0,
+              "varPercent": null,
+              "varValue": 12.11
+            }
+          ],
+          "validation": null,
+          "hasComment": false,
+          "hasJustification": false,
+          "id_account_revision": 0,
+          "id_fiscal_year": 0,
+          "varPercent": null,
+          "varValue": 12
+        }
+      ],
+      "validation": null,
+      "hasComment": false,
+      "hasJustification": false,
+      "id_account_revision": 0,
+      "id_fiscal_year": 0,
+      "varPercent": null,
+      "varValue": 12.11
+    }
+  ],
+  "results": {
+    "exercice_values": [
+      -12.11,
+      null
+    ],
+    "month_values": [
+      null,
+      null,
+      -12,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}

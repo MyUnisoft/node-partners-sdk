@@ -20,7 +20,7 @@ export async function getPartialFEC(options: IGetFECEntriesOptions) {
   endpoint.searchParams.set("to", options.to);
 
 
-  const { data } = await httpie.post<{status: string}>(endpoint, {
+  const { data } = await httpie.post<string>(endpoint, {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/json"
@@ -28,6 +28,21 @@ export async function getPartialFEC(options: IGetFECEntriesOptions) {
   });
 
   return data;
+}
+
+export async function getPartialFECStream(options: IGetFECEntriesOptions) {
+  const endpoint = new URL("/api/v1/export/fec", BASE_API_URL);
+  endpoint.searchParams.set("export_type", "1");
+  endpoint.searchParams.set("from", options.from);
+  endpoint.searchParams.set("to", options.to);
+
+
+  return await httpie.stream("POST", endpoint, {
+    headers: {
+      ...getDefaultHeaders(options),
+      "content-type": "application/json"
+    }
+  });
 }
 
 export interface IGetFEC extends IDefaultHeaderOptions {
@@ -39,7 +54,7 @@ export async function getFEC(options: IGetFEC) {
   endpoint.searchParams.set("export_type", "0");
   endpoint.searchParams.set("exercice_id", String(options.exerciceId));
 
-  const { data } = await httpie.post<{status: string}>(endpoint, {
+  const { data } = await httpie.post<string>(endpoint, {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/json"

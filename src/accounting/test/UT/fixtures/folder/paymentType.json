@@ -1,0 +1,32 @@
+[
+  {
+    "code": "CB",
+    "name": "Carte bleue",
+    "payment_type_id": 1
+  },
+  {
+    "code": "CHQ",
+    "name": "Chèque",
+    "payment_type_id": 4
+  },
+  {
+    "code": "ESP",
+    "name": "Espèce",
+    "payment_type_id": 3
+  },
+  {
+    "code": "LCR",
+    "name": "Lettre de change",
+    "payment_type_id": 6
+  },
+  {
+    "code": "PRLV",
+    "name": "Prélèvement",
+    "payment_type_id": 5
+  },
+  {
+    "code": "VIRT",
+    "name": "Virement",
+    "payment_type_id": 2
+  }
+]

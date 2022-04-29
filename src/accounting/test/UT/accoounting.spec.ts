@@ -6,23 +6,34 @@ import * as httpie from "@myunisoft/httpie";
 // Require Internal Dependencies
 import * as myun from "../../../index";
 import { BASE_API_URL } from "../../../constants";
-import kWalletReply from "./fixtures/wallet.json";
-import kPersPhysiqueReply from "./fixtures/persPhysique.json";
-import kSocietyeReply from "./fixtures/society.json";
-import kMemberReply from "./fixtures/member.json";
-import kDashboardModules from "./fixtures/dashboardModules.json";
-import kCycleOfReview from "./fixtures/cycleOfReview.json";
-import kCompanyByRef from "./fixtures/companyByRef.json";
-import kDossierRevisionList from "./fixtures/dossierRevisionList.json";
-import kWorkProgramOfReview from "./fixtures/workProgramOfReview.json";
-import kUserV2 from "./fixtures/userV2.json";
+
+// Fixtures Firm
+import kCompanyByRefReply from "./fixtures/firm/companyByRef.json";
+import kCycleOfReviewReply from "./fixtures/firm/cycleOfReview.json";
+import kDashboardModulesReply from "./fixtures/firm/dashboardModules.json";
+import kDossierRevisionListReply from "./fixtures/firm/dossierRevisionList.json";
+import kMemberReply from "./fixtures/firm/member.json";
+import kPersPhysiqueReply from "./fixtures/firm/persPhysique.json";
+import kSocietyReply from "./fixtures/firm/society.json";
+import kUserV2Reply from "./fixtures/firm/userV2.json";
+import kWalletReply from "./fixtures/firm/wallet.json";
+import kWorkProgramOfReviewReply from "./fixtures/firm/workProgramOfReview.json";
+
+// Fixtures Folder
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import kBalanceReply from "./fixtures/folder/balance.json";
+import kBalanceDynamiqueReply from "./fixtures/folder/balanceDynamique.json";
+import kDiaryReply from "./fixtures/folder/diary.json";
+import kExerciceReply from "./fixtures/folder/exercice.json";
+import kParamVatReply from "./fixtures/folder/paramVat.json";
+import kPaymentTypeReply from "./fixtures/folder/paymentType.json";
+import kSocietyByIdReply from "./fixtures/folder/societyById.json";
 
 // CONSTANTS
 const kMockHttpAgent = new httpie.MockAgent();
 const kOriginalHttpDispatcher = httpie.getGlobalDispatcher();
 const kHttpReplyHeaders = { headers: { "content-type": "application/json" } };
 const kUrlPathname = "/api/v1";
-
 
 function initiateHttpieMock() {
   const mockClient = kMockHttpAgent.get(BASE_API_URL);
@@ -32,7 +43,7 @@ function initiateHttpieMock() {
       path: (url) => url.startsWith(`${kUrlPathname}/users_v2`),
       method: "GET"
     })
-    .reply(200, kUserV2, kHttpReplyHeaders);
+    .reply(200, kUserV2Reply, kHttpReplyHeaders);
 
   mockClient
     .intercept({
@@ -53,14 +64,14 @@ function initiateHttpieMock() {
       path: `${kUrlPathname}/society`,
       method: "GET"
     })
-    .reply(200, kSocietyeReply, kHttpReplyHeaders);
+    .reply(200, kSocietyReply, kHttpReplyHeaders);
 
   mockClient
     .intercept({
       path: (url) => url.startsWith(`${kUrlPathname}/society/search`),
       method: "GET"
     })
-    .reply(200, kCompanyByRef, kHttpReplyHeaders);
+    .reply(200, kCompanyByRefReply, kHttpReplyHeaders);
 
   mockClient
     .intercept({
@@ -74,28 +85,76 @@ function initiateHttpieMock() {
       path: (url) => url.startsWith(`${kUrlPathname}/dashboard/modules`),
       method: "GET"
     })
-    .reply(200, kDashboardModules, kHttpReplyHeaders);
+    .reply(200, kDashboardModulesReply, kHttpReplyHeaders);
 
   mockClient
     .intercept({
       path: (url) => url.startsWith(`${kUrlPathname}/dadp/dossier_revision_list`),
       method: "GET"
     })
-    .reply(200, kDossierRevisionList, kHttpReplyHeaders);
+    .reply(200, kDossierRevisionListReply, kHttpReplyHeaders);
 
   mockClient
     .intercept({
       path: (url) => url.startsWith(`${kUrlPathname}/dadp/cycle`),
       method: "GET"
     })
-    .reply(200, kCycleOfReview, kHttpReplyHeaders);
+    .reply(200, kCycleOfReviewReply, kHttpReplyHeaders);
 
   mockClient
     .intercept({
       path: (url) => url.startsWith(`${kUrlPathname}/dadp/work_program`),
       method: "GET"
     })
-    .reply(200, kWorkProgramOfReview, kHttpReplyHeaders);
+    .reply(200, kWorkProgramOfReviewReply, kHttpReplyHeaders);
+
+  return mockClient;
+}
+
+
+function initiateHttpieMockFolder() {
+  const mockClient = kMockHttpAgent.get(BASE_API_URL);
+  mockClient
+    .intercept({
+      path: `${kUrlPathname}/society/exercice`,
+      method: "GET"
+    })
+    .reply(200, kExerciceReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: `${kUrlPathname}/diary`,
+      method: "GET"
+    })
+    .reply(200, kDiaryReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: `${kUrlPathname}/vat_param`,
+      method: "GET"
+    })
+    .reply(200, kParamVatReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: `${kUrlPathname}/payment_type`,
+      method: "GET"
+    })
+    .reply(200, kPaymentTypeReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: `${kUrlPathname}/society`,
+      method: "GET"
+    })
+    .reply(200, kSocietyByIdReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/balance_dynamique`),
+      method: "GET"
+    })
+    .reply(200, kBalanceDynamiqueReply, kHttpReplyHeaders);
 
   return mockClient;
 }
@@ -112,17 +171,16 @@ afterAll(() => {
 });
 
 describe("Accounting", () => {
-  let mockClient;
-  beforeEach(() => {
-    mockClient = initiateHttpieMock();
-  });
-
-  afterEach(async() => {
-    await mockClient.close();
-  });
-
-
   describe("firm", () => {
+    let mockClient;
+    beforeEach(() => {
+      mockClient = initiateHttpieMock();
+    });
+
+    afterEach(async() => {
+      await mockClient.close();
+    });
+
     test("getUsers", async() => {
       const data = await myun.accounting.firm.getUsers({
         accessToken: "test"
@@ -215,5 +273,112 @@ describe("Accounting", () => {
 
       expect(data[0].ref).toBe("AC-A-00-A1");
     });
+  });
+
+  describe("folder", () => {
+    let mockClient;
+    beforeEach(() => {
+      mockClient = initiateHttpieMockFolder();
+    });
+
+    afterEach(async() => {
+      await mockClient.close();
+    });
+
+    test("getExercices", async() => {
+      const data = await myun.accounting.folder.getExercices({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data[0].label).toBe("N");
+    });
+
+    test("getDiaries", async() => {
+      const data = await myun.accounting.folder.getDiaries({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data[1].code).toBe("02");
+      expect(data[1].name).toBe("JOURNAL DE VENTES");
+    });
+
+    test("getVatParameters", async() => {
+      const data = await myun.accounting.folder.getVatParameters({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data[0].code).toBe("01");
+      expect(data[0].blocked).toBe(true);
+    });
+
+    test("getInformation", async() => {
+      const data = await myun.accounting.folder.getInformation({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data.name).toBe("Aadprox");
+    });
+
+    test("getPaymentType", async() => {
+      const data = await myun.accounting.folder.getPaymentType({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data[0].code).toBe("CB");
+      expect(data[0].name).toBe("Carte bleue");
+    });
+
+    test("getDynamicBalanceFromExercice", async() => {
+      const data = await myun.accounting.folder.getDynamicBalanceFromExercice({
+        accessToken: "test",
+        accountingFolderId: 1,
+        axisId: 1
+      });
+
+      expect(data[0].exercice.start_date).toBe("2021-01-01");
+      expect(data[0].exercice.end_date).toBe("2021-12-31");
+    });
+
+    test("getDynamicBalanceFromDate", async() => {
+      const data = await myun.accounting.folder.getDynamicBalanceFromDate({
+        accessToken: "test",
+        accountingFolderId: 1,
+        startDate: "20210101",
+        endDate: "20211231",
+        axisId: 1
+      });
+
+      expect(data[0].exercice.start_date).toBe("2021-01-01");
+      expect(data[0].exercice.end_date).toBe("2021-12-31");
+    });
+
+    // test("getGrandLivre", async() => {
+    //   const data = await myun.accounting.folder.getGrandLivre({
+    //     accessToken: "test",
+    //     accountingFolderId: 1,
+    //     startDate: "2021-01-01",
+    //     endDate: "2021-12-31"
+    //   });
+
+    //   expect(data[0].exercice.start_date).toBe("2021-01-01");
+    //   expect(data[0].exercice.end_date).toBe("2021-12-31");
+    // });
+
+    // test("getGrandLivreStream", async() => {
+    //   const data = await myun.accounting.folder.getGrandLivreStream({
+    //     accessToken: "test",
+    //     accountingFolderId: 1,
+    //     startDate: "2021-01-01",
+    //     endDate: "2021-12-31"
+    //   });
+
+    //   expect(data[0].exercice.start_date).toBe("2021-01-01");
+    //   expect(data[0].exercice.end_date).toBe("2021-12-31");
+    // });
   });
 });
