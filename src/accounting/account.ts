@@ -90,12 +90,15 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
   return data;
 }
 
+// changer le body comme la methode findOrCreate ?
 export interface IUpdateAccountOptions extends IDefaultHeaderOptions {
   body: Windev.Account.UpdateAccount;
 }
 
 export async function updateAccount(options: IUpdateAccountOptions) {
   throwIfIsNotFirm();
+  // manque le society-id dans le header ? error GBL1
+
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
 
   const { data } = await httpie.put<Windev.Account.Account | { status: string; message: string; }>(endpoint, {

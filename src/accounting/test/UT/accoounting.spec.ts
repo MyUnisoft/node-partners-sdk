@@ -29,6 +29,14 @@ import kParamVatReply from "./fixtures/folder/paramVat.json";
 import kPaymentTypeReply from "./fixtures/folder/paymentType.json";
 import kSocietyByIdReply from "./fixtures/folder/societyById.json";
 
+// Fixtures Account
+import kDetailedAccountReply from "./fixtures/account/detailedAccount.json";
+import kEntriesAccountReply from "./fixtures/account/entries.json";
+import kFindOrCreateAccounttReply from "./fixtures/account/findOrCreateAccount.json";
+import kSimplifiedAccountReply from "./fixtures/account/simplifiedAccount.json";
+import kUpdateAccounttReply from "./fixtures/account/updateAccount.json";
+import { Windev } from "@myunisoft/tsd";
+
 // CONSTANTS
 const kMockHttpAgent = new httpie.MockAgent();
 const kOriginalHttpDispatcher = httpie.getGlobalDispatcher();
@@ -155,6 +163,42 @@ function initiateHttpieMockFolder() {
       method: "GET"
     })
     .reply(200, kBalanceDynamiqueReply, kHttpReplyHeaders);
+
+  return mockClient;
+}
+
+interface IMockAccountOptions {
+  getAccountReply?: Windev.Account.SimplifiedAccount[] | Windev.Account.DetailedAccounts | Windev.Account.AccountEntries;
+  putAccountReply?: Windev.Account.Account | { status: string; message: string; };
+}
+
+
+function initiateHttpieMockAccount(options: IMockAccountOptions = Object.create(null)) {
+  const mockClient = kMockHttpAgent.get(BASE_API_URL);
+  const {
+    getAccountReply = kSimplifiedAccountReply
+  } = options;
+
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/account`),
+      method: "GET"
+    })
+    .reply(200, getAccountReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/account`),
+      method: "POST"
+    })
+    .reply(200, kFindOrCreateAccounttReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/account`),
+      method: "PUT"
+    })
+    .reply(200, kUpdateAccounttReply, kHttpReplyHeaders);
 
   return mockClient;
 }
@@ -380,5 +424,95 @@ describe("Accounting", () => {
     //   expect(data[0].exercice.start_date).toBe("2021-01-01");
     //   expect(data[0].exercice.end_date).toBe("2021-12-31");
     // });
+  });
+
+
+  describe("account", () => {
+    let mockClient;
+    afterEach(async() => {
+      await mockClient.close();
+    });
+
+    test("getAll", async() => {
+      mockClient = initiateHttpieMockAccount();
+
+      const data = await myun.accounting.account.getAll({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data[1].account_number).toBe("101200");
+    });
+
+    test("getAllDetailed", async() => {
+      mockClient = initiateHttpieMockAccount({ getAccountReply: kDetailedAccountReply });
+
+      const data = await myun.accounting.account.getAllDetailed({
+        accessToken: "test",
+        accountingFolderId: 1
+      });
+
+      expect(data.account_array![0].label).toBe("RESERVE LEGALE PROP.");
+    });
+
+    test("findOrCreate", async() => {
+      mockClient = initiateHttpieMockAccount();
+
+      const data = await myun.accounting.account.findOrCreate({
+        accessToken: "test",
+        accountingFolderId: 1,
+        accountNumber: "106110",
+        label: "RESERVE LEGALE PROP."
+      });
+
+      expect(data.account_id).toBe(4);
+    });
+
+    test("updateAccount", async() => {
+      mockClient = initiateHttpieMockAccount();
+
+      const data = await myun.accounting.account.updateAccount({
+        accessToken: "test",
+        body: {
+          account_id: 2,
+          account_number: "101200",
+          label: "CAPITAL APPELE NON VERS"
+        }
+      });
+
+      if ("label" in data) {
+        expect(data.label).toBe("CAPITAL APPELE NON VERS");
+      }
+    });
+
+    test("getlineEntries by number", async() => {
+      mockClient = initiateHttpieMockAccount({ getAccountReply: kEntriesAccountReply });
+
+      const data = await myun.accounting.account.getlineEntries({
+        accessToken: "test",
+        accountingFolderId: 1,
+        accountNumber: "101200",
+        searchDate: { start_date: "20210101", end_date: "20211231" }
+      });
+
+      if ("label" in data) {
+        expect(data.total_debit).toBe(0);
+      }
+    });
+
+    test("getlineEntries by id", async() => {
+      mockClient = initiateHttpieMockAccount({ getAccountReply: kEntriesAccountReply });
+
+      const data = await myun.accounting.account.getlineEntries({
+        accessToken: "test",
+        accountingFolderId: 1,
+        accountId: 1,
+        searchDate: { start_date: "20210101", end_date: "20211231" }
+      });
+
+      if ("label" in data) {
+        expect(data.total_debit).toBe(0);
+      }
+    });
   });
 });
