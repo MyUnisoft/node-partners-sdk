@@ -1,0 +1,50 @@
+{
+  "debit_total": 29.40,
+  "credit_total": 29.40,
+  "type": "E",
+  "entry_array": [
+    {
+      "entry_id": 5,
+      "etablissement_id": 1,
+      "date_piece": "2021-03-30",
+      "diary": {
+        "id": 2,
+        "code": "02",
+        "label": "JOURNAL DE VENTES",
+        "diary_type_code": "VTE"
+      },
+      "comment": false,
+      "entry_date": "2021-03-30",
+      "pj_list": [
+        {
+          "document_id": 15,
+          "date_time": "2021-03-30T09:07:07",
+          "name": "attachment",
+          "token": "",
+          "etat": true,
+          "baseUrl": "",
+          "thumbnail": "",
+          "link": "",
+          "download": ""
+        }
+      ],
+      "entry_list": [
+        {
+          "line_entry_id": 11,
+          "account": {
+            "account_id": 421,
+            "account_number": "419999",
+            "label": "01.MyUni_Dext_Customer"
+          },
+          "piece": "",
+          "piece2": "000123Z555",
+          "lettrage": "AAB",
+          "label": "01.MyUni_Dext_Customer",
+          "credit": 3.59,
+          "currency": "EUR"
+        }
+      ],
+      "blocked": false
+    }
+  ]
+}

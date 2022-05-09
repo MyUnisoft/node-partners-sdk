@@ -1,7 +1,11 @@
 // Import Node.js Dependencies
+import fs from "fs";
+import path from "path";
+import { Writable } from "stream";
 
 // Require Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
+import { Windev } from "@myunisoft/tsd";
 
 // Require Internal Dependencies
 import * as myun from "../../../index";
@@ -28,6 +32,7 @@ import kExerciceReply from "./fixtures/folder/exercice.json";
 import kParamVatReply from "./fixtures/folder/paramVat.json";
 import kPaymentTypeReply from "./fixtures/folder/paymentType.json";
 import kSocietyByIdReply from "./fixtures/folder/societyById.json";
+const kGrandLivreReply = fs.readFileSync(path.join(__dirname, "fixtures", "folder", "grandLivre.pdf"));
 
 // Fixtures Account
 import kDetailedAccountReply from "./fixtures/account/detailedAccount.json";
@@ -35,7 +40,6 @@ import kEntriesAccountReply from "./fixtures/account/entries.json";
 import kFindOrCreateAccounttReply from "./fixtures/account/findOrCreateAccount.json";
 import kSimplifiedAccountReply from "./fixtures/account/simplifiedAccount.json";
 import kUpdateAccounttReply from "./fixtures/account/updateAccount.json";
-import { Windev } from "@myunisoft/tsd";
 
 // CONSTANTS
 const kMockHttpAgent = new httpie.MockAgent();
@@ -164,6 +168,13 @@ function initiateHttpieMockFolder() {
     })
     .reply(200, kBalanceDynamiqueReply, kHttpReplyHeaders);
 
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/grand_livre`),
+      method: "GET"
+    })
+    .reply(200, kGrandLivreReply, { headers: { "content-type": "application/pdf" } });
+
   return mockClient;
 }
 
@@ -171,7 +182,6 @@ interface IMockAccountOptions {
   getAccountReply?: Windev.Account.SimplifiedAccount[] | Windev.Account.DetailedAccounts | Windev.Account.AccountEntries;
   putAccountReply?: Windev.Account.Account | { status: string; message: string; };
 }
-
 
 function initiateHttpieMockAccount(options: IMockAccountOptions = Object.create(null)) {
   const mockClient = kMockHttpAgent.get(BASE_API_URL);
@@ -401,29 +411,38 @@ describe("Accounting", () => {
       expect(data[0].exercice.end_date).toBe("2021-12-31");
     });
 
-    // test("getGrandLivre", async() => {
-    //   const data = await myun.accounting.folder.getGrandLivre({
-    //     accessToken: "test",
-    //     accountingFolderId: 1,
-    //     startDate: "2021-01-01",
-    //     endDate: "2021-12-31"
-    //   });
+    test("getGrandLivre", async() => {
+      const data = await myun.accounting.folder.getGrandLivre({
+        accessToken: "test",
+        accountingFolderId: 1,
+        startDate: "2021-01-01",
+        endDate: "2021-12-31"
+      });
 
-    //   expect(data[0].exercice.start_date).toBe("2021-01-01");
-    //   expect(data[0].exercice.end_date).toBe("2021-12-31");
-    // });
+      // console.log(data);
 
-    // test("getGrandLivreStream", async() => {
-    //   const data = await myun.accounting.folder.getGrandLivreStream({
-    //     accessToken: "test",
-    //     accountingFolderId: 1,
-    //     startDate: "2021-01-01",
-    //     endDate: "2021-12-31"
-    //   });
+      expect(typeof data).toBe("string");
+    });
 
-    //   expect(data[0].exercice.start_date).toBe("2021-01-01");
-    //   expect(data[0].exercice.end_date).toBe("2021-12-31");
-    // });
+    test("getGrandLivreStream", async() => {
+      const cursor = await myun.accounting.folder.getGrandLivreStream({
+        accessToken: "test",
+        accountingFolderId: 1,
+        startDate: "2021-01-01",
+        endDate: "2021-12-31"
+      });
+
+
+      const buffs: Buffer[] = [];
+      cursor(new Writable({
+        write(chunk) {
+          buffs.push(chunk);
+        }
+      }));
+
+
+      expect(typeof buffs.toString()).toBe("string");
+    });
   });
 
 

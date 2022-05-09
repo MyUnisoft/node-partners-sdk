@@ -9,6 +9,9 @@ import * as httpie from "@myunisoft/httpie";
 // Require Internal Dependencies
 import * as myun from "../../../../index";
 import { BASE_API_URL } from "../../../../constants";
+import { Windev } from "@myunisoft/tsd";
+
+import kCEntriesReply from "./fixtures/entry.json";
 
 // CONSTANTS
 const kMockHttpAgent = new httpie.MockAgent();
@@ -51,6 +54,23 @@ function initiateHttpieMock() {
     .reply(200, {
       nb_ocr: 0,
       ocr_follow_up_array: []
+    }, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/entries`),
+      method: "POST"
+    })
+    .reply(200, kCEntriesReply, kHttpReplyHeaders);
+
+  mockClient
+    .intercept({
+      path: (url) => url.startsWith(`${kUrlPathname}/entries/id`),
+      method: "GET"
+    })
+    .reply(200, {
+      id_entry: 1,
+      type: "ENTRIES"
     }, kHttpReplyHeaders);
 
   return mockClient;
@@ -204,5 +224,33 @@ describe("export", () => {
 
     const data = JSON.parse(Buffer.concat(buffs).toString("utf-8"));
     expect(data.nb_ocr).toBe(0);
+  });
+
+  describe("index", () => {
+    test("getEntryByPartnerID", async() => {
+      const data = await myun.accounting.export.getEntryByPartnerID({
+        accessToken: "test",
+        accountingFolderId: 1,
+        id: 1
+      });
+
+      expect(data.id_entry).toBe(1);
+      expect(data.type).toBe("ENTRIES");
+    });
+
+    test("getEntries", async() => {
+      const data = await myun.accounting.export.getEntries<Windev.Entry.Entries>({
+        accessToken: "test",
+        type: "entry",
+        accountingFolderId: 1,
+        body: {
+          sort: { ecr: "desc" },
+          filters: [{ name: "type", value: "e" }]
+        }
+      });
+
+      expect(data.type).toBe("E");
+      expect(data.entry_array[0].entry_id).toBe(5);
+    });
   });
 });
