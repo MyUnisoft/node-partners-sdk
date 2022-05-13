@@ -48,10 +48,15 @@ export async function generateKey(options: Required<IDefaultHeaderOptions>): Pro
   return data;
 }
 
+export interface SocietyEndpointsInfo {
+  path: string;
+  method: string;
+}
+
 export async function getEndpoints(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/key/info", BASE_API_URL);
 
-  const { data } = await httpie.get(endpoint, {
+  const { data } = await httpie.get<SocietyEndpointsInfo[]>(endpoint, {
     headers: getDefaultHeaders(options)
   });
 
