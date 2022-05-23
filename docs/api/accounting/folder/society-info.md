@@ -1,5 +1,7 @@
 # Society info
 
+[<-- Back](../../../../README.md)
+
 ## Get society info
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";
@@ -172,3 +174,5 @@ interface CompanyInfo {
   enable_quantity: boolean;
 }
 ```
+
+[<-- Back](../../../../README.md)

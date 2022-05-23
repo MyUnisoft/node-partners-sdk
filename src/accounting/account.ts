@@ -141,7 +141,7 @@ export interface ILineEntriesOptions extends IDefaultHeaderOptions {
   entryTypes?: "SITU" | "NORM";
 }
 
-export async function getlineEntries(options: RequireExactlyOne<ILineEntriesOptions, "accountId" | "accountNumber">) {
+export async function getLineEntries(options: RequireExactlyOne<ILineEntriesOptions, "accountId" | "accountNumber">) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/account/entries", BASE_API_URL);

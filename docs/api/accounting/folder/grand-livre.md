@@ -1,5 +1,7 @@
 # Grand Livre
 
+[<-- Back](../../../../README.md)
+
 ```ts
 const options: MyUnisoft.compta.society.IGetGrandLivreOptions = {
   header: {

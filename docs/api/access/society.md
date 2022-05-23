@@ -1,4 +1,7 @@
 # Society access
+
+[<-- Back](../../../README.md)
+
 >Once your API token is generated, it is no longer necessary to use this function (unless the token has been revoked).
 
 ```ts
@@ -41,5 +44,4 @@ interface Endpoint {
 }
 
 type getEndpoints = (options: IDefaultHeaderOptions) => Promise<Endpoint[]>;
-
 ```

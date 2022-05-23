@@ -1,3 +1,6 @@
+
+> [Back to root API](../../README.md#📜-api)
+
 ```ts
 /**
  * @description Default interface for all requests options

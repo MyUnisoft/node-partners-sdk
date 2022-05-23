@@ -90,6 +90,12 @@ APIs to authenticate the script or to generate tokens. Choose depending on the k
 ---
 
 ### [Accounting](./docs/api/compta)
+- [Account](./docs/api/accounting/account/account.md)
+  - [GetAll](./docs/api/accounting/account/getAll.md#exemple-get-all)
+  - [GetAllDetailed](./docs/api/accounting/account/account.md#exemple-get-all-detailed)
+  - [FindOrCreate](./docs/api/accounting/account/account.md#exemple-find-or-create)
+  - [UpdateAccount](./docs/api/accounting/account/account.md#exemple-update-account)
+  - [GetLineEntries](./docs/api/accounting/account/account.md#exemple-get-line-entries)
 - [Folder](./docs/api/accounting/folder)
   - [Informations of the accounting folder](./docs/api/accounting/folder/society-info.md)
   - [Diaries](./docs/api/accounting/folder/diary.md) (Journaux)

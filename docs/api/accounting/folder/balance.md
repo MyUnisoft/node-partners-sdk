@@ -1,5 +1,7 @@
 # Balance
 
+[<-- Back](../../../../README.md)
+
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";
 import { Windev } from "@myunisoft/tsd";
@@ -73,3 +75,5 @@ interface IBalanceOptions extends IDefaultOptions {
   params: IBalanceByExerciceParams | IBalanceByDateParams;
 }
 ```
+
+[<-- Back](../../../../README.md)

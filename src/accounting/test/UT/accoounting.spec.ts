@@ -123,7 +123,6 @@ function initiateHttpieMock() {
   return mockClient;
 }
 
-
 function initiateHttpieMockFolder() {
   const mockClient = kMockHttpAgent.get(BASE_API_URL);
   mockClient
@@ -419,8 +418,6 @@ describe("Accounting", () => {
         endDate: "2021-12-31"
       });
 
-      // console.log(data);
-
       expect(typeof data).toBe("string");
     });
 
@@ -440,11 +437,9 @@ describe("Accounting", () => {
         }
       }));
 
-
       expect(typeof buffs.toString()).toBe("string");
     });
   });
-
 
   describe("account", () => {
     let mockClient;
@@ -507,7 +502,7 @@ describe("Accounting", () => {
     test("getlineEntries by number", async() => {
       mockClient = initiateHttpieMockAccount({ getAccountReply: kEntriesAccountReply });
 
-      const data = await myun.accounting.account.getlineEntries({
+      const data = await myun.accounting.account.getLineEntries({
         accessToken: "test",
         accountingFolderId: 1,
         accountNumber: "101200",
@@ -522,7 +517,7 @@ describe("Accounting", () => {
     test("getlineEntries by id", async() => {
       mockClient = initiateHttpieMockAccount({ getAccountReply: kEntriesAccountReply });
 
-      const data = await myun.accounting.account.getlineEntries({
+      const data = await myun.accounting.account.getLineEntries({
         accessToken: "test",
         accountingFolderId: 1,
         accountId: 1,

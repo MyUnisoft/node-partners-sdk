@@ -194,7 +194,7 @@ export async function getGrandLivre(options: IGetGrandLivreOptions) {
   endpoint.searchParams.set("start_date", options.startDate);
   endpoint.searchParams.set("end_date", options.endDate);
 
-  const { data } = await httpie.get(endpoint, {
+  const { data } = await httpie.get<string>(endpoint, {
     headers: getDefaultHeaders(options)
   });
 

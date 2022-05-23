@@ -30,3 +30,4 @@ export function configure(options: IConfigureOptions) {
 
 export * as access from "./access/index";
 export * as accounting from "./accounting/index";
+export { IDefaultHeaderOptions } from "./constants";
