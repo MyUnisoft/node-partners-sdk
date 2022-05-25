@@ -5,7 +5,7 @@ import { ReadStream } from "fs";
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
+import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders, rateLimitChecker } from "../../constants";
 
 export interface ISendTRAOptions extends IDefaultHeaderOptions {
   body: Buffer | ReadableStream | ReadStream;
@@ -19,6 +19,7 @@ export async function TRA(options: ISendTRAOptions) {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

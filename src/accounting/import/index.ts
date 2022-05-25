@@ -2,7 +2,12 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
+import {
+  BASE_API_URL,
+  IDefaultHeaderOptions,
+  getDefaultHeaders,
+  rateLimitChecker
+} from "../../constants";
 
 export * from "./ocr";
 export * from "./FacturX";
@@ -30,7 +35,8 @@ export async function addAttachmentToEntry(options: IAddAttachmentToEntryOptions
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"
-    }
+    },
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;

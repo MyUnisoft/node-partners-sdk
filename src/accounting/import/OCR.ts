@@ -10,7 +10,8 @@ import {
   IDefaultHeaderOptions,
   enumInvoiceType,
   BASE_API_URL,
-  firmAccessThrowWithoutSociety
+  firmAccessThrowWithoutSociety,
+  rateLimitChecker
 } from "../../constants";
 
 export interface ISendImgOrPdfOptions extends IDefaultHeaderOptions {
@@ -42,6 +43,7 @@ export async function ocr(options: ISendImgOrPdfOptions) {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

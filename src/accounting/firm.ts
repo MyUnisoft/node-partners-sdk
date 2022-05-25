@@ -8,6 +8,7 @@ import {
   firmAccessThrowWithoutSociety,
   getDefaultHeaders,
   IDefaultHeaderOptions,
+  rateLimitChecker,
   throwIfIsNotFirm
 } from "../constants";
 
@@ -16,7 +17,8 @@ export async function getUsers(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/users_v2", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.User.UsersResponse>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -27,7 +29,8 @@ export async function getPhysicalPersons(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/pers_physique", BASE_API_URL);
 
   const { data } = await httpie.get<{ array_pers_physique: Windev.User.PhysicalPerson[] }>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;

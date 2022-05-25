@@ -9,7 +9,8 @@ import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
-  getDefaultHeaders
+  getDefaultHeaders,
+  rateLimitChecker
 } from "../../constants";
 
 export interface ISendFECOptions extends IDefaultHeaderOptions {
@@ -40,6 +41,7 @@ export async function FEC(options: ISendFECOptions) {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

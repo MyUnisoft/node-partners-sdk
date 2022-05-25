@@ -11,7 +11,8 @@ import {
   IDefaultHeaderOptions,
   enumInvoiceType,
   BASE_API_URL,
-  firmAccessThrowWithoutSociety
+  firmAccessThrowWithoutSociety,
+  rateLimitChecker
 } from "../../constants";
 
 export interface ISendFacturXPdfOptions extends IDefaultHeaderOptions {
@@ -35,6 +36,7 @@ export async function FacturX(options: ISendFacturXPdfOptions) {
       ...getDefaultHeaders(options),
       "content-type": "application/octect"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

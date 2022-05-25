@@ -35,6 +35,8 @@
   "dependencies": {
     "@myunisoft/httpie": "^1.6.0",
     "@myunisoft/tsd": "^2.0.1",
+    "@slimio/timemap": "^1.0.0",
+    "p-ratelimit": "^1.0.1",
     "type-fest": "^2.12.0"
   },
   "devDependencies": {

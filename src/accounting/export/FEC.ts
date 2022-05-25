@@ -3,7 +3,12 @@ import * as httpie from "@myunisoft/httpie";
 // import { ReadStream } from "fs";
 
 // Import Internal Dependencies
-import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
+import {
+  BASE_API_URL,
+  IDefaultHeaderOptions,
+  getDefaultHeaders,
+  rateLimitChecker
+} from "../../constants";
 
 export interface IGetFECEntriesOptions extends IDefaultHeaderOptions {
   /** Format: YYYY-MM-DD */
@@ -24,7 +29,8 @@ export async function getPartialFEC(options: IGetFECEntriesOptions) {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/json"
-    }
+    },
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -58,7 +64,8 @@ export async function getFEC(options: IGetFEC) {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/json"
-    }
+    },
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;

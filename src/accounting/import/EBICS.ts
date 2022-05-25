@@ -7,7 +7,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
   getDefaultHeaders,
-  throwIfIsNotFirm
+  throwIfIsNotFirm,
+  rateLimitChecker
 } from "../../constants";
 
 export interface ISendEBICS extends IDefaultHeaderOptions {
@@ -27,6 +28,7 @@ export async function EBICS(options: ISendEBICS) {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

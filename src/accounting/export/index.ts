@@ -2,7 +2,13 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Import Internal Dependencies
-import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
+import {
+  BASE_API_URL,
+  firmAccessThrowWithoutSociety,
+  IDefaultHeaderOptions,
+  getDefaultHeaders,
+  rateLimitChecker
+} from "../../constants";
 
 export * as FEC from "./FEC";
 export * as OCR from "./OCR";
@@ -25,7 +31,8 @@ export async function getEntryByPartnerID(options: IEntryByPartnerOptions) {
   endpoint.searchParams.set("id_origin", String(options.id));
 
   const { data } = await httpie.get<IEntryByPartnerResponse>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -67,6 +74,7 @@ export async function getEntries<T>(options: IDefaultGetEntriesOptions) {
 
   const { data } = await httpie.post<T>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

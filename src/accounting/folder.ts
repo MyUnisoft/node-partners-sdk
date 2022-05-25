@@ -7,7 +7,8 @@ import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
-  getDefaultHeaders
+  getDefaultHeaders,
+  rateLimitChecker
 } from "../constants";
 
 export async function getExercices(options: IDefaultHeaderOptions) {
@@ -15,7 +16,8 @@ export async function getExercices(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/society/exercice", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.Exercice[]>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -26,7 +28,8 @@ export async function getDiaries(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/diary", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.Diary[]>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -37,7 +40,8 @@ export async function getVatParameters(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/vat_param", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Vat.VatParam[]>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -48,7 +52,8 @@ export async function getPaymentType(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/payment_type", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.PaymentType[]>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -59,7 +64,8 @@ export async function getInformation(options: IDefaultHeaderOptions) {
   const endpoint = new URL("/api/v1/society", BASE_API_URL);
 
   const { data } = await httpie.get<Windev.Society.Company>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -135,7 +141,8 @@ export async function getDynamicBalanceFromExercice(options: IBalanceByExercice)
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/x-www-form-urlencoded"
-    }
+    },
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -170,7 +177,8 @@ export async function getDynamicBalanceFromDate(options: IBalanceByDate) {
     headers: {
       ...getDefaultHeaders(options),
       "content-type": "application/x-www-form-urlencoded"
-    }
+    },
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -195,7 +203,8 @@ export async function getGrandLivre(options: IGetGrandLivreOptions) {
   endpoint.searchParams.set("end_date", options.endDate);
 
   const { data } = await httpie.get<string>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;

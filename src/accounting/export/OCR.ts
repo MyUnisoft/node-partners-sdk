@@ -7,7 +7,8 @@ import {
   IDefaultHeaderOptions,
   getDefaultHeaders,
   BASE_API_URL,
-  throwIfIsNotFirm
+  throwIfIsNotFirm,
+  rateLimitChecker
 } from "../../constants";
 
 export interface IOCRFollowUpOptions extends IDefaultHeaderOptions {
@@ -88,6 +89,7 @@ export interface IGetOCRFollowUpResponse {
   nb_ocr: number;
   ocr_follow_up_array: IOCRFollowUp[];
 }
+
 function setPendingDocumentParams(options: IOCRFollowUpOptions) {
   const endpoint = new URL("/api/v1/document_follow_up", BASE_API_URL);
 
@@ -117,6 +119,7 @@ export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
 
   const { data } = await httpie.post<IGetOCRFollowUpResponse>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

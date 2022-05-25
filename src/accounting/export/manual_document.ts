@@ -6,7 +6,8 @@ import {
   IDefaultHeaderOptions,
   getDefaultHeaders,
   BASE_API_URL,
-  throwIfIsNotFirm
+  throwIfIsNotFirm,
+  rateLimitChecker
 } from "../../constants";
 
 export interface IPendingDocumentOptions extends IDefaultHeaderOptions {
@@ -86,7 +87,8 @@ export async function getPendingDocument(options: IPendingDocumentOptions) {
   const endpoint = setPendingDocumentParams(options);
 
   const { data } = await httpie.get<IPendingDocuments>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;

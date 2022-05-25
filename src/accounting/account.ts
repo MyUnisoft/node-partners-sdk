@@ -9,7 +9,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
   getDefaultHeaders,
-  throwIfIsNotFirm
+  throwIfIsNotFirm,
+  rateLimitChecker
 } from "../constants";
 
 export interface IGetAllOptions extends IDefaultHeaderOptions {
@@ -37,7 +38,8 @@ export async function getAll(options: IGetAllOptions) {
   endpoint.searchParams.set("q", String(options.accountNumber || ""));
 
   const { data } = await httpie.get<Windev.Account.SimplifiedAccount[]>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -64,7 +66,8 @@ export async function getAllDetailed(options: IGetAllDetailedOptions) {
   endpoint.searchParams.set("sort_", JSON.stringify(options.sort) || "");
 
   const { data } = await httpie.get<Windev.Account.DetailedAccounts>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -81,6 +84,7 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
 
   const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: {
       account_number: options.accountNumber,
       label: options.label
@@ -103,6 +107,7 @@ export async function updateAccount(options: IUpdateAccountOptions) {
 
   const { data } = await httpie.put<Windev.Account.Account | { status: string; message: string; }>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 
@@ -159,7 +164,8 @@ export async function getLineEntries(options: RequireExactlyOne<ILineEntriesOpti
   }
 
   const { data } = await httpie.get<Windev.Account.AccountEntries>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
