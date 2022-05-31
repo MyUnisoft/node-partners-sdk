@@ -625,7 +625,7 @@ interface IGetGrandLivreOptions extends IDefaultHeaderOptions {
 ### IDefaultHeaderOptions
 - [IDefaultHeaderOptions](../../../interfaces/common.md)
 
-#### IBalanceDynamique
+### IBalanceDynamique
 ```ts
 interface IBalanceDynamique {
   exercice: {

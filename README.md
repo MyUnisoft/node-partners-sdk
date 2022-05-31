@@ -106,6 +106,17 @@ APIs to authenticate the script or to generate tokens. Choose depending on the k
   - Get Dynamic Balance From Date
   - Get Grand Livre
   - Get Grand Livre Stream
+- [Firm](./docs/api/accounting/firm.md)
+  - Get Users
+  - Get Physical Persons
+  - Get Wallets
+  - Get Accounting Firms
+  - Get Dashboard Modules
+  - Get Accounting Folders
+  - Get Company By Ref
+  - Get Review
+  - Get Cycle Of Review
+  - Get Work Progam Of Review
 
 ## License
 MIT

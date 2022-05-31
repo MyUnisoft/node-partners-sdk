@@ -23,14 +23,15 @@ export interface IConfigureOptions {
   secretKey: string;
 
   /** The secret key provided by the MyUnisoft team for the 'X-Third-Party-Secret' header */
-  limitManager: boolean;
+  limitManager?: boolean;
 }
 
 export function configure(options: IConfigureOptions) {
-  getters.secret.set(options.secretKey);
-  getters.limitManager.set(typeof options.limitManager === "boolean" ? options.limitManager : false);
+  const { secretKey, userAgent, limitManager = false } = options;
+  getters.secret.set(secretKey);
+  getters.limitManager.set(limitManager);
 
-  httpie.DEFAULT_HEADER["user-agent"] = options.userAgent;
+  httpie.DEFAULT_HEADER["user-agent"] = userAgent;
 }
 
 export * as access from "./access/index";

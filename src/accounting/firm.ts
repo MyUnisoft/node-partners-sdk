@@ -114,12 +114,12 @@ export interface IDashbordModule {
     initial: string;
     firstname: string;
   };
-  MG: null;
-  RD: null;
+  MG: string | null;
+  RD: string | null;
   secured: boolean;
   company_id: number;
   my_data_rh: boolean,
-  silae_code: null,
+  silae_code: string | null,
   wallet_list: [
     {
       label: string;
@@ -132,12 +132,13 @@ export interface IDashbordModule {
     id_type_company: number;
   };
   retrieving_day: number;
-  employee_app_id: null;
+  employee_app_id: string | null;
   formula_myun_id: number;
-  folder_reference: null;
-  preaccounting_id: null;
+  folder_reference: string | null;
+  preaccounting_id: string | null;
   accounting_process: boolean;
 }
+
 export async function getDashboardModules(options: IDefaultHeaderOptions) {
   throwIfIsNotFirm();
   const endpoint = new URL("/api/v1/dashboard/modules", BASE_API_URL);
@@ -215,7 +216,7 @@ export async function getReview(options: IGetReviewOptions) {
   const endpoint = new URL("/api/v1/dadp/dossier_revision_list", BASE_API_URL);
   endpoint.searchParams.set("review_id", String(options.reviewId || ""));
 
-  const { data } = await httpie.get<{ dossier_revision_list: IDossierRevision[]}>(endpoint, {
+  const { data } = await httpie.get<{dossier_revision_list: IDossierRevision[]}>(endpoint, {
     headers: getDefaultHeaders(options)
   });
 

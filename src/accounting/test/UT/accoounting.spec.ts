@@ -274,7 +274,7 @@ describe("Accounting", () => {
       expect(data[0].name).toBe("SCH1");
     });
 
-    test("getAccountingFirms", async() => {
+    test("getDashboardModules", async() => {
       const data = await myun.accounting.firm.getDashboardModules({
         accessToken: "test"
       });
