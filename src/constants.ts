@@ -1,13 +1,20 @@
 // Import Node.js Dependencies
 import { IncomingHttpHeaders } from "http";
 
+// Import Third-party Dependencies
+import { pRateLimit } from "p-ratelimit";
+import Timemap from "@slimio/timemap";
+
 // Import Internal Dependencies
 import { getters } from "./index";
+import { InlineCallbackAction } from "@myunisoft/httpie";
 
-// export const BASE_AUTH_URL = "https://app.myunisoft.fr/";
-// export const BASE_API_URL = "https://app.myunisoft.fr/";
-export const BASE_AUTH_URL = "https://yoda.myunisoft.fr:1337/";
-export const BASE_API_URL = "https://yoda.myunisoft.fr:1367/";
+const tmLimit = new Timemap<InlineCallbackAction>(1000 * 60 * 5);
+
+// export const BASE_AUTH_URL = "https://app.myunisoft.fr";
+// export const BASE_API_URL = "https://app.myunisoft.fr";
+export const BASE_AUTH_URL = "https://yoda.myunisoft.fr:1337";
+export const BASE_API_URL = "https://yoda.myunisoft.fr:1367";
 
 export const enumInvoiceType = Object.freeze({
   Achat: "1",
@@ -25,6 +32,22 @@ export interface IDefaultHeaderOptions {
 
   /** Accounting folder (dossier de production) id */
   accountingFolderId?: string | number;
+}
+
+export function rateLimitChecker(token: string): InlineCallbackAction | undefined {
+  if (getters.limitManager) {
+    if (!tmLimit.has(token)) {
+      tmLimit.set(token, pRateLimit({
+        interval: 1000 * 60,
+        rate: 100,
+        concurrency: 10
+      }));
+    }
+
+    return tmLimit.get(token, true);
+  }
+
+  return void 0;
 }
 
 /**

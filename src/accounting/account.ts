@@ -9,7 +9,8 @@ import {
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
   getDefaultHeaders,
-  throwIfIsNotFirm
+  throwIfIsNotFirm,
+  rateLimitChecker
 } from "../constants";
 
 export interface IGetAllOptions extends IDefaultHeaderOptions {
@@ -37,7 +38,8 @@ export async function getAll(options: IGetAllOptions) {
   endpoint.searchParams.set("q", String(options.accountNumber || ""));
 
   const { data } = await httpie.get<Windev.Account.SimplifiedAccount[]>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -64,7 +66,8 @@ export async function getAllDetailed(options: IGetAllDetailedOptions) {
   endpoint.searchParams.set("sort_", JSON.stringify(options.sort) || "");
 
   const { data } = await httpie.get<Windev.Account.DetailedAccounts>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;
@@ -81,6 +84,7 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
 
   const { data } = await httpie.post<Windev.Account.Account>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: {
       account_number: options.accountNumber,
       label: options.label
@@ -90,16 +94,20 @@ export async function findOrCreate(options: IFindOrCreateOptions) {
   return data;
 }
 
+// changer le body comme la methode findOrCreate ?
 export interface IUpdateAccountOptions extends IDefaultHeaderOptions {
   body: Windev.Account.UpdateAccount;
 }
 
 export async function updateAccount(options: IUpdateAccountOptions) {
   throwIfIsNotFirm();
+  // manque le society-id dans le header ? error GBL1
+
   const endpoint = new URL("/api/v1/account", BASE_API_URL);
 
   const { data } = await httpie.put<Windev.Account.Account | { status: string; message: string; }>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 
@@ -138,7 +146,7 @@ export interface ILineEntriesOptions extends IDefaultHeaderOptions {
   entryTypes?: "SITU" | "NORM";
 }
 
-export async function getlineEntries(options: RequireExactlyOne<ILineEntriesOptions, "accountId" | "accountNumber">) {
+export async function getLineEntries(options: RequireExactlyOne<ILineEntriesOptions, "accountId" | "accountNumber">) {
   firmAccessThrowWithoutSociety(options);
 
   const endpoint = new URL("/api/v1/account/entries", BASE_API_URL);
@@ -156,7 +164,8 @@ export async function getlineEntries(options: RequireExactlyOne<ILineEntriesOpti
   }
 
   const { data } = await httpie.get<Windev.Account.AccountEntries>(endpoint, {
-    headers: getDefaultHeaders(options)
+    headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken)
   });
 
   return data;

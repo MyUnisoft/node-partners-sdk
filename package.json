@@ -9,8 +9,8 @@
   },
   "scripts": {
     "build": "rimraf ./dist && tsc",
-    "prepublishOnly": "npm run build",
-    "test": "jest"
+    "test": "jest --projects jest_ut.config.js",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">=14"
@@ -33,8 +33,10 @@
   },
   "homepage": "https://github.com/MyUnisoft/node-partners-sdk#readme",
   "dependencies": {
-    "@myunisoft/httpie": "^1.5.0",
+    "@myunisoft/httpie": "^1.6.0",
     "@myunisoft/tsd": "^2.0.1",
+    "@slimio/timemap": "^1.0.0",
+    "p-ratelimit": "^1.0.1",
     "type-fest": "^2.12.0"
   },
   "devDependencies": {

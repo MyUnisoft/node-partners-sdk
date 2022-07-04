@@ -1,0 +1,28 @@
+{
+  "array_pers_physique": [
+    {
+      "name": "API",
+      "actif": true,
+      "civility": {
+        "id": 1,
+        "label": "Monsieur",
+        "value": "Mr"
+      },
+      "firstname": "Cabinet",
+      "coordonnee": [
+        {
+          "id": 1,
+          "type": {
+            "id": 1,
+            "label": "Mail",
+            "value": "Mail"
+          },
+          "label": "",
+          "value": "api@gmail.com"
+        }
+      ],
+      "company_number": 0,
+      "pers_physique_id": 1
+    }
+  ]
+}

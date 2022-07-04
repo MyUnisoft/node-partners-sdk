@@ -1,0 +1,28 @@
+{
+"  etablissement_id": 17,
+  "diary_id": 417,
+  "date_piece": "2022-04-02",
+  "pj_list": [],
+  "entry_list": [
+      {
+          "credit": 10,
+          "debit": 0,
+          "account_id": 33238,
+          "label": "CB",
+          "piece": "9723330801",
+          "piece2": "9723330801",
+          "payment_type_id": -1
+      },
+      {
+          "credit": 0,
+          "debit": 10,
+          "account_id": 9081,
+          "label": "CB",
+          "piece": "9723330801",
+          "piece2": "9723330801",
+          "payment_type_id": -1
+      }
+  ],
+  "period_to": "2022-04-02",
+  "period_from": "2022-04-02"
+}

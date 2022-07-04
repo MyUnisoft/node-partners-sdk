@@ -1,3 +1,6 @@
+// Import Node.js Dependencies
+import { ReadStream } from "fs";
+
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 
@@ -6,7 +9,8 @@ import {
   BASE_API_URL,
   firmAccessThrowWithoutSociety,
   IDefaultHeaderOptions,
-  getDefaultHeaders
+  getDefaultHeaders,
+  rateLimitChecker
 } from "../../constants";
 
 export interface ISendFECOptions extends IDefaultHeaderOptions {
@@ -21,7 +25,7 @@ export interface ISendFECOptions extends IDefaultHeaderOptions {
    * 2 = Delete and import.
    */
   type: 0 | 1 | 2;
-  body: Buffer | string;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function FEC(options: ISendFECOptions) {
@@ -37,9 +41,9 @@ export async function FEC(options: ISendFECOptions) {
       ...getDefaultHeaders(options),
       "content-type": "application/octet-stream"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 
   return data;
 }
-

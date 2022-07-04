@@ -3,7 +3,13 @@ import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
 
 // Import Internal Dependencies
-import { BASE_API_URL, firmAccessThrowWithoutSociety, IDefaultHeaderOptions, getDefaultHeaders } from "../../constants";
+import {
+  BASE_API_URL,
+  firmAccessThrowWithoutSociety,
+  IDefaultHeaderOptions,
+  getDefaultHeaders,
+  rateLimitChecker
+} from "../../constants";
 
 export interface IEntryOptions extends IDefaultHeaderOptions {
   body: Windev.Entry.NewEntry;
@@ -26,6 +32,7 @@ export async function jsonEntry(options: IDirectEntryOptions) {
 
   const { data } = await httpie.post(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 
@@ -38,6 +45,7 @@ export async function jsonPendingEntry(options: IEntryOptions) {
 
   const { data } = await httpie.post(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

@@ -1,5 +1,7 @@
 # Diary
 
+[<-- Back](../../../../README.md)
+
 ## Get all
 ```ts
 import * as MyUnisoft from "@myunisoft/partners-sdk";

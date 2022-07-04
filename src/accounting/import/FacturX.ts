@@ -1,3 +1,6 @@
+// Import Node.js Dependencies
+import { ReadStream } from "fs";
+
 // Import Third-party Dependencies
 import * as httpie from "@myunisoft/httpie";
 import { Windev } from "@myunisoft/tsd";
@@ -8,14 +11,15 @@ import {
   IDefaultHeaderOptions,
   enumInvoiceType,
   BASE_API_URL,
-  firmAccessThrowWithoutSociety
+  firmAccessThrowWithoutSociety,
+  rateLimitChecker
 } from "../../constants";
 
 export interface ISendFacturXPdfOptions extends IDefaultHeaderOptions {
   name: string;
   invoiceType: "Achat" | "Note de frais" | "Vente" | "Avoir";
   extension: string;
-  body: Buffer | string;
+  body: Buffer | ReadableStream | ReadStream;
 }
 
 export async function FacturX(options: ISendFacturXPdfOptions) {
@@ -32,6 +36,7 @@ export async function FacturX(options: ISendFacturXPdfOptions) {
       ...getDefaultHeaders(options),
       "content-type": "application/octect"
     },
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 

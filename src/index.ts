@@ -11,7 +11,8 @@ export type AccessType = "firm" | "society";
 
 export const getters = Object.freeze({
   secret: new LocalVariable<string>(),
-  accessType: new LocalVariable<AccessType>()
+  accessType: new LocalVariable<AccessType>(),
+  limitManager: new LocalVariable<boolean>()
 });
 
 export interface IConfigureOptions {
@@ -20,13 +21,19 @@ export interface IConfigureOptions {
 
   /** The secret key provided by the MyUnisoft team for the 'X-Third-Party-Secret' header */
   secretKey: string;
+
+  /** The secret key provided by the MyUnisoft team for the 'X-Third-Party-Secret' header */
+  limitManager?: boolean;
 }
 
 export function configure(options: IConfigureOptions) {
-  getters.secret.set(options.secretKey);
+  const { secretKey, userAgent, limitManager = false } = options;
+  getters.secret.set(secretKey);
+  getters.limitManager.set(limitManager);
 
-  httpie.DEFAULT_HEADER["user-agent"] = options.userAgent;
+  httpie.DEFAULT_HEADER["user-agent"] = userAgent;
 }
 
 export * as access from "./access/index";
 export * as accounting from "./accounting/index";
+export { IDefaultHeaderOptions } from "./constants";

@@ -1,0 +1,9 @@
+{
+  "total_debit": 0,
+  "total_credit": 0,
+  "thisAccount": {
+      "id": 0,
+      "number": "",
+      "label": ""
+  }
+}

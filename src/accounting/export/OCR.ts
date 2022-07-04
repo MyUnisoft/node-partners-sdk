@@ -7,7 +7,8 @@ import {
   IDefaultHeaderOptions,
   getDefaultHeaders,
   BASE_API_URL,
-  throwIfIsNotFirm
+  throwIfIsNotFirm,
+  rateLimitChecker
 } from "../../constants";
 
 export interface IOCRFollowUpOptions extends IDefaultHeaderOptions {
@@ -89,24 +90,51 @@ export interface IGetOCRFollowUpResponse {
   ocr_follow_up_array: IOCRFollowUp[];
 }
 
-export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
-  throwIfIsNotFirm();
+function setPendingDocumentParams(options: IOCRFollowUpOptions) {
+  const endpoint = new URL("/api/v1/document_follow_up", BASE_API_URL);
 
-  const endpoint = new URL("/api/v1/ocr_follow_up", BASE_API_URL);
   endpoint.searchParams.set("start_date", options.startDate);
   endpoint.searchParams.set("end_date", options.endDate);
   endpoint.searchParams.set("request_mode", String(options.mode));
-  endpoint.searchParams.set("limit", String(options.limit || ""));
-  endpoint.searchParams.set("filter", options.filter || "");
-  endpoint.searchParams.set("sort", JSON.stringify(options.sort) || "");
-  endpoint.searchParams.set("offset", String(options.offset || ""));
+  if (typeof options.limit !== "undefined") {
+    endpoint.searchParams.set("limit", String(options.limit));
+  }
+  if (typeof options.filter !== "undefined") {
+    endpoint.searchParams.set("filter", options.filter);
+  }
+  if (typeof options.sort !== "undefined") {
+    endpoint.searchParams.set("sort", JSON.stringify(options.sort));
+  }
+  if (typeof options.offset !== "undefined") {
+    endpoint.searchParams.set("offset", String(options.offset));
+  }
+
+  return endpoint;
+}
+
+export async function getOCRFollowUp(options: IOCRFollowUpOptions) {
+  throwIfIsNotFirm();
+
+  const endpoint = setPendingDocumentParams(options);
 
   const { data } = await httpie.post<IGetOCRFollowUpResponse>(endpoint, {
     headers: getDefaultHeaders(options),
+    limit: rateLimitChecker(options.accessToken),
     body: options.body
   });
 
   return data;
+}
+
+export async function getOCRFollowUpStream(options: IOCRFollowUpOptions) {
+  throwIfIsNotFirm();
+
+  const endpoint = setPendingDocumentParams(options);
+
+  return await httpie.stream("POST", endpoint, {
+    headers: getDefaultHeaders(options),
+    body: options.body
+  });
 }
 
 // export type IOCRFollowUpV2Response = Omit<IOCRFollowUp, "from_source" | "is_parent" | "ocr_parent_doc_id" | "ocr_doc_id">[];

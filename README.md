@@ -90,14 +90,33 @@ APIs to authenticate the script or to generate tokens. Choose depending on the k
 ---
 
 ### [Accounting](./docs/api/compta)
-- [Folder](./docs/api/accounting/folder)
-  - [Informations of the accounting folder](./docs/api/accounting/folder/society-info.md)
-  - [Diaries](./docs/api/accounting/folder/diary.md) (Journaux)
-  - [Exercices](./docs/api/accounting/folder/exercices.md)
-  - [Balance](./docs/api/accounting/folder/balance.md)
-  - [Grand Livre](./docs/api/accounting/folder/grandèlivre.md)
-  - [Payment type](./docs/api/accounting/folder/payment-type.md) (Méthodes de paiements)
-  - [VAT](./docs/api/accounting/folder/vat.md) (TVA)
+- [Account](./docs/api/accounting/account.md)
+  - Get All
+  - Get AllDetailed
+  - Find Or Create
+  - Update Account
+  - Get Line Entries
+- [Folder](./docs/api/accounting/folder.md)
+  - Get Exercices
+  - Get Diaries
+  - Get Vat Parameters
+  - Get Payment Type
+  - Get Information
+  - Get Dynamic Balance From Exercice
+  - Get Dynamic Balance From Date
+  - Get Grand Livre
+  - Get Grand Livre Stream
+- [Firm](./docs/api/accounting/firm.md)
+  - Get Users
+  - Get Physical Persons
+  - Get Wallets
+  - Get Accounting Firms
+  - Get Dashboard Modules
+  - Get Accounting Folders
+  - Get Company By Ref
+  - Get Review
+  - Get Cycle Of Review
+  - Get Work Progam Of Review
 
 ## License
 MIT
