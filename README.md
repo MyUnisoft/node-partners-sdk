@@ -61,8 +61,6 @@ console.log(diaries);
 
 ## 📜 API
 
-> ⚠️ WORK IN PROGRESS
-
 ### Configure
 
 Use this function at the beginning of the runtime. We highly recommand the [dotenv](https://www.npmjs.com/package/dotenv) npm package to loads environment variables (Do not store them in the code).
@@ -86,8 +84,6 @@ APIs to authenticate the script or to generate tokens. Choose depending on the k
 ### [Access](./docs/api/access)
 - 🔹 [Firm](./docs/api/access/firm.md)
 - 🔸 [Society (Folder)](./docs/api/access/society.md)
-
----
 
 ### [Accounting](./docs/api/compta)
 - [Account](./docs/api/accounting/account.md)
