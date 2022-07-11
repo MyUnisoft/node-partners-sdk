@@ -121,7 +121,7 @@ APIs to authenticate the script or to generate tokens. Choose depending on the k
 ## Contributors ✨
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -133,6 +133,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://www.linkedin.com/in/thomas-gentilhomme/"><img src="https://avatars.githubusercontent.com/u/4438263?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gentilhomme</b></sub></a><br /><a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=fraxken" title="Code">💻</a> <a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=fraxken" title="Documentation">📖</a> <a href="#security-fraxken" title="Security">🛡️</a></td>
     <td align="center"><a href="http://sofiand.github.io/portfolio-client/"><img src="https://avatars.githubusercontent.com/u/39944043?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Yefis</b></sub></a><br /><a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=SofianD" title="Code">💻</a> <a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=SofianD" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/AlexandreMalaj"><img src="https://avatars.githubusercontent.com/u/32218832?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alexandre Malaj</b></sub></a><br /><a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=AlexandreMalaj" title="Code">💻</a> <a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=AlexandreMalaj" title="Documentation">📖</a> <a href="https://github.com/MyUnisoft/node-partners-sdk/commits?author=AlexandreMalaj" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
