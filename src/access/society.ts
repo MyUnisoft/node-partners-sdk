@@ -4,23 +4,6 @@ import * as httpie from "@myunisoft/httpie";
 import { BASE_API_URL, IDefaultHeaderOptions, getDefaultHeaders } from "../constants";
 import { getters } from "../index";
 
-export interface IGrantedFor {
-  grantedFor: number;
-}
-
-export async function getThirdPartyId(options: IDefaultHeaderOptions): Promise<IGrantedFor> {
-  const endpoint = new URL("/api/v1/key/granted-for", BASE_API_URL);
-
-  const { data } = await httpie.post<IGrantedFor>(endpoint, {
-    authorization: options.accessToken,
-    body: {
-      secret: getters.secret.get()
-    }
-  });
-
-  return data;
-}
-
 export interface SocietyApiToken {
   id: string;
   target: number;
@@ -34,13 +17,13 @@ export interface SocietyApiToken {
  * it is no longer necessary to use this function (unless the token has been revoked).
  */
 export async function generateKey(options: Required<IDefaultHeaderOptions>): Promise<SocietyApiToken> {
-  const { grantedFor } = await getThirdPartyId(options);
-
   const endpoint = new URL("/api/v1/key/create", BASE_API_URL);
   const { data } = await httpie.post<SocietyApiToken>(endpoint, {
     authorization: options.accessToken,
+    headers: {
+      "X-Third-Party-Secret": getters.secret.get()
+    },
     body: {
-      grantedFor: String(grantedFor),
       target: String(options.accountingFolderId)
     }
   });

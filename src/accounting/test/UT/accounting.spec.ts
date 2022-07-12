@@ -500,6 +500,7 @@ describe("Accounting", () => {
     });
 
     test("getlineEntries by number", async() => {
+      // @ts-ignore
       mockClient = initiateHttpieMockAccount({ getAccountReply: kEntriesAccountReply });
 
       const data = await myun.accounting.account.getLineEntries({
@@ -515,6 +516,7 @@ describe("Accounting", () => {
     });
 
     test("getlineEntries by id", async() => {
+      // @ts-ignore
       mockClient = initiateHttpieMockAccount({ getAccountReply: kEntriesAccountReply });
 
       const data = await myun.accounting.account.getLineEntries({

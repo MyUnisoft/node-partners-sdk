@@ -30,13 +30,6 @@ function initiateHttpieMockSociety() {
 
   mockClient
     .intercept({
-      path: (url) => url.startsWith(`${kUrlPathname}/key/granted-for`),
-      method: "POST"
-    })
-    .reply(200, { grantedFor: 1 }, kHttpReplyHeaders);
-
-  mockClient
-    .intercept({
       path: (url) => url.startsWith(`${kUrlPathname}/key/create`),
       method: "POST"
     })
@@ -103,7 +96,7 @@ afterAll(() => {
   httpie.setGlobalDispatcher(kOriginalHttpDispatcher);
 });
 
-describe("Accounting", () => {
+describe("Access", () => {
   let mockClient;
 
   afterEach(async() => {
@@ -142,17 +135,6 @@ describe("Accounting", () => {
   });
 
   describe("society", () => {
-    test("getThirdPartyId", async() => {
-      mockClient = initiateHttpieMockSociety();
-
-      // should we initialize the secret ?
-      const data = await myun.access.society.getThirdPartyId({
-        accessToken: "test"
-      });
-
-      expect(data.grantedFor).toBe(1);
-    });
-
     test("generateKey", async() => {
       mockClient = initiateHttpieMockSociety();
 
@@ -176,6 +158,7 @@ describe("Accounting", () => {
       expect(data[0].method).toBe("get");
     });
   });
+
   describe("user", () => {
     test("authenticate", async() => {
       mockClient = initiateHttpieMockUser("authenticated");
