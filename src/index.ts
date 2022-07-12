@@ -22,12 +22,16 @@ export interface IConfigureOptions {
   /** The secret key provided by the MyUnisoft team for the 'X-Third-Party-Secret' header */
   secretKey: string;
 
-  /** The secret key provided by the MyUnisoft team for the 'X-Third-Party-Secret' header */
+  /**
+   * Use the built-in rate-limit manager
+   *
+   * @default true
+   */
   limitManager?: boolean;
 }
 
 export function configure(options: IConfigureOptions) {
-  const { secretKey, userAgent, limitManager = false } = options;
+  const { secretKey, userAgent, limitManager = true } = options;
   getters.secret.set(secretKey);
   getters.limitManager.set(limitManager);
 

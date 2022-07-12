@@ -9,7 +9,8 @@ import Timemap from "@slimio/timemap";
 import { getters } from "./index";
 import { InlineCallbackAction } from "@myunisoft/httpie";
 
-const tmLimit = new Timemap<InlineCallbackAction>(1000 * 60 * 5);
+// CONSTANTS
+const kTokenRatelimit = new Timemap<InlineCallbackAction>(1000 * 60 * 5);
 
 // export const BASE_AUTH_URL = "https://app.myunisoft.fr";
 // export const BASE_API_URL = "https://app.myunisoft.fr";
@@ -36,15 +37,15 @@ export interface IDefaultHeaderOptions {
 
 export function rateLimitChecker(token: string): InlineCallbackAction | undefined {
   if (getters.limitManager) {
-    if (!tmLimit.has(token)) {
-      tmLimit.set(token, pRateLimit({
+    if (!kTokenRatelimit.has(token)) {
+      kTokenRatelimit.set(token, pRateLimit({
         interval: 1000 * 60,
         rate: 100,
         concurrency: 10
       }));
     }
 
-    return tmLimit.get(token, true);
+    return kTokenRatelimit.get(token, true);
   }
 
   return void 0;
