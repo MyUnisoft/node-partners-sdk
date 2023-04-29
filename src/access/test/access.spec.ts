@@ -2,9 +2,9 @@
 import * as httpie from "@myunisoft/httpie";
 
 // Require Internal Dependencies
-import * as myun from "../../../index";
-import { BASE_API_URL, BASE_AUTH_URL } from "../../../constants";
-import { IFirmAuthenticateResponse } from "../../firm";
+import * as myun from "../../index";
+import { BASE_API_URL, BASE_AUTH_URL } from "../../constants";
+import { IFirmAuthenticateResponse } from "../firm";
 
 // CONSTANTS
 const kMockHttpAgent = new httpie.MockAgent();

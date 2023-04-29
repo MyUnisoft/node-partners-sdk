@@ -10,7 +10,6 @@
 <p align="center">
     <a href="https://github.com/MyUnisoft/node-partners-sdk"><img src="https://img.shields.io/github/package-json/v/MyUnisoft/node-partners-sdk?style=flat-square" alt="npm version"></a>
     <a href="https://github.com/MyUnisoft/node-partners-sdk"><img src="https://img.shields.io/github/license/MyUnisoft/node-partners-sdk?style=flat-square" alt="license"></a>
-    <a href="./SECURITY.md"><img src="https://img.shields.io/badge/Security-Responsible%20Disclosure-yellow.svg?style=flat-square" alt="Responsible Disclosure Policy" /></a>
 </p>
 
 ## 👀 Why ?
@@ -21,7 +20,7 @@
 - Following strong security best practices.
 
 ## 🚧 Requirements
-- [Node.js](https://nodejs.org/en/) version 14 or higher
+- [Node.js](https://nodejs.org/en/) version 16 or higher
 
 ## 🚀 Getting Started
 
@@ -98,21 +97,13 @@ APIs to authenticate the script or to generate tokens. Choose depending on the k
   - Get Vat Parameters
   - Get Payment Type
   - Get Information
-  - Get Dynamic Balance From Exercice
-  - Get Dynamic Balance From Date
-  - Get Grand Livre
-  - Get Grand Livre Stream
 - [Firm](./docs/api/accounting/firm.md)
   - Get Users
   - Get Physical Persons
   - Get Wallets
   - Get Accounting Firms
-  - Get Dashboard Modules
   - Get Accounting Folders
   - Get Company By Ref
-  - Get Review
-  - Get Cycle Of Review
-  - Get Work Progam Of Review
 
 ## Contributors ✨
 

@@ -3,14 +3,17 @@ import { IncomingHttpHeaders } from "http";
 
 // Import Third-party Dependencies
 import { pRateLimit } from "p-ratelimit";
-import Timemap from "@slimio/timemap";
+import EphemeralMap from "@openally/ephemeral-map";
 
 // Import Internal Dependencies
 import { getters } from "./index";
 import { InlineCallbackAction } from "@myunisoft/httpie";
 
 // CONSTANTS
-const kTokenRatelimit = new Timemap<InlineCallbackAction>(1000 * 60 * 5);
+const kTokenRatelimit = new EphemeralMap<string, InlineCallbackAction>(void 0, {
+  ttl: 1000 * 60 * 5,
+  refreshOnGet: true
+});
 
 // export const BASE_AUTH_URL = "https://app.myunisoft.fr";
 // export const BASE_API_URL = "https://app.myunisoft.fr";
@@ -45,7 +48,7 @@ export function rateLimitChecker(token: string): InlineCallbackAction | undefine
       }));
     }
 
-    return kTokenRatelimit.get(token, true);
+    return kTokenRatelimit.get(token);
   }
 
   return void 0;

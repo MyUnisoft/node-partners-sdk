@@ -1,12 +1,10 @@
-/* eslint-disable max-nested-callbacks */
 // Require Internal Dependencies
-import * as myun from "../../index";
-import { firmAccessThrowWithoutSociety, throwIfIsNotFirm } from "../../constants";
-import { configure } from "../../index";
-
+import * as myun from "../index";
+import { firmAccessThrowWithoutSociety, throwIfIsNotFirm } from "../constants";
+import { configure } from "../index";
 
 describe("Root", () => {
-  describe("Contants", () => {
+  describe("CONSTANTS", () => {
     afterEach(() => {
       myun.getters.accessType.set("society");
     });
